@@ -162,7 +162,6 @@ function csvToArray(dataset, delimiter = ",") {
   return arr;
 }
 
-
 function wait(ms){
    var start = new Date().getTime();
    var end = start;
@@ -420,11 +419,34 @@ function showDemo() {
     //runDemo.addEventListener('click',trainDemoModel,false)
 }
 
+var myWindow1 = null
+function DCIS_process(){
+    console.log("dcis process");
+    if ((myWindow1 == null) || (myWindow1.closed)) {
+        myWindow1 = window.open("", "MsgWindow", "width=500, height=500");
+
+        myWindow1.document.write(css + '<html><head><title>Table</title></head><body>');
+        myWindow1.document.write('<p>Ductal carcinoma in situ (DCIS) is the presence of abnormal cells inside a milk duct in the breast. DCIS is considered the earliest form of breast cancer and is noninvasive, meaning it has not spread out of the milk duct to invade other parts of the breast. </p>')
+        myWindow1.document.write('<p>solid: A “Solid” cell pattern is one in which the cancer cells have completely filled the duct.</p>')
+        myWindow1.document.write('<p>apocrine: Apocrine breast cancer is a rare type of invasive ductal breast cancer. Like other types of invasive ductal cancer, apocrine breast cancer begins in the milk duct of the breast before spreading to the tissues around the duct. The cells that make up an apocrine tumor are different than those of typical ductal cancers.</p>')
+        myWindow1.document.write('<p>cribriform: A “cribriform” pattern has gaps between the cancer cells within the duct, with an appearance similar to the "holes in swiss cheese" or perhaps "ripples". A cribriform pattern is consistent with a low or medium grade DCIS.</p>')
+        myWindow1.document.write('<p>dcis: Normal DCIS</p>')
+        myWindow1.document.write('<p>comedo: it is characterized by the presence of central necrosis, or evidence of cell death and decay. A diagnosis of this particular kind of breast cancer is somewhat fortuitous as it is confined to the breast ducts and usually does not spread beyond. However, in terms of the various kinds of DCIS, comedo carcinoma is considered to be of a higher grade and a little more aggressive than the others, and may be treated a little more aggressively.</p>')
+        myWindow1.document.write('<p>papillary: A "papillary" DCIS pattern is one arranged in a "fern-like" pattern within the duct. Unlike the cribriform pattern, the papillary has no isolated "holes" of cancer cells, but they are all connected in a kind of asymmetrical or undulating pattern throughout the duct.</p>')
+        myWindow1.document.write('<p>micropapillary: Micro-papillary DCIS is now thought to be a highly malignant, dangerous presentation of DCIS, and is of the highest risk. With micropapillary DCIS the ducts are dilated and lined by a stratified population of monotonous cells. The pattern may show small finger-like protuberances with bulbous ends, which may form arches. Micropapillary DCIS is often multifocal and multicentric. When the presentation is pure, it is often considered grounds for mastectomy in hopes of avoiding invasive micropapillary carcinoma.</p>')
+
+        myWindow1.document.write('</body></html>');
+        myWindow1.document.close();
+    }else{
+         Swal.fire("The example dataset is already open")
+        }
+}
+
 function nottrainModel() {
 
     add_userMsg("End task")
 
-    appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
+    appendMessage(BOT_NAME, NURSE_IMG, "left","Would you like to take a survey?","no information",{"Yes":"Yes","No":"No"})
 
     // more_que = "Do you have any other questions?"
     // appendMessage(BOT_NAME, NURSE_IMG, "left", more_que,"survey",{"I have no questions":"I have no questions","I have questions":"I have questions"})
@@ -662,12 +684,69 @@ function train15year(){
             appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"});
 }
 
+function predictanotherpatient(){
+    add_userMsg("Predict another patient")
+     var instruction = ""
+    var msgText = ""
+    var btnGroup = []
+    var nextques = ""
+    var pattern = "Predict"
+        input_choice = input_question["Predict"]
+        PERSON_NAME="Your choice is"
+    if (pattern=="Predict")
+    {
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "I can predict the recurrence probability of breast cancer, please tell me which year you want to predict","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
+    }
+    else {
+
+        for (var i = 0; i < input_choice.length; i++) {
+            console.log(pattern)
+            console.log(input_choice[i].patterns)
+            console.log(Object.keys(input_choice[i].patterns).indexOf(pattern))
+            if (Object.keys(input_choice[i].patterns).indexOf(pattern) != -1) {
+                if (input_choice[i].tag=="treatment_year")
+                {
+                    if (input_choice[i].patterns[pattern]=="10")
+                    {
+                        input_choice = input_question10["Predict"]
+                    }
+                    if (input_choice[i].patterns[pattern]=="5")
+                    {
+                        input_choice = input_question5["Predict"]
+                    }
+                }
+                input.push(input_choice[i].patterns[pattern])
+                nextques = input_choice[i].nextques
+                console.log(nextques)
+            }
+        }
+    }
+    if(nextques == "none"){
+        var input_cpoy = input
+        input = []
+        getinput(input_cpoy)
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Thank you! you answered all questions, we are calculating recurrence","no information",btnGroup);
+        return
+    }
+    tag=""
+    for (var i = 0 ; i < input_choice.length; i++) {
+        if (input_choice[i].tag == nextques){
+            let index = Math.floor((Math.random()*input_choice[i].responses.length))
+            msgText = input_choice[i].responses[index]
+            btnGroup = Object.keys(input_choice[i].patterns)
+            instruction = input_choice[i].instruction
+            tag = input_choice[i].tag
+        }
+    }
+    appendMessage(BOT_NAME, NURSE_IMG, "left", msgText, instruction, btnGroup,tag);
+}
+
 function takesurvey(){
-appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[]);
+add_userMsg("take a survey");
+appendMessage(BOT_NAME, NURSE_IMG, "left","BYE, It is my pleasure to help you,Have a nice day!How many stars you can give us?","no information",[]);
 }
 
 function takenosurvey(){
-
             location.reload();
             return
 }
@@ -675,6 +754,28 @@ function takenosurvey(){
 function haveQuestion() {
     add_userMsg("I have questions")
     appendMessage(BOT_NAME, NURSE_IMG, "left","Please tell me your questions, I will pass your question to our experts ","no information",[])
+}
+
+function displayRadioValue()
+{
+    var ele = document.getElementsByName('star');
+    console.log(ele);
+    checked_star=0
+            for(i = 0; i < ele.length; i++) {
+                if(ele[i].checked){
+                    checked_star=i
+                }
+
+            }
+    var text=document.getElementById("usersuggestion").value;
+    console.log(text);
+    console.log(5-checked_star);
+    $.post("/submitsurvey", {
+                star:5-checked_star,
+                text:text
+            }).done(function (data) {
+               console.log(data)
+            })
 }
 
 function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
@@ -699,29 +800,55 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     if (btnGroup != "") {
         if (text=="What is your " || text=="Could you tell me your " || text=="What is your tumor " || text=="Could you tell me your tumor ")
         {
+            if (tag=="DCIS_level"){
+            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please select one choice according to your situation and click the link for more information)"
+            }
+            else{
             text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please select one choice according to your situation)"
+            }
         }
         else{
         text = text + "(Please select one choice according to your situation)"
         }
     }
     if (text == SURVEY) {
-        starHTML = '<div class="stars" id="stars"><form  onsubmit="getValue();" >\n' +
-           ' <input class="star star-5" id="star-5" type="radio" name="star" value ="5" onsubmit="getValue();"/>\n' +
-           ' <label class="star star-5" for="star-5"></label>\n' +
-           ' <input class="star star-4" id="star-4" type="radio" name="star" value ="4" onsubmit="getValue();"/>\n' +
-            '<label class="star star-4" for="star-4"></label>\n' +
-            '<input class="star star-3" id="star-3" type="radio" name="star" value ="3" onsubmit="getValue();"/>\n' +
-            '<label class="star star-3" for="star-3"></label>\n' +
-            '<input class="star star-2" id="star-2" type="radio" name="star" value ="2" onsubmit="getValue();"/>\n' +
-            '<label class="star star-2" for="star-2"></label>\n' +
-            '<input class="star star-1" id="star-1" type="radio" name="star" value ="1" onsubmit="getValue();"/>\n' +
-            '<label class="star star-1" for="star-1"></label>\n' +
-            '<label for="exampleFormControlTextarea1">Please leave your suggestions for iMedBot</label>\n' +
-            '<textarea class="form-control" id="usersuggestion" rows="5"></textarea>\n' +
-            '<input type="submit" value="Submit" class ="btn btn-success">\n' +
-        '</form>\n' +
-        '</div>\n'
+
+        starHTML =
+        '<div class="stars" id="stars">\n'+
+        '<form onsubmit="displayRadioValue()">\n'+
+    '<input class="star star-5" id="star-5" type="radio" name="star" value ="5">\n'+
+    '<label class="star star-5" for="star-5"></label>\n' +
+    '<input class="star star-4" id="star-4" type="radio" name="star" value ="4">\n'+
+    ' <label class="star star-4" for="star-4"></label>\n' +
+    '<input class="star star-3" id="star-3" type="radio" name="star" value ="3">\n'+
+    ' <label class="star star-3" for="star-3"></label>\n' +
+    '<input class="star star-2" id="star-2" type="radio" name="star" value ="2">\n'+
+    ' <label class="star star-2" for="star-2"></label>\n' +
+    '<input class="star star-1" id="star-1" type="radio" name="star" value ="1">\n'+
+    ' <label class="star star-1" for="star-1"></label>\n' +
+    '<label for="exampleFormControlTextarea1">Please leave your suggestions for iMedBot</label>\n' +
+    '<textarea class="form-control" id="usersuggestion" rows="5"></textarea>\n'+
+    '<input type="submit" value="Submit" class ="btn btn-success" >\n'+
+    '</form>\n'+
+    '</div>\n'
+
+
+       // starHTML = '<div class="stars" id="stars"><form  onsubmit="getValue();" >\n' +
+         //  ' <input class="star star-5" id="star-5" type="radio" name="star" value ="5" onsubmit="getValue();"/>\n' +
+           //' <label class="star star-5" for="star-5"></label>\n' +
+       //    ' <input class="star star-4" id="star-4" type="radio" name="star" value ="4" onsubmit="getValue();"/>\n' +
+       //     '<label class="star star-4" for="star-4"></label>\n' +
+       //     '<input class="star star-3" id="star-3" type="radio" name="star" value ="3" onsubmit="getValue();"/>\n' +
+       //     '<label class="star star-3" for="star-3"></label>\n' +
+       //     '<input class="star star-2" id="star-2" type="radio" name="star" value ="2" onsubmit="getValue();"/>\n' +
+       //     '<label class="star star-2" for="star-2"></label>\n' +
+       //     '<input class="star star-1" id="star-1" type="radio" name="star" value ="1" onsubmit="getValue();"/>\n' +
+       //     '<label class="star star-1" for="star-1"></label>\n' +
+       //     '<label for="exampleFormControlTextarea1">Please leave your suggestions for iMedBot</label>\n' +
+       //     '<textarea class="form-control" id="usersuggestion" rows="5"></textarea>\n' +
+       //     '<input type="submit" value="Submit" class ="btn btn-success">\n' +
+       // '</form>\n' +
+       // '</div>\n'
     }
     if (instruction == "Parameters") {
         parameterHTML = '<form id="parameterForm" onsubmit="getParameter();return false" method="post">\n' +
@@ -836,9 +963,18 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
         <div class="msg-text">${text}</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
 
     }
+
+
     //'beforeend': Just inside the element, after its last child.
     msgerChat.insertAdjacentHTML("beforeend", msgHTML);
     msgerChat.scrollTop += 500;
+
+    const show_option=document.getElementsByTagName("a");
+    for (var i = 0; i < show_option.length ; i++) {
+        if (show_option[i].text=="DCIS_level")
+             show_option[i].addEventListener("click",DCIS_process,false);
+    }
+
     if (buttonHtml != " ") {
         const btn_group = document.getElementsByClassName("btn btn-success");
 
@@ -891,6 +1027,9 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
             }
             else if (btn_group[i].innerHTML == "I have questions") {
                 btn_group[i].addEventListener('click', haveQuestion, false)
+            }
+             else if (btn_group[i].innerHTML == "Predict another patient") {
+                btn_group[i].addEventListener('click', predictanotherpatient, false)
             }
             else {
                     btn_group[i].addEventListener('click', showNext, false)
@@ -948,9 +1087,10 @@ function showNext(e){
         //alert("Do you really want to train the model?")
 
     }else {
+
         for (var i = 0; i < input_choice.length; i++) {
+
             if (Object.keys(input_choice[i].patterns).indexOf(pattern) != -1) {
-                console.log(input_choice[i].patterns[pattern])
                 if (input_choice[i].tag=="treatment_year")
                 {
                     if (input_choice[i].patterns[pattern]=="10")
@@ -975,7 +1115,9 @@ function showNext(e){
         return
     }
     tag=""
+
     for (var i = 0 ; i < input_choice.length; i++) {
+
         if (input_choice[i].tag == nextques){
 
             let index = Math.floor((Math.random()*input_choice[i].responses.length))
@@ -983,6 +1125,7 @@ function showNext(e){
             btnGroup = Object.keys(input_choice[i].patterns)
             instruction = input_choice[i].instruction
             tag = input_choice[i].tag
+
         }
     }
     appendMessage(BOT_NAME, NURSE_IMG, "left", msgText, instruction, btnGroup,tag);
@@ -990,9 +1133,9 @@ function showNext(e){
 
 function getinput(input_copy){
   $.get("/getInput", { msg: input_copy.toString() }).done(function (data) {
-    res = "Your risk of breast cancer recurrence is" +" "+data.substring(2,data.length-2)
+    res = "The patient's risk of breast cancer recurrence is" +" "+data.substring(2,data.length-2)
       appendMessage(BOT_NAME, NURSE_IMG, "left", res,"no information",[])
-      appendMessage(BOT_NAME, NURSE_IMG, "left","Would you like to take a survey?","no information",{"Yes":"Yes","No":"No"})
+      appendMessage(BOT_NAME, NURSE_IMG, "left","What is the following thing you would like to do?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
      // appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
 
 
