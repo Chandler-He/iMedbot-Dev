@@ -538,10 +538,11 @@ function submitPatientForm(){
     document.getElementById('textInput').placeholder = "We are evaluating your patient...";
     var patient_dic = []
     var patient_Form = document.getElementById("patientForm")
+
+    console.log(patient_Form.elements)
     var shap_check = document.getElementById("shapCheck").checked
 
     for (var i = 0; i < patient_Form.elements.length-1; i++) {
-         console.log("patient form ",i," is ",patient_Form.elements[i])
 
         patient_dic.push({key:patient_Form.elements[i].id, value:patient_Form.elements[i].value})
     }
@@ -564,10 +565,17 @@ function submitPatientForm(){
         //document.getElementById('textInput').placeholder = "Enter your message..."
     })
 
+
 }
 function generatePatientForm(labelList,table_result) {
     //console.log(labelList.toString())
     //console.log(table_result)
+     var patient_Form = document.getElementById("patientForm")
+     if (patient_Form)
+     {
+     patient_Form.remove();
+     }
+
     var labelList_withouttarget = labelList
     console.log(labelList_withouttarget)
     labelList_withouttarget.pop()
@@ -615,6 +623,7 @@ function generatePatientForm(labelList,table_result) {
                 patientFormHtml=" "
           }
           appendMessage(BOT_NAME, NURSE_IMG, "left", "Please fill the patient form below and click submit",patientFormHtml,[])
+
     }
 
 function testPatient() {

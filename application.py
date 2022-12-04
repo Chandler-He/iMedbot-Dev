@@ -97,7 +97,7 @@ def get_test_patient_list():
     print(data)
     dataset_name_str = json.loads(data)
     filename = os.path.join("dataset/", dataset_name_str)
-    print(filename)
+    print(filename[-3:])
     if filename[-3:]=="txt":
         with open(filename) as f:
             contents = f.readlines()
@@ -105,18 +105,29 @@ def get_test_patient_list():
         for i in range(len(contents)):
             contents[i] = contents[i].split()
         labellist = contents[0]
+        res = {}
+        print(len(labellist), len(contents))
+        for i in range(len(labellist)):
+            res[str(i)] = []
+            for j in range(1, len(contents)):
+                if contents[j][i] not in res[str(i)]:
+                    res[str(i)].append(contents[j][i])
+        print(res)
     else:
         contents=pandas.read_csv(filename)
+        print("contents",contents)
         labellist=contents.columns.values.tolist()
+        print(labellist)
         contents=contents.values.tolist()
-    res = {}
-    print(len(labellist), len(contents))
-    for i in range(len(labellist)):
-        res[str(i)] = []
-        for j in range(1, len(contents)):
-            if contents[j][i] not in res[str(i)]:
-                res[str(i)].append(contents[j][i])
-    print(res)
+        res={}
+        print(len(labellist), len(contents))
+        for i in range(len(labellist)):
+            res[labellist[i]] = []
+            for j in range(1, len(contents)):
+                if contents[j][i] not in res[labellist[i]]:
+                    res[labellist[i]].append(contents[j][i])
+        print("res is ",res)
+
     return {"labellist": labellist, "tableresult": res}
 
 
