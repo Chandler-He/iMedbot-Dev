@@ -2,6 +2,8 @@ import os
 import webbrowser
 
 import numpy as np
+import pandas
+
 from chatbot import chatbot
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
@@ -91,20 +93,22 @@ def get_model_inputdata():
 
 @application.route("/getTestPatient")
 def get_test_patient_list():
-    year = request.args.get('msg')
-    if int(year) == 5:
-        with open('dataset/LSM-5Year-I-240.txt') as f:
+    data = request.args.get('dataset_name')
+    print(data)
+    dataset_name_str = json.loads(data)
+    filename = os.path.join("dataset/", dataset_name_str)
+    print(filename)
+    if filename[-3:]=="txt":
+        with open(filename) as f:
             contents = f.readlines()
-    if int(year) == 10:
-        with open('dataset/LSM-10Year-I-240.txt') as f:
-            contents = f.readlines()
-    if int(year) == 15:
-        with open('dataset/LSM-15Year-I-240.txt') as f:
-            contents = f.readlines()
-    print(year)
-    for i in range(len(contents)):
-        contents[i] = contents[i].split()
-    labellist = contents[0]
+
+        for i in range(len(contents)):
+            contents[i] = contents[i].split()
+        labellist = contents[0]
+    else:
+        contents=pandas.read_csv(filename)
+        labellist=contents.columns.values.tolist()
+        contents=contents.values.tolist()
     res = {}
     print(len(labellist), len(contents))
     for i in range(len(labellist)):
@@ -172,6 +176,7 @@ def get_model_patientform():
                 # print("++++++++++++++++++++++++")
                 result = []
                 for item in X:
+                    print("item is ",item)
                     prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
                     # print(prob)
                     # print(prob[0][0])

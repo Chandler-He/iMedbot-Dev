@@ -6,7 +6,7 @@ PERSON_NAME = "You";
 var input_question = JSON.parse(input_question)
 var input_question10 = JSON.parse(input_question10)
 var input_question5 = JSON.parse(input_question5)
-train_model_year=0
+train_model_year=5
 
 var input = []
 const SURVEY = "BYE, It is my pleasure to help you,Have a nice day!How many stars you can give us?"
@@ -265,12 +265,7 @@ function submit() {
             console.log("break point 235 ")
             var array = csvToArray(rawLog, delimiter = ",")
             var tablehead = Object.keys(array[0]);
-            if ((train_model_year==5 && tablehead.length!=21)||(train_model_year==10 && tablehead.length!=19)||(train_model_year==15 && tablehead.lenght!=18))
-                {
-                    alert ("Your dataset size does not match the year you selected, please resubmit it ")
-                    location.reload();
-                    return
-             }
+
             viewDataset(rawLog,name,size)
         }
         reader.readAsText(dataset);
@@ -361,24 +356,7 @@ function showDemo() {
     '<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>2</td><td>1</td><td>0</td><td>0</td></tr>'+
     '<tr><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>0</td><td>0</td><td>2</td><td>2</td><td>2</td><td>1</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>'
     }
-    if (train_model_year==10){
-    demoHtml=
-    '<thead class="thead-dark"><tr><th>lymph_node_positive</th><th>ER</th><th>PR_percent</th><th>smoking</th><th>ER_percent</th><th>family_history</th><th>alcohol_useage</th><th>Histology</th><th>age_at_diagnosis</th><th>DCIS_level</th><th>TNEG</th><th>surgical_margins</th><th>grade</th><th>stage</th><th>HER2</th><th>ethnicity</th><th>n_tnm_stage</th><th>PR</th><th>distant_recurrence</th></tr></thead>'+
-    '<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>'+
-    '<tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>'+
-    '<tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>2</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td></tr>'+
-    '<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td></tr>'+
-    '<tr><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td><td>0</td><td>2</td><td>1</td><td>1</td><td>3</td><td>0</td><td>1</td><td>1</td><td>2</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>'
-    }
-    if (train_model_year==15){
-    demoHtml=
-    '<thead class="thead-dark"><tr><th>invasive_tumor_Location</th><th>ER</th><th>ER_percent</th><th>alcohol_useage</th><th>Histology</th><th>size</th><th>age_at_diagnosis</th><th>t_tnm_stage</th><th>lymph_node_status</th><th>menopause_status</th><th>surgical_margins</th><th>grade</th><th>stage</th><th>histology2</th><th>race</th><th>n_tnm_stage</th><th>re_excision</th><th>distant_recurrence</th></tr></thead>'+
-    '<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>'+
-    '<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>'+
-    '<tr><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>'+
-    '<tr><td>2</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td><td>0</td><td>1</td></tr>'+
-    '<tr><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td></tr>'
-    }
+
     requirements = '<h2>Instructions:</h2>'+
         '<ul className="list-group list-group-flush">'+
         '<li className="list-group-item">1.The size of dataset should be in 50kb-500kb</li>'+
@@ -396,7 +374,7 @@ function showDemo() {
         myWindow.document.write(demoHtml)
         myWindow.document.write('</table>')
 
-        myWindow.document.write('<button id = "runDemo" type="button" class="btn btn-info " >Run Demo!</button>')
+       // myWindow.document.write('<button id = "runDemo" type="button" class="btn btn-info " >Run Demo!</button>')
         //myWindow.document.write('<span id = "Validation_AUC" className = "badge badge-primary" style="display:none"  ><br />The Validation_AUC of demo dataset is 0.841</span>')
         myWindow.document.write('<script>' +
             'document.getElementById("runDemo").addEventListener("click",()=>{ document.getElementById("Validation_AUC").style.display="inline"},false)' +
@@ -641,7 +619,12 @@ function generatePatientForm(labelList,table_result) {
 
 function testPatient() {
     add_userMsg("Testing with new patients")
-    $.get("/getTestPatient", { msg: train_model_year }).done(function (data) {
+    if (window.dataset_name===undefined)
+    {
+        if (train_model_year==5){window.dataset_name="LSM-5Year-I-240.txt";}
+    }
+    console.log(window.dataset_name)
+    $.get("/getTestPatient", { dataset_name: JSON.stringify(window.dataset_name) }).done(function (data) {
         generatePatientForm(data["labellist"], data["tableresult"])
 
     })
@@ -668,21 +651,7 @@ function noQuestion() {
     appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
 }
 
-function train5year(){
-            train_model_year=5;
-            add_userMsg("5 year");
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"});
-}
-function train10year(){
-            train_model_year=10;
-            add_userMsg("10 year");
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"});
-}
-function train15year(){
-            train_model_year=15;
-            add_userMsg("15 year");
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"});
-}
+
 
 function predictanotherpatient(){
     add_userMsg("Predict another patient")
@@ -979,19 +948,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
         const btn_group = document.getElementsByClassName("btn btn-success");
 
         for (let i = 0; i < btn_group.length; i++) {
-            if (btn_group[i].innerHTML == "5 year" && instruction == "no information")
-            {
-            btn_group[i].addEventListener('click', train5year, false)
-            }
-            else if (btn_group[i].innerHTML == "10 year" && instruction == "no information")
-            {
-            btn_group[i].addEventListener('click', train10year, false)
-            }
-            else if (btn_group[i].innerHTML == "15 year" && instruction == "no information")
-            {
-            btn_group[i].addEventListener('click', train15year, false)
-            }
-            else if (btn_group[i].innerHTML == "Yes" && original_text == "Would you like to take a survey?")
+            if (btn_group[i].innerHTML == "Yes" && original_text == "Would you like to take a survey?")
             {
             console.log(text)
             btn_group[i].addEventListener('click', takesurvey, false)
@@ -1076,8 +1033,7 @@ function showNext(e){
                   confirmButtonText: 'Yes, Go on!'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                      //appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"})
-                      appendMessage(BOT_NAME, NURSE_IMG, "left", "We can train the model for 5 year, 10 year and 15 year respectively. The dataset format is different from three choices","no information",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
+                      appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"})
                   }else {
                       console.log("hello")
                         secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"
