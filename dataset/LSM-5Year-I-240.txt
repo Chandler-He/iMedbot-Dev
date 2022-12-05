@@ -1,4 +1,4 @@
-race	smoking	family_history	age_at_diagnosis	TNEG	ER	ER_percent	PR	PR_percent	P53	HER2	t_tnm_stage	n_tnm_stage	stage	lymph_node_positive	Histology	size	invasive_tumor_Location	DCIS_level	surgical_margins	distant_recurrence
+    race	smoking	family_history	age_at_diagnosis	TNEG	ER	ER_percent	PR	PR_percent	P53	HER2	t_tnm_stage	n_tnm_stage	stage	lymph_node_positive	Histology	size	invasive_tumor_Location	DCIS_level	surgical_margins	distant_recurrence
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	1	1	0	0	0	1	0	0	0	1	1	1	1	0	1	0	1	0	0
 0	0	2	2	0	0	0	0	1	0	0	2	2	0	0	1	0	1	2	0	0
