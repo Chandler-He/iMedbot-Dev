@@ -18,12 +18,27 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, Stratified
 import matplotlib.pyplot as plt
 import joblib
 import time
+import pymongo
+from datetime import datetime
 
 application = Flask(__name__)
 application.static_folder = 'static'
 bootstrap = Bootstrap(application)
 class_button_json = json.loads(open('training_data/classes_button.json').read())
 list_of_classes = class_button_json['classes_button']
+
+'''
+connect to database
+'''
+client = pymongo.MongoClient("mongodb+srv://yangzhen:yangzhen@cluster0.wigwlyv.mongodb.net/?retryWrites=true&w=majority")
+db = client.test
+
+#name of database
+imedbot = client["imedbot"]
+#name of collection
+survey = imedbot["survey"]
+
+
 model_15 = load_model('model15.h5')
 model_10 = load_model('model10.h5')
 model_5 = load_model('model5.h5')
@@ -137,10 +152,10 @@ def get_user_survey():
         star = request.form.get('star')
         text = request.form.get('text')
         print(star, text)
-        survey_result={"time":time.time(),"star":star,"suggestion":text}
-        with open("savedata/myfile.txt", 'w') as f:
-            for key, value in survey_result.items():
-                f.write('%s:%s\n' % (key, value))
+        now = datetime.now()
+        print("Current Time =", now)
+        survey_dict={"time":now,"star":star,"suggestion":text}
+        survey.insert_one(survey_dict)
 
     return "success"
 

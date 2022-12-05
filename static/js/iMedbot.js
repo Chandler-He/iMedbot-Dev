@@ -45,8 +45,7 @@ $(document).on({
 
 
 msgerForm.addEventListener("submit", event => {
-console.log("11111111111");
-alert("done")
+
   event.preventDefault();
   const msgText = msgerInput.value;
   if (!msgText) return;
@@ -88,25 +87,27 @@ function getValue(event){
 }
 var alreaView = false
 function gobacktoBrowse() {
-    console.log("11111111111");
-alert("done")
+
     location.reload();
     text = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"
     appendMessage(BOT_NAME, NURSE_IMG, "left", text,"no information",{"Predict":"Predict","Train a Model":"Train a Model"})
 
 }
 function uploadData(e) {
-    add_userMsg("Upload Local Dataset")
+//    add_userMsg("Upload Local Dataset")
     document.getElementById('fileid').click();
+    console.log(document.getElementById('fileid'))
     if (alreaView == false){
 
         document.getElementById("fileid").onchange = function() {
         submit();
 
         };
+        var dataset = $('#fileid').prop('files')[0];
+    console.log(dataset)
 
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
-            alreaView = true
+  //  appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
+    alreaView = true
     }
 
 }
@@ -121,7 +122,7 @@ function runModelExampleDateset(e){
 
 function uploadNewData(e) {
     alreaView=false;
-    add_userMsg("Open new dataset")
+    //add_userMsg("Open new dataset")
     document.getElementById('fileid').click();
     console.log(document.getElementById("fileid"))
     if (alreaView == false){
@@ -172,7 +173,8 @@ function wait(ms){
 function viewDataset(dataset,name,size){
     // var statisticalData = "Your dataset name is <b>"+ name +"</b> ; dataset size is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     // appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
-    console.log("breakpoint 153 ",dataset,name,size)
+
+
     var showTable = document.getElementById('showdataset');
     var hidden_div = document.getElementById("hidden_div")
     var hidden_table = document.getElementById("hidden_table")
@@ -245,7 +247,6 @@ function viewDataset(dataset,name,size){
  }
 function submit() {
     //showdataset.style = "display:inline"
-    console.log("enter submit")
     function read(callback) {
 
         var dataset = $('#fileid').prop('files')[0];
@@ -262,20 +263,21 @@ function submit() {
         var reader = new FileReader();
         reader.onload = function() {
             rawLog = reader.result
-            console.log("break point 235 ")
             var array = csvToArray(rawLog, delimiter = ",")
             var tablehead = Object.keys(array[0]);
-
+            add_userMsg("view my dataset");
             viewDataset(rawLog,name,size)
         }
         reader.readAsText(dataset);
+        add_userMsg("Upload Local Dataset");
     }
     var dataset = $('#fileid').prop('files')[0];
     if (dataset === undefined){
         alert("please upload your dataset first")
         // gobacktoBrowse()
     }else {
-        read()
+        read();
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"});
     }
 }
 
@@ -539,21 +541,18 @@ function submitPatientForm(){
     var patient_dic = []
     var patient_Form = document.getElementById("patientForm")
 
-    console.log(patient_Form.elements)
     var shap_check = document.getElementById("shapCheck").checked
 
     for (var i = 0; i < patient_Form.elements.length-1; i++) {
 
         patient_dic.push({key:patient_Form.elements[i].id, value:patient_Form.elements[i].value})
     }
-    console.log(patient_dic)
     if (window.dataset_name===undefined)
     {
         if (train_model_year==5){window.dataset_name="LSM-5Year-I-240.txt";}
         if (train_model_year==10){window.dataset_name="LSM-10Year-I-240.txt";}
         if (train_model_year==15){window.dataset_name="LSM-15Year-I-240.txt";}
     }
-    console.log(window.dataset_name)
 
     $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name),shap_check: JSON.stringify(shap_check)}).done(function (data) {
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Your distant_recurrence probability is " + data, "no information", [])
@@ -577,7 +576,6 @@ function generatePatientForm(labelList,table_result) {
      }
 
     var labelList_withouttarget = labelList
-    console.log(labelList_withouttarget)
     labelList_withouttarget.pop()
     if (labelList_withouttarget.length == 0){
         labelList_withouttarget = (labelList.toString()).split("\t")
