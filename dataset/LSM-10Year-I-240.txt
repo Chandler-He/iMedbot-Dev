@@ -1826,3 +1826,6 @@ lymph_node_positive	ER	PR_percent	smoking	ER_percent	family_history	alcohol_usea
 1	0	1	1	0	4	2	1	0	0	0	0	0	1	0	0	3	1	0
 1	0	2	0	0	1	2	0	2	0	0	0	2	1	0	0	2	2	0
 1	0	0	1	0	1	0	1	0	0	0	0	2	1	0	0	2	1	0
+
+
+

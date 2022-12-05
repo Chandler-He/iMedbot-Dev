@@ -121,12 +121,14 @@ def get_test_patient_list():
             contents[i] = contents[i].split()
         labellist = contents[0]
         res = {}
-        print(len(labellist), len(contents))
+        print(labellist, len(contents[0]),len(contents))
+        print(contents)
         for i in range(len(labellist)):
-            res[str(i)] = []
+            res[labellist[i]] = []
             for j in range(1, len(contents)):
-                if contents[j][i] not in res[str(i)]:
-                    res[str(i)].append(contents[j][i])
+
+                if len(contents[j])==len(labellist) and contents[j][i] not in res[labellist[i]]:
+                    res[labellist[i]].append(contents[j][i])
         print(res)
     else:
         contents=pandas.read_csv(filename)
