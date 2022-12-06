@@ -785,7 +785,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
             }
         }
         else{
-        text = text + "(Please select one choice according to your situation)"
+        //text = text + "(Please select one choice according to your situation)"
         }
     }
     if (text == SURVEY) {
