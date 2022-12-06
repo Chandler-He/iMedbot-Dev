@@ -9,8 +9,9 @@ var input_question5 = JSON.parse(input_question5)
 train_model_year=5
 
 var input = []
-const SURVEY = "BYE, It is my pleasure to help you,Have a nice day!How many stars you can give us?"
+const SURVEY = "It is my pleasure to help you. Please rate our service, thank you!"
 
+//The patientParameter_dis is currently not used?
 var patientParameter_dis = {"race": "race_dis",
     "ethnicity": "ethnicity_dis",
     "smoking": "smoking_dis",
@@ -89,7 +90,7 @@ var alreaView = false
 function gobacktoBrowse() {
 
     location.reload();
-    text = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"
+    text = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset, or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please make your choice by click one of the buttons below."
     appendMessage(BOT_NAME, NURSE_IMG, "left", text,"no information",{"Predict":"Predict","Train a Model":"Train a Model"})
 
 }
