@@ -118,7 +118,7 @@ function uploadData(e) {
 
 function runModelExampleDateset(e){
     add_userMsg("Run Model with Example Dataset")
-    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use our default parameter set to train the example dataset","Train Model",{"Yes": "Yes","No,I don't":"No,I don't"})
+    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use our default parameter setting to train the example dataset","Train Model",{"Yes": "Yes","No,I don't":"No,I don't"})
 }
 
 function uploadNewData(e) {
@@ -194,11 +194,11 @@ function viewDataset(dataset,name,size){
         // }
 
     //}
-    var statisticalData = "Your dataset name is <b>"+ name +"</b>; row number of dataset is <b>"+ array.length +"</b>; column number of dataset is <b>"+ tablehead.length +"</b>;dataset size is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
+    var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array.length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
 
     if (array.length < 30){
-        alert ("Your dataset size is less than 30, please resubmit it ")
+        alert ("The number of rows of your dataset is less than 30, please resubmit it ")
         location.reload();
         return
     }
@@ -234,7 +234,7 @@ function viewDataset(dataset,name,size){
     showTable.style = "display:inline"
     // console.log(tableHTML)
     }
-    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use our default parameter set to train  your dataset","Train Model",{"Yes":"Yes","No":"No"})
+    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use our default parameter setting to train  your dataset","Train Model",{"Yes":"Yes","No":"No"})
     var openWindow=function(event,tableHTML){
         var myWindow = window.open("", "MsgWindow", "width=500, height=500");
         myWindow.document.write(css + '<html><head><title>Table</title></head><body>');
@@ -257,7 +257,7 @@ function submit() {
         window.dataset_name = dataset.name
         const size = dataset.size
         if (name.slice(-3) != 'txt' && name.slice(-3) != 'csv'){
-            alert ("Your format is not 'txt' or 'csv', please upload allowed format!  ")
+            alert ("Your file format is not 'txt' or 'csv', please correct your file format and reupload!  ")
             location.reload();
             return
         }
@@ -266,26 +266,26 @@ function submit() {
             rawLog = reader.result
             var array = csvToArray(rawLog, delimiter = ",")
             var tablehead = Object.keys(array[0]);
-            add_userMsg("view my dataset");
+            add_userMsg("View my dataset");
             viewDataset(rawLog,name,size)
         }
         reader.readAsText(dataset);
-        add_userMsg("Upload Local Dataset");
+        add_userMsg("Upload local dataset");
     }
     var dataset = $('#fileid').prop('files')[0];
     if (dataset === undefined){
-        alert("please upload your dataset first")
+        alert("Please upload your dataset first!")
         // gobacktoBrowse()
     }else {
         read();
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"});
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Please view your dataset and some basic counts of your dataset will be shown.","View your dataset",{"View your dataset":"View your dataset"});
     }
 }
 
 function getParameterExam(){
         console.log("enter getpara exam")
     document.getElementById('textInput').disabled = true;
-    document.getElementById('textInput').placeholder = "Your model is training!";
+    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
         const name = '15_year_smote_balancedataset - Copy.csv'
         var learningrate = $("#parameterForm input[name=learningrate]").val()
         var decay = $("#parameterForm input[name=decay]").val()
@@ -300,18 +300,18 @@ function getParameterExam(){
             dropoutrate: dropoutrate,
             epochs: epochs
         }).done(function (data) {
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model ", "no information", [])
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Your model validation auc is " + data, "no information", [])
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model. ", "no information", [])
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + data, "no information", [])
             wait(20000);
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "This is your roc curve","no information",[])
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to test your patients? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[])
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
             document.getElementById('textInput').disabled = true;
             //document.getElementById('textInput').placeholder = "Enter your message..."
         })
     }
 function getParameter(){
     document.getElementById('textInput').disabled = true;
-    document.getElementById('textInput').placeholder = "Your model is training!";
+    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
     function read_parameter(callback) {
 
         var dataset = $('#fileid').prop('files')[0];
@@ -333,11 +333,11 @@ function getParameter(){
                 dropoutrate: dropoutrate,
                 epochs: epochs
             }).done(function (data) {
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model ", "no information", [])
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "Your model validation auc is " + data, "no information", [])
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model. ", "no information", [])
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + data, "no information", [])
                 wait(20000);
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "This is your roc curve","no information",[])
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to test your patients? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[])
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do predicton now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
                 document.getElementById('textInput').disabled = true;
                 //document.getElementById('textInput').placeholder = "Enter your message..."
             })
@@ -362,11 +362,11 @@ function showDemo() {
 
     requirements = '<h2>Instructions:</h2>'+
         '<ul className="list-group list-group-flush">'+
-        '<li className="list-group-item">1.The size of dataset should be in 50kb-500kb</li>'+
-        '<li className="list-group-item">2.The dataset must be in .csv or .txt format</li>'+
-        '<li className="list-group-item">3.The label must be the first row of dataset</li>'+
-        '<li className="list-group-item">4.Can only use categorical data for now</li>'+
-        '<li className="list-group-item">5.The last column will be considered to the target</li>'+
+        '<li className="list-group-item">1.The size of dataset file should be in 50kb-500kb;</li>'+
+        '<li className="list-group-item">2.The dataset must be in .csv or .txt format;</li>'+
+        '<li className="list-group-item">3.The labels of the columns must be in the first row;</li>'+
+        '<li className="list-group-item">4.Can only use categorical data for now;</li>'+
+        '<li className="list-group-item">5.The last column will be considered as the target feature by default. </li>'+
     '</ul>'
     if ((myWindow == null) || (myWindow.closed)) {
         myWindow = window.open("", "MsgWindow", "width=500, height=500");
@@ -461,13 +461,13 @@ function trainModel() {
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
-                  cancelButtonText: 'No,I want to set it manually',
+                  cancelButtonText: 'Cancel',
                   confirmButtonText: 'Yes, Go on!',
                   reverseButtons: true
                 }).then((result) => {
                   if (result.isConfirmed) {
                       document.getElementById('textInput').disabled = true;
-                      document.getElementById('textInput').placeholder = "Your model is training!";
+                      document.getElementById('textInput').placeholder = "Training is on!";
                       var dataset = $('#fileid').prop('files')[0];
                       console.log("dataset",dataset);
                       if (dataset == null){
@@ -477,10 +477,10 @@ function trainModel() {
                           console.log(data_name);
                           $.post("/Examdataset", {name: data_name}).done(function (data) {
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model ","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Your model validation auc is "+ data,"no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "This is your roc curve","no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ data,"no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve.","no information",[])
 
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to test your patients? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
                                     document.getElementById('textInput').disabled = true;
                                     //document.getElementById('textInput').placeholder="Enter your message..."
                                 })
@@ -494,10 +494,10 @@ function trainModel() {
                             reader.onload = function() {
                                 rawLog = reader.result
                                 $.post("/dataset", { dataset: rawLog, name: name}).done(function (data) {
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model ","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Your model validation auc is "+ data,"no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "This is your roc curve","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to test your patients? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, training is on ","no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ data,"no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve","no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
                                     document.getElementById('textInput').disabled = true;
                                     //document.getElementById('textInput').placeholder="Enter your message..."
                                 })
@@ -512,8 +512,8 @@ function trainModel() {
 function trainModelWithParameterExam() {
     add_userMsg("No, I don't")
 
-    const question = "Please input the parameters you want to train the example dataset"
-    appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Train Model with Example dataset",[])
+    const question = "Please input the hyperparameter values you want to use for model training"
+    appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Train model with example dataset",[])
     document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
@@ -521,7 +521,7 @@ function trainModelWithParameterExam() {
 function trainModelWithParameter() {
     add_userMsg("No")
 
-    const question = "Please input the parameters you want"
+    const question = "Please input the hyperparameter values you want to use."
     appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Parameters",[])
     document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
@@ -529,7 +529,7 @@ function trainModelWithParameter() {
 }
 function retrainModelWithParameter() {
     add_userMsg("Retrain the model")
-    const question = "Please input the parameters you want"
+    const question = "Please input the hyperparameter values you want to use"
     appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Parameters",[])
     document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
@@ -556,11 +556,11 @@ function submitPatientForm(){
     }
 
     $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name),shap_check: JSON.stringify(shap_check)}).done(function (data) {
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Your distant_recurrence probability is " + data, "no information", [])
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of breast cancer metastasis is: " + data, "no information", [])   //This is place that you need to add a variable that contains the value of year. 
         if(shap_check == true){
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "This is your SHAP plot","no information",[])}
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[])}    //Be specific about the type of SHAP plot. 
 
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to test your patients? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
         document.getElementById('textInput').disabled = true;
         //document.getElementById('textInput').placeholder = "Enter your message..."
     })
@@ -615,7 +615,7 @@ function generatePatientForm(labelList,table_result) {
             let front = '<form id="patientForm" onsubmit="submitPatientForm();return false" method="post">\n'
             let end =' <div class="form-check">\n' +
                 '    <input type="checkbox" class="form-check-input" id="shapCheck">\n' +
-                '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to your dataset size and model</label>\n' +
+                '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model</label>\n' +
                 '  </div> <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>'
             patientFormHtml = front+patientFormHtml.join("")+end
           }else {
@@ -672,7 +672,7 @@ function predictanotherpatient(){
         PERSON_NAME="Your choice is"
     if (pattern=="Predict")
     {
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "I can predict the recurrence probability of breast cancer, please tell me which year you want to predict","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "For now, I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me which year you want to go by?","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
     }
     else {
 
@@ -702,7 +702,7 @@ function predictanotherpatient(){
         var input_cpoy = input
         input = []
         getinput(input_cpoy)
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Thank you! you answered all questions, we are calculating recurrence","no information",btnGroup);
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "You answered all questions, thank you! We are doing the calculation now. ","no information",btnGroup);
         return
     }
     tag=""
@@ -720,7 +720,7 @@ function predictanotherpatient(){
 
 function takesurvey(){
 add_userMsg("take a survey");
-appendMessage(BOT_NAME, NURSE_IMG, "left","BYE, It is my pleasure to help you,Have a nice day!How many stars you can give us?","no information",[]);
+appendMessage(BOT_NAME, NURSE_IMG, "left","It is my pleasure to serve. Please rate my service if you can. Thank you!?","no information",[]);
 }
 
 function takenosurvey(){
@@ -1154,8 +1154,8 @@ function formatDate(date) {
 }
 function load(){
 
-    firstMsg = "Hi, welcome to iMedBot! Go ahead and send me a message. 😄"
-    secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"
+    firstMsg = "Hi, welcome to iMedBot! 😄"
+    secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
     btnGroup = []
     appendMessage(BOT_NAME, NURSE_IMG, "left", firstMsg,"no information", btnGroup);
     appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Train a Model":"Train a Model"});
