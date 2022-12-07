@@ -582,10 +582,10 @@ function generatePatientForm(labelList,table_result) {
         labelList_withouttarget = (labelList.toString()).split("\t")
         labelList_withouttarget.pop()
     }
-    //console.log(labelList_withouttarget)
-    //console.log(table_result)
+    console.log(labelList_withouttarget)
+    console.log(table_result)
     var final_result = labelList_withouttarget.map((e, i) => e + "&"+table_result[i]);
-    //console.log(final_result)
+    console.log(final_result)
     let patientFormHtml = ""
           if (labelList.length != 0){
               document.getElementById('textInput').disabled = true;
@@ -720,7 +720,7 @@ function predictanotherpatient(){
 
 function takesurvey(){
 add_userMsg("take a survey");
-appendMessage(BOT_NAME, NURSE_IMG, "left","It is my pleasure to serve. Please rate my service if you can. Thank you!?","no information",[]);
+appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[]);
 }
 
 function takenosurvey(){
@@ -765,7 +765,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     var parameterHTML = ``
     var patientHtml = ``
     var rocHTML = ``
-    if(text.includes("roc curve")){
+    if(text.includes("ROC_curve")){
         rocHTML = `<img className="fit-picture" src="static/img/roc/roc_curve.png" alt="ROC Curve" style="width:300px;height:250px;">`
     }
     if(text.includes("SHAP")){
@@ -1027,7 +1027,7 @@ function showNext(e){
 
     if (pattern == "Predict"){
         add_userMsg("Predict")
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "I can predict the recurrence probability of breast cancer, please tell me which year you want to predict","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me which year you want to go by?","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
     }else if(pattern == "Train a Model"){
         add_userMsg("Train a Model")
                 Swal.fire({
@@ -1044,7 +1044,7 @@ function showNext(e){
                       appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"})
                   }else {
                       console.log("hello")
-                        secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"
+                        secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
                         appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Train a Model":"Train a Model"});
                       }
                 })
@@ -1075,7 +1075,7 @@ function showNext(e){
         var input_cpoy = input
         input = []
         getinput(input_cpoy)
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Thank you! you answered all questions, we are calculating recurrence","no information",btnGroup);
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "You answered all questions, thank you! We are doing the calculation now. ","no information",btnGroup);
         return
     }
     tag=""
@@ -1097,9 +1097,9 @@ function showNext(e){
 
 function getinput(input_copy){
   $.get("/getInput", { msg: input_copy.toString() }).done(function (data) {
-    res = "The patient's risk of breast cancer recurrence is" +" "+data.substring(2,data.length-2)
+    res = "The chance of breast cancer metastasis is" +" "+data.substring(2,data.length-2)
       appendMessage(BOT_NAME, NURSE_IMG, "left", res,"no information",[])
-      appendMessage(BOT_NAME, NURSE_IMG, "left","What is the following thing you would like to do?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
+      appendMessage(BOT_NAME, NURSE_IMG, "left","Which task would you like to do next?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
      // appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
 
 
