@@ -60,7 +60,7 @@ input_question5 =
     '  {"tag": "ER_percent",\n' +
     ' "instruction": "ER Percent means percent of cell stain positive for ER receptors",\n' +
     '  "nextques": "PR",\n' +
-    '  "patterns": {"ER_percent:90-100":"0","ER_percent:0-20":"1","ER_percent:20-90":"2"},\n' +
+    '  "patterns": {"ER_percent:0-20":"1","ER_percent:20-90":"2","ER_percent:90-100":"0"},\n' +
     '  "responses": ["What is your ","Could you tell me your "]' +
     '  },\n' +
 
@@ -95,21 +95,21 @@ input_question5 =
     '  {"tag": "t_tnm_stage",\n' +
     ' "instruction": "prime tumor stage in TNM system.X means that the tumour size cannot be assessed. IS means ductal carcinoma in situ. It is a pre invasive breast cancer. 1 means that the tumour is 2 centimetres (cm) across or less. 2 means that the tumour is more than 2 centimetres but no more than 5 centimetres across. 3 means the tumour is bigger than 5 centimetres across. 4 means tumor has spread into other places",\n' +
     '  "nextques": "n_tnm_stage",\n' +
-    '  "patterns": {"t_tnm_stage 1":"0","t_tnm_stage 3":"1","t_tnm_stage 2":"4","t_tnm_stage 4":"6","t_tnm_stage X":"7","t_tnm_stage IS":"2","t_tnm_stage 0":"3","t_tnm_stage 1mic":"5"},\n' +
+    '  "patterns": {"t_tnm_stage 0":"3","t_tnm_stage 1":"0","t_tnm_stage 2":"4","t_tnm_stage 3":"1","t_tnm_stage 4":"6","t_tnm_stage X":"7","t_tnm_stage IS":"2","t_tnm_stage 1mic":"5"},\n' +
     '  "responses": ["What is your ","Could you tell me your "]' +
     '  },\n' +
 
     '  {"tag": "n_tnm_stage",\n' +
     ' "instruction": "X: The lymph nodes were not evaluated. 0: Either of the following: no cancer was found in the lymph nodes or only areas of cancer smaller than 0.2 mm are in the lymph nodes. 1: The cancer has spread to 1 to 3 axillary lymph nodes and/or the internal mammary lymph nodes. 2: The cancer has spread to 4 to 9 axillary lymph nodes. 3: The cancer has spread to 10 or more axillary lymph nodes, or it has spread to the lymph nodes located under the clavicle, or collarbone. ",\n' +
     '  "nextques": "stage",\n' +
-    '  "patterns": {"n_tnm_stage 1":"2","n_tnm_stage 0":"0","n_tnm_stage 2":"1","n_tnm_stage X":"3","n_tnm_stage 3":"4"},\n' +
+    '  "patterns": {"n_tnm_stage 0":"0","n_tnm_stage 1":"2","n_tnm_stage 2":"1","n_tnm_stage 3":"4","n_tnm_stage X":"3"},\n' +
     '  "responses": ["What is your ","Could you tell me your "]' +
     '  },\n' +
 
     '  {"tag": "stage",\n' +
     ' "instruction": "composite of size and number of positive nodes",\n' +
     '  "nextques": "lymph_node_positive",\n' +
-    '  "patterns": {"stage 1":"0","stage 3":"1","stage 2":"2","stage 0":"3"},\n' +
+    '  "patterns": {"stage 0":"3","stage 1":"0","stage 2":"2","stage 3":"1"},\n' +
     '  "responses": ["What is your ","Could you tell me your "]' +
     '  },\n' +
 
