@@ -7,7 +7,7 @@ var input_question = JSON.parse(input_question)
 var input_question10 = JSON.parse(input_question10)
 var input_question5 = JSON.parse(input_question5)
 train_model_year=5
-
+predict_year=15
 var input = []
 const SURVEY = "It is my pleasure to help you. Please rate our service, thank you!"
 
@@ -44,16 +44,16 @@ $(document).on({
 });
 
 
+//currently we do not need this part, if in the future we need user input again, readd it
+//msgerForm.addEventListener("submit", event => {
 
-msgerForm.addEventListener("submit", event => {
-
-  event.preventDefault();
-  const msgText = msgerInput.value;
-  if (!msgText) return;
-  appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText,"no information",[]);
-  msgerInput.value = "";
-  botResponse(msgText);
-});
+//  event.preventDefault();
+//  const msgText = msgerInput.value;
+//  if (!msgText) return;
+//  appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText,"no information",[]);
+//  msgerInput.value = "";
+//  botResponse(msgText);
+//});
 
 
 
@@ -685,11 +685,16 @@ function predictanotherpatient(){
                 {
                     if (input_choice[i].patterns[pattern]=="10")
                     {
+                        predict_year=10
                         input_choice = input_question10["Predict"]
                     }
-                    if (input_choice[i].patterns[pattern]=="5")
+                    else if (input_choice[i].patterns[pattern]=="5")
                     {
+                        predict_year=5
                         input_choice = input_question5["Predict"]
+                    }
+                    else {
+                        predict_year=15
                     }
                 }
                 input.push(input_choice[i].patterns[pattern])
@@ -775,13 +780,13 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     let buttonHtml = generateBtnGroup(btnGroup)
     original_text=text
     if (btnGroup != "") {
-        if (text=="What is your " || text=="Could you tell me your " || text=="What is your tumor " || text=="Could you tell me your tumor ")
+        if (text=="What is the " || text=="Could you tell me the ")
         {
             if (tag=="DCIS_level"){
-            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please select one choice according to your situation and click the link for more information)"
+            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please "+"<a href='#'>click here</a>"+" for more information about the meaning of the choices)"
             }
             else{
-            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please select one choice according to your situation)"
+            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " of your patient?"
             }
         }
         else{
@@ -948,7 +953,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
 
     const show_option=document.getElementsByTagName("a");
     for (var i = 0; i < show_option.length ; i++) {
-        if (show_option[i].text=="DCIS_level")
+        if (show_option[i].text=="click here")
              show_option[i].addEventListener("click",DCIS_process,false);
     }
 
@@ -1059,11 +1064,17 @@ function showNext(e){
                 {
                     if (input_choice[i].patterns[pattern]=="10")
                     {
+                        predict_year=10
                         input_choice = input_question10["Predict"]
                     }
-                    if (input_choice[i].patterns[pattern]=="5")
+                    else if (input_choice[i].patterns[pattern]=="5")
                     {
+                        predict_year=5
                         input_choice = input_question5["Predict"]
+                    }
+                    else
+                    {
+                        predict_year=15
                     }
                 }
                 input.push(input_choice[i].patterns[pattern])
@@ -1097,7 +1108,7 @@ function showNext(e){
 
 function getinput(input_copy){
   $.get("/getInput", { msg: input_copy.toString() }).done(function (data) {
-    res = "The chance of breast cancer metastasis is" +" "+data.substring(2,data.length-2)
+    res = "The chance of breast cancer metastasis of "+predict_year+"-year is" +" "+data.substring(2,data.length-2)
       appendMessage(BOT_NAME, NURSE_IMG, "left", res,"no information",[])
       appendMessage(BOT_NAME, NURSE_IMG, "left","Which task would you like to do next?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
      // appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])

@@ -94,13 +94,66 @@ def get_model_inputdata():
     # transformation need according .txt in ../docs/informationprovidedfordevelopment/
 
     if input[0] == 15:
-        res = model_15.predict(np.array([input[1:]]))
+        race=input[1]
+        alcohol=input[2]
+        age=input[3]
+        menopause=input[4]
+        er=input[5]
+        erp=input[6]
+        ttnm=input[7]
+        ntnm=input[8]
+        stage=input[9]
+        lymph=input[10]
+        histology=input[11]
+        size=input[12]
+        grade=input[13]
+        histology2=input[14]
+        loaction=input[15]
+        excision=input[16]
+        margins=input[17]
+        res = model_15.predict(np.array([[loaction,er,erp,alcohol,histology,size,age,ttnm,lymph,menopause,margins,grade,stage,histology2,race,ntnm,excision]]))
     elif input[0] == 10:
-
-
-        res = model_10.predict(np.array([input[1:]]))
+        ethnicity = input[1]
+        smoking = input[2]
+        alcohol = input[3]
+        family = input[4]
+        age = input[5]
+        tneg = input[6]
+        er = input[7]
+        erp = input[8]
+        pr = input[9]
+        prp = input[10]
+        her2 = input[11]
+        ntnm = input[12]
+        stage = input[13]
+        lymph = input[14]
+        histology = input[15]
+        grade = input[16]
+        dcis = input[17]
+        margins=input[18]
+        res = model_10.predict(np.array([[lymph,er,prp,smoking,erp,family,alcohol,histology,age,dcis,tneg,margins,grade,stage,her2,ethnicity,ntnm,pr]]))
     elif input[0] == 5:
-        res = model_5.predict(np.array([input[1:]]))
+        race = input[1]
+        smoking = input[2]
+        family = input[3]
+        age = input[4]
+        tneg = input[5]
+        er = input[6]
+        erp = input[7]
+        pr = input[8]
+        prp = input[9]
+        p53 = input[10]
+        her2 = input[11]
+        ttnm = input[12]
+        ntnm = input[13]
+        stage = input[14]
+        lymph = input[15]
+        histology = input[16]
+        size = input[17]
+        location = input[18]
+        dcis =input[19]
+        margins=input[20]
+        res = model_5.predict(np.array([[race,smoking,family,age,tneg,er,erp,pr,prp,p53,her2,ttnm,ntnm,stage,lymph,histology,size,location,dcis,margins]]))
     else:
         res = "Sorry we only have 15 year model so far"
     return str(res)
