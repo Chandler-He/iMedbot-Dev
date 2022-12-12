@@ -91,13 +91,14 @@ function gobacktoBrowse() {
 
     location.reload();
     text = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset, or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please make your choice by click one of the buttons below."
-    appendMessage(BOT_NAME, NURSE_IMG, "left", text,"no information",{"Predict":"Predict","Train a Model":"Train a Model"})
+    appendMessage(BOT_NAME, NURSE_IMG, "left", text,"no information",{"Predict":"Predict","Model Training":"Model Training"})
 
 }
 function uploadData(e) {
-//    add_userMsg("Upload Local Dataset")
+   // add_userMsg("Upload Local Dataset")
+   console.log($('#fileid'))
     document.getElementById('fileid').click();
-    console.log(document.getElementById('fileid'))
+    console.log(alreaView)
     if (alreaView == false){
 
         document.getElementById("fileid").onchange = function() {
@@ -105,11 +106,11 @@ function uploadData(e) {
 
         };
         var dataset = $('#fileid').prop('files')[0];
-    console.log(dataset)
-
+        console.log(dataset)
   //  appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
     alreaView = true
     }
+
 
 }
 
@@ -123,6 +124,7 @@ function runModelExampleDateset(e){
 
 function uploadNewData(e) {
     alreaView=false;
+    $('#fileid').val("");
     //add_userMsg("Open new dataset")
     document.getElementById('fileid').click();
     console.log(document.getElementById("fileid"))
@@ -197,11 +199,11 @@ function viewDataset(dataset,name,size){
     var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array.length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
 
-    if (array.length < 30){
-        alert ("The number of rows of your dataset is less than 30, please resubmit it ")
-        location.reload();
-        return
-    }
+  //  if (array.length < 30){
+    //    alert ("The number of rows of your dataset is less than 30, please resubmit it ")
+      //  location.reload();
+        //return
+    //}
 
     for(var  i= 0; i< tablehead.length; i++) {
         tableHTML+= '<th>' + tablehead[i] + '</th>'
@@ -248,9 +250,11 @@ function viewDataset(dataset,name,size){
  }
 function submit() {
     //showdataset.style = "display:inline"
+    console.log("enter submit")
+    var valid_file=true
     function read(callback) {
 
-        var dataset = $('#fileid').prop('files')[0];
+         dataset = $('#fileid').prop('files')[0];
 
 
         const name = dataset.name
@@ -258,18 +262,48 @@ function submit() {
         const size = dataset.size
         if (name.slice(-3) != 'txt' && name.slice(-3) != 'csv'){
             alert ("Your file format is not 'txt' or 'csv', please correct your file format and reupload!  ")
-            location.reload();
+            //location.reload();
+            console.log(typeof dataset);
+            dataset=undefined;
+            console.log(dataset);
+            $('#fileid').val("");
+            valid_file=false;
             return
         }
+        if (size>500000){
+            alert ("The size of your dataset file is too large, please reupload a smaller one which size is less than 500kb!  ")
+            //location.reload();
+            delete dataset;
+            dataset=undefined;
+            console.log(dataset)
+
+            $('#fileid').val("");
+            console.log($('#fileid'))
+            valid_file=false;
+            return
+        }
+
+
         var reader = new FileReader();
         reader.onload = function() {
             rawLog = reader.result
             var array = csvToArray(rawLog, delimiter = ",")
+
             var tablehead = Object.keys(array[0]);
+            if (valid_file){
             add_userMsg("View my dataset");
-            viewDataset(rawLog,name,size)
+            viewDataset(rawLog,name,size);
+            }
+            else
+            {
+                return;
+            }
         }
+
         reader.readAsText(dataset);
+        console.log(valid_file)
+
+        if (valid_file)
         add_userMsg("Upload local dataset");
     }
     var dataset = $('#fileid').prop('files')[0];
@@ -278,7 +312,9 @@ function submit() {
         // gobacktoBrowse()
     }else {
         read();
+        if (valid_file==true){
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Please view your dataset and some basic counts of your dataset will be shown.","View your dataset",{"View your dataset":"View your dataset"});
+        }
     }
 }
 
@@ -441,27 +477,18 @@ function trainModel() {
 
     Swal.fire({
                   title: 'Default Parameter Settings',
-                  text: " 'mstruct': [(50, 1)],\n" +
-                      "        'drate': [0.2],\n" +
-                      "        'kinit': ['glorot_normal'],\n" +
-                      "        'iacti': ['relu'],\n" +
-                      "        'hacti': ['relu'],\n" +
-                      "        'oacti': ['sigmoid'],\n" +
-                      "        'opti': ['Adagrad'],\n" +
-                      "        'lrate': [0.01],\n" +
-                      "        'momen': [0.4],\n" +
-                      "        'dec': [0.0005],\n" +
-                      "        'ls': ['binary_crossentropy'],\n" +
-                      "        'batch_size': [40],\n" +
-                      "        'epochs': [85],\n" +
-                      "        'L1': [0.005],\n" +
-                      "        'L2': [0.005],\n" +
-                      "        'ltype': [3]",
+                  html:
+                        ' <p>  <a href="#" id="show-option" title= "Drate is dropout rate. In dropout, we randomly shut down some fraction of a layer’s neurons at each training step by zeroing out the neuron values.">   drate</a>: [0.2]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= "Lrate means learning rate. The learning rate is a tuning parameter in an optimization algorithm that determines the step size at each iteration while moving toward a minimum of a loss function.">  lrate</a>: [0.01]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= "Decay is a regularization technique that is used in machine learning to reduce the complexity of a model and prevent overfitting.">  dec</a>: [0.0005]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= "Batch size is a term used in machine learning and refers to the number of training examples utilized in one iteration.">  batch_size</a>: [40]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= "An epoch is when all the training data is used at once and is defined as the total number of iterations of all the training data in one cycle for training the machine learning model. ">  epochs</a>: [85]</p>',
                   icon: 'info',
-                  showCancelButton: true,
+                  showCancelButton: false,
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
-                  cancelButtonText: 'Cancel',
+
+                     cancelButtonText: 'Cancel',
                   confirmButtonText: 'Yes, Go on!',
                   reverseButtons: true
                 }).then((result) => {
@@ -513,7 +540,7 @@ function trainModelWithParameterExam() {
     add_userMsg("No, I don't")
 
     const question = "Please input the hyperparameter values you want to use for model training"
-    appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Train model with example dataset",[])
+    appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Train Model with Example dataset",[])
     document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
@@ -536,6 +563,7 @@ function retrainModelWithParameter() {
 
 }
 function submitPatientForm(){
+    add_userMsg("Submit patient form")
     console.log("submitPatientForm")
     document.getElementById('textInput').disabled = true;
     document.getElementById('textInput').placeholder = "We are evaluating your patient...";
@@ -568,8 +596,8 @@ function submitPatientForm(){
 
 }
 function generatePatientForm(labelList,table_result) {
-    //console.log(labelList.toString())
-    //console.log(table_result)
+    console.log(labelList.toString())
+    console.log(table_result)
      var patient_Form = document.getElementById("patientForm")
      if (patient_Form)
      {
@@ -583,7 +611,7 @@ function generatePatientForm(labelList,table_result) {
         labelList_withouttarget.pop()
     }
     console.log(labelList_withouttarget)
-    console.log(table_result)
+    console.log(table_result[0])
     var final_result = labelList_withouttarget.map((e, i) => e + "&"+table_result[i]);
     console.log(final_result)
     let patientFormHtml = ""
@@ -598,13 +626,14 @@ function generatePatientForm(labelList,table_result) {
                                     <a href="#" id="show-option" title=${patientParameter_dis[label]}>
                                        <i class="fas fa-info-circle" style="color:black"></i>
                                     </a>
-                                       <label for=${label} class="col-sm-5 col-form-label"><font size="-1">${label}</font></label>
+                                       <label for=${label} class="col-sm-5 col-form-label">${label}</label>
                                        <div class="col-sm-6">
                                       
                                                 <select id=${label} class="form-control" required>
-                                        <option selected value="1">1</option>`
+                                        <option selected value="1">0</option>
+                                        `
 
-                  const option_html = option_list.map(function(option){
+                  const option_html = option_list.slice(1).map(function(option){
                       const one_option =  `<option value=${option}>${option}</option>`
 
                       return one_option
@@ -832,34 +861,35 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
        // '</form>\n' +
        // '</div>\n'
     }
+
     if (instruction == "Parameters") {
         parameterHTML = '<form id="parameterForm" onsubmit="getParameter();return false" method="post">\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="learningrate" class="col-sm-2 col-form-label"><font size="-1">Learning Rate</font></label>\n' +
+            '    <label for="learningrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Lrate means learning rate. The learning rate is a tuning parameter in an optimization algorithm that determines the step size at each iteration while moving toward a minimum of a loss function.">Learning Rate</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="learningrate" name="learningrate" placeholder=0.001 value=0.001>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="batchsize" class="col-sm-2 col-form-label">Batch Size</label>\n' +
+            '    <label for="batchsize" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Batch size is a term used in machine learning and refers to the number of training examples utilized in one iteration.">Batch Size</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" class="form-control" id="batchsize" name="batchsize" placeholder=10 value=10>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="epoch" class="col-sm-2 col-form-label">Epoch</label>\n' +
+            '    <label for="epoch" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "An epoch is when all the training data is used at once and is defined as the total number of iterations of all the training data in one cycle for training the machine learning model. "> Epoch</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" class="form-control" id="epoch" name="epochs" placeholder=10 value=10>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="decay" class="col-sm-2 col-form-label">Decay</label>\n' +
+            '    <label for="decay" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Decay is a regularization technique that is used in machine learning to reduce the complexity of a model and prevent overfitting."> Decay</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="decay" name="decay" placeholder=0.001 value=0.001>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="dropoutrate" class="col-sm-2 col-form-label">Dropout Rate</label>\n' +
+            '    <label for="dropoutrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Drate is dropout rate. In dropout, we randomly shut down some fraction of a layer’s neurons at each training step by zeroing out the neuron values."> Dropout Rate</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="dropoutrate" name="dropoutrate" placeholder=0.02 value=0.02>\n' +
             '    </div>\n' +
@@ -873,31 +903,31 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     if(instruction == "Train Model with Example dataset" ||(instruction=="Parameters"&& $('#fileid').prop('files')[0]==null)) {
         parameterHTML = '<form id="parameterForm" onsubmit="getParameterExam();return false" method="post">\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="learningrate" class="col-sm-2 col-form-label"><font size="-1">Learning Rate</font></label>\n' +
+            '    <label for="learningrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Lrate means learning rate. The learning rate is a tuning parameter in an optimization algorithm that determines the step size at each iteration while moving toward a minimum of a loss function.">Learning Rate</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="learningrate" name="learningrate" placeholder=0.001 value=0.001>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="batchsize" class="col-sm-2 col-form-label">Batch Size</label>\n' +
+            '    <label for="batchsize" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Batch size is a term used in machine learning and refers to the number of training examples utilized in one iteration.">Batch Size</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" class="form-control" id="batchsize" name="batchsize" placeholder=10 value=10>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="epoch" class="col-sm-2 col-form-label">Epoch</label>\n' +
+            '    <label for="epoch" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "An epoch is when all the training data is used at once and is defined as the total number of iterations of all the training data in one cycle for training the machine learning model. "> Epoch</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" class="form-control" id="epoch" name="epochs" placeholder=10 value=10>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="decay" class="col-sm-2 col-form-label">Decay</label>\n' +
+            '    <label for="decay" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Decay is a regularization technique that is used in machine learning to reduce the complexity of a model and prevent overfitting."> Decay</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="decay" name="decay" placeholder=0.001 value=0.001>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +
-            '    <label for="dropoutrate" class="col-sm-2 col-form-label">Dropout Rate</label>\n' +
+            '    <label for="dropoutrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Drate is dropout rate. In dropout, we randomly shut down some fraction of a layer’s neurons at each training step by zeroing out the neuron values."> Dropout Rate</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="dropoutrate" name="dropoutrate" placeholder=0.02 value=0.02>\n' +
             '    </div>\n' +
@@ -930,7 +960,31 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
         <div class="msg-text">
             ${text}
         </div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div> </div>`;
-    } else
+    }else if(text.includes("ROC_curve")) {
+        var msgHTML =
+        `<div class="msg ${side}-msg">
+        <div class="msg-img" style="background-image: url(${img})"></div>
+        <div class="msg-bubble">
+            <div class="msg-info">
+                <div class="msg-info-name">${name}</div>
+                <div class="msg-info-time">${formatDate(new Date())}
+                </div>
+            </div>
+        <div class="msg-text">Figure below is the validation <a href="#" id="show-option" title= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1).'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+    }
+    else if(text.includes("SHAP")){
+        var msgHTML =
+        `<div class="msg ${side}-msg">
+        <div class="msg-img" style="background-image: url(${img})"></div>
+        <div class="msg-bubble">
+            <div class="msg-info">
+                <div class="msg-info-name">${name}</div>
+                <div class="msg-info-time">${formatDate(new Date())}
+                </div>
+            </div>
+        <div class="msg-text">Figure below is your <a href="#" id="show-option" title= 'SHAP dependence plots are an alternative to partial dependence plots and accumulated local effects. The y-axis indicates the variable name, in order of importance from top to bottom. The value next to them is the mean SHAP value. On the x-axis is the SHAP value. Indicates how much is the change in log-odds. From this number we can extract the probability of success. Gradient color indicates the original value for that variable. In booleans, it will take two colors, but in number it can contain the whole spectrum. Each point represents a row from the original dataset.'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+    }
+    else
     {
 
     var msgHTML =
@@ -1017,7 +1071,7 @@ function showNext(e){
     var btnGroup = []
     var nextques = ""
     var pattern = e.target.innerHTML
-    if (e.target.innerHTML != "Predict" && e.target.innerHTML != "Train a Model"){
+    if (e.target.innerHTML != "Predict" && e.target.innerHTML != "Model Training"){
     add_userMsg(e.target.innerHTML)
     }
 
@@ -1025,7 +1079,7 @@ function showNext(e){
     if (pattern == "Predict"){
         input_choice = input_question["Predict"]
         PERSON_NAME="Your choice is"
-    }else if(pattern == "Train a Model"){
+    }else if(pattern == "Model Training"){
         input_choice = input_question["Train a Model"]
         PERSON_NAME="Your choice is"
     }
@@ -1033,10 +1087,10 @@ function showNext(e){
     if (pattern == "Predict"){
         add_userMsg("Predict")
         appendMessage(BOT_NAME, NURSE_IMG, "left", "I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me which year you want to go by?","treatment_year instruction",{"5 year":"5 year","10 year":"10 year","15 year":"15 year"})
-    }else if(pattern == "Train a Model"){
-        add_userMsg("Train a Model")
+    }else if(pattern == "Model Training"){
+        add_userMsg("Model Training")
                 Swal.fire({
-                  title: 'Model Method Description ',
+                  title: 'About model training ',
                   text: " We will use 80% of your dataset to train this model with 5 fold cross validation strategies and 20% dataset as validation dataset to return the validation AUC, do you want to proceed it?",
                   icon: 'info',
                   showCancelButton: true,
@@ -1050,7 +1104,7 @@ function showNext(e){
                   }else {
                       console.log("hello")
                         secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
-                        appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Train a Model":"Train a Model"});
+                        appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
                       }
                 })
         //alert("Do you really want to train the model?")
@@ -1169,7 +1223,7 @@ function load(){
     secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
     btnGroup = []
     appendMessage(BOT_NAME, NURSE_IMG, "left", firstMsg,"no information", btnGroup);
-    appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Train a Model":"Train a Model"});
+    appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
 }
 
 window.οnlοad =load()

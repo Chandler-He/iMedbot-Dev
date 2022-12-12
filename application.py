@@ -196,8 +196,11 @@ def get_test_patient_list():
                 if contents[j][i] not in res[labellist[i]]:
                     res[labellist[i]].append(contents[j][i])
         print("res is ",res)
-
-    return {"labellist": labellist, "tableresult": res}
+    table_result=[]
+    for key,value in res.items():
+        value.sort()
+        table_result.append(value)
+    return {"labellist": labellist, "tableresult": table_result}
 
 
 @application.route("/submitsurvey", methods=['POST','GET'])
