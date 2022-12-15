@@ -42,7 +42,7 @@ body {
 }
 
 .msger-header {
-  /* display: flex; */
+
   font-size: medium;
   justify-content: space-between;
   padding: 10px;
@@ -51,6 +51,7 @@ body {
   background: #eee;
   color: #666;
 }
+
 
 .msger-chat {
   flex: 1;
@@ -335,4 +336,16 @@ textarea {
 
 .list-group-item{
 margin:50px;
+}
+
+
+.previous {
+
+  background: rgb(0, 196, 65);
+  text-decoration: none;
+  display: inline-block;
+  padding: 5px 10px;
+  color: #fff;
+  border-radius:10px;
+  position:left;
 }

@@ -64,6 +64,17 @@ $(document).on({
  * @param {string} text the value of input
  */
 
+function GoBackToLastMsg(){
+    message=document.getElementsByClassName("msg");
+    if (message.length>2){
+    message[message.length-1].remove();
+    }
+    else{
+    location.reload();
+    }
+    console.log(message[message.length-1]);
+}
+
 function getValue(event){
     console.log(event)
     var radio = document.getElementsByClassName('stars');
@@ -625,13 +636,20 @@ function submitPatientForm(){
     }
 
     $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name),shap_check: JSON.stringify(shap_check)}).done(function (data) {
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of breast cancer metastasis is: " + data, "no information", [])   //This is place that you need to add a variable that contains the value of year. 
+        if (data=="error")
+        {
+            alert("Sorry, there is an time-out error")
+            location.reload()
+        }
+        else{
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of breast cancer metastasis is: " + data, "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[])}    //Be specific about the type of SHAP plot. 
 
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
         document.getElementById('textInput').disabled = true;
         //document.getElementById('textInput').placeholder = "Enter your message..."
+        }
     })
 
 
@@ -827,7 +845,10 @@ function displayRadioValue()
                 text:text
             }).done(function (data) {
                console.log(data)
+               alert("done")
+               location.reload()
             })
+
 }
 
 function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {

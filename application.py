@@ -220,76 +220,79 @@ def get_user_survey():
 @application.route("/patientform", methods=['GET', 'POST'])
 def get_model_patientform():
     if request.method == "POST":
-        dataset_name = request.form.get('dataset_name')
-        shap_check = request.form.get("shap_check")
-        print(shap_check)
-        print("dataset_name ", dataset_name)
-        dataset_name_str = json.loads(dataset_name)
-        print(dataset_name_str)
-        filename = os.path.join("dataset/", dataset_name_str)
-        predset, target, X_columns = modelTraining.loadandprocess(filename, predtype=1, scaled=False)
-        print("147", X_columns)
-        print("148", predset[0])
-        print("149", target[0])
-        # ['race', 'ethnicity', 'smoking', 'alcohol_useage', 'family_history', 'age_at_diagnosis', 'menopause_status',
-        #  'side', 'TNEG', 'ER', 'ER_percent', 'PR', 'PR_percent',
-        #  'P53', 'HER2', 't_tnm_stage', 'n_tnm_stage', 'stage', 'lymph_node_removed', 'lymph_node_positive',
-        #  'lymph_node_status', 'Histology', 'size', 'grade', 'invasive', 'hi
-        #  stology2', 'invasive_tumor_Location', 'DCIS_level', 're_excision', 'surgical_margins', 'MRIs_60_surgery']
-        strat_shuf = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=123)
-        for CV_index, val_index in strat_shuf.split(predset, target):
-            X_CV, X_val = predset[CV_index], predset[val_index]
-            Y_CV, Y_val = target[CV_index], target[val_index]
+        try:
+            dataset_name = request.form.get('dataset_name')
+            shap_check = request.form.get("shap_check")
+            print(shap_check)
+            print("dataset_name ", dataset_name)
+            dataset_name_str = json.loads(dataset_name)
+            print(dataset_name_str)
+            filename = os.path.join("dataset/", dataset_name_str)
+            predset, target, X_columns = modelTraining.loadandprocess(filename, predtype=1, scaled=False)
+            print("147", X_columns)
+            print("148", predset[0])
+            print("149", target[0])
+            # ['race', 'ethnicity', 'smoking', 'alcohol_useage', 'family_history', 'age_at_diagnosis', 'menopause_status',
+            #  'side', 'TNEG', 'ER', 'ER_percent', 'PR', 'PR_percent',
+            #  'P53', 'HER2', 't_tnm_stage', 'n_tnm_stage', 'stage', 'lymph_node_removed', 'lymph_node_positive',
+            #  'lymph_node_status', 'Histology', 'size', 'grade', 'invasive', 'hi
+            #  stology2', 'invasive_tumor_Location', 'DCIS_level', 're_excision', 'surgical_margins', 'MRIs_60_surgery']
+            strat_shuf = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=123)
+            for CV_index, val_index in strat_shuf.split(predset, target):
+                X_CV, X_val = predset[CV_index], predset[val_index]
+                Y_CV, Y_val = target[CV_index], target[val_index]
 
-        category_list = []
-        patient_dic = request.form.get('patient_dic')
-        patient_input_list = json.loads(patient_dic)
+            category_list = []
+            patient_dic = request.form.get('patient_dic')
+            patient_input_list = json.loads(patient_dic)
 
-        patient_input_list = patient_input_list[:-1]
-        print(patient_input_list)
-        for item in patient_input_list:
-            category_list.append(int(item['value']))
-        print("168", np.array([category_list]))
-        # [[2 0 1 1 2 1 1 0 0 1 1 1 1 1 0 1 1 2 1 1 1 1 2 1 1 0 2 3 1 1 1]]
-        user_training_model = load_model('user_training_model.h5')
+            patient_input_list = patient_input_list[:-1]
+            print(patient_input_list)
+            for item in patient_input_list:
+                category_list.append(int(item['value']))
+            print("168", np.array([category_list]))
+            # [[2 0 1 1 2 1 1 0 0 1 1 1 1 1 0 1 1 2 1 1 1 1 2 1 1 0 2 3 1 1 1]]
+            user_training_model = load_model('user_training_model.h5')
 
-        if shap_check == "true":
-            def f(X):
-                # return best_model.predict(X).flatten()
-                # print("++++++++++++++++++++++++")
-                result = []
-                for item in X:
-                    print("item is ",item)
-                    prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
-                    # print(prob)
-                    # print(prob[0][0])
-                    result.append(prob[0][0])
-                print(np.array(result))
-                # the reason why we have 5 results is because we use kmeans to shrink the x_cv(background dataset) dataset to only 5 samples
-                # [0.4565038  0.3262849  0.3953898  0.23958007 0.3785722]
+            if shap_check == "true":
+                def f(X):
+                    # return best_model.predict(X).flatten()
+                    # print("++++++++++++++++++++++++")
+                    result = []
+                    for item in X:
+                        print("item is ",item)
+                        prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
+                        # print(prob)
+                        # print(prob[0][0])
+                        result.append(prob[0][0])
+                    print(np.array(result))
+                    # the reason why we have 5 results is because we use kmeans to shrink the x_cv(background dataset) dataset to only 5 samples
+                    # [0.4565038  0.3262849  0.3953898  0.23958007 0.3785722]
 
-                print(type(result))
-                return np.array(result)
+                    print(type(result))
+                    return np.array(result)
 
-            # shap.kmeans(data, K) to summarize the background as K samples, in our case it transfer
-            X_train_summary = shap.kmeans(X_CV, 1)
-            print(X_train_summary)
-            # < shap.utils._legacy.DenseData object at 0x0000024682E412B0 >
-            print("111111111111111111111111111111111111111")
-            explainer = shap.KernelExplainer(f, X_train_summary)
-            print("222222222222222222222222222222222222222")
-            shap_values = explainer.shap_values(np.array([category_list]))
-            print("333333333333333333333333333333333333333")
-            print(shap_values)
-            print(explainer.expected_value)
-            # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
-            shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
-                                                 data=np.array([category_list])[0], feature_names=X_columns))
-            plt.savefig('static/img/shap/shap.png')
+                # shap.kmeans(data, K) to summarize the background as K samples, in our case it transfer
+                X_train_summary = shap.kmeans(X_CV, 1)
+                print(X_train_summary)
+                # < shap.utils._legacy.DenseData object at 0x0000024682E412B0 >
+                print("111111111111111111111111111111111111111")
+                explainer = shap.KernelExplainer(f, X_train_summary)
+                print("222222222222222222222222222222222222222")
+                shap_values = explainer.shap_values(np.array([category_list]))
+                print("333333333333333333333333333333333333333")
+                print(shap_values)
+                print(explainer.expected_value)
+                # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
+                shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
+                                                     data=np.array([category_list])[0], feature_names=X_columns))
+                plt.savefig('static/img/shap/shap.png')
 
-        res = user_training_model.predict_proba(np.array([category_list]))
-        res = str(res).replace('[', '').replace(']', '')
-        print(res)
+            res = user_training_model.predict_proba(np.array([category_list]))
+            res = str(res).replace('[', '').replace(']', '')
+            print(res)
+        except:
+            res="error"
     return res
 
 
