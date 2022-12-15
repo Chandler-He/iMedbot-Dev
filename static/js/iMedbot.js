@@ -96,20 +96,41 @@ function gobacktoBrowse() {
 }
 function uploadData(e) {
    // add_userMsg("Upload Local Dataset")
-   console.log($('#fileid'))
-    document.getElementById('fileid').click();
-    console.log(alreaView)
-    if (alreaView == false){
+   Swal.fire({
+                  title: 'Instructions for dataset',
+                  html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
+                        '<li className="list-group-item">The size of dataset file should be in 50kb-500kb;</li>'+
+                        '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
+                        '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
+                        '<li className="list-group-item">Can only use categorical data for now;</li>'+
+                        '<li className="list-group-item">The last column will be considered as the target feature by default. </li>'+
+                        '</ul>',
+                  icon: 'info',
+                  showCancelButton: false,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                    cancelButtonText: 'No, cancel!',
+                  confirmButtonText: 'Yes, I confirm!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    console.log($('#fileid'))
+                    document.getElementById('fileid').click();
+                    console.log(alreaView)
+                    if (alreaView == false){
 
-        document.getElementById("fileid").onchange = function() {
-        submit();
+                        document.getElementById("fileid").onchange = function() {
+                        submit();
 
-        };
-        var dataset = $('#fileid').prop('files')[0];
-        console.log(dataset)
-  //  appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
-    alreaView = true
-    }
+                        };
+                        var dataset = $('#fileid').prop('files')[0];
+                        console.log(dataset)
+                  //  appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
+                    alreaView = true
+                    }
+                  }
+                })
+
+
 
 
 }
@@ -123,20 +144,40 @@ function runModelExampleDateset(e){
 }
 
 function uploadNewData(e) {
-    alreaView=false;
-    $('#fileid').val("");
-    //add_userMsg("Open new dataset")
-    document.getElementById('fileid').click();
-    console.log(document.getElementById("fileid"))
-    if (alreaView == false){
-        document.getElementById("fileid").onchange = function() {
-            submit();
-        };
+    Swal.fire({
+                  title: 'Instructions for dataset',
+                  html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
+                        '<li className="list-group-item">The size of dataset file should be in 50kb-500kb;</li>'+
+                        '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
+                        '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
+                        '<li className="list-group-item">Can only use categorical data for now;</li>'+
+                        '<li className="list-group-item">The last column will be considered as the target feature by default. </li>'+
+                        '</ul>',
+                  icon: 'info',
+                  showCancelButton: false,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                    cancelButtonText: 'No, cancel!',
+                  confirmButtonText: 'Yes, I confirm!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                        alreaView=false;
+                    $('#fileid').val("");
+                    //add_userMsg("Open new dataset")
+                    document.getElementById('fileid').click();
+                    console.log(document.getElementById("fileid"))
+                    if (alreaView == false){
+                        document.getElementById("fileid").onchange = function() {
+                            submit();
+                        };
 
-        //appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
-    console.log(4)
-    alreaView = true
-    }}
+                        //appendMessage(BOT_NAME, NURSE_IMG, "left", "Please check the dataset you uploaded and it will give your some basic stats","View your dataset",{"View your dataset":"View your dataset"})
+                    console.log(4)
+                    alreaView = true
+                    }
+                    }
+                })
+}
 
 function csvToArray(dataset, delimiter = ",") {
   // slice from start of text to the first \n index
@@ -442,17 +483,17 @@ function DCIS_process(){
     if ((myWindow1 == null) || (myWindow1.closed)) {
         myWindow1 = window.open("", "MsgWindow", "width=500, height=500");
 
-        myWindow1.document.write(css + '<html><head><title>Table</title></head><body>');
-        myWindow1.document.write('<p>Ductal carcinoma in situ (DCIS) is the presence of abnormal cells inside a milk duct in the breast. DCIS is considered the earliest form of breast cancer and is noninvasive, meaning it has not spread out of the milk duct to invade other parts of the breast. </p>')
-        myWindow1.document.write('<p>solid: A “Solid” cell pattern is one in which the cancer cells have completely filled the duct.</p>')
-        myWindow1.document.write('<p>apocrine: Apocrine breast cancer is a rare type of invasive ductal breast cancer. Like other types of invasive ductal cancer, apocrine breast cancer begins in the milk duct of the breast before spreading to the tissues around the duct. The cells that make up an apocrine tumor are different than those of typical ductal cancers.</p>')
-        myWindow1.document.write('<p>cribriform: A “cribriform” pattern has gaps between the cancer cells within the duct, with an appearance similar to the "holes in swiss cheese" or perhaps "ripples". A cribriform pattern is consistent with a low or medium grade DCIS.</p>')
-        myWindow1.document.write('<p>dcis: Normal DCIS</p>')
-        myWindow1.document.write('<p>comedo: it is characterized by the presence of central necrosis, or evidence of cell death and decay. A diagnosis of this particular kind of breast cancer is somewhat fortuitous as it is confined to the breast ducts and usually does not spread beyond. However, in terms of the various kinds of DCIS, comedo carcinoma is considered to be of a higher grade and a little more aggressive than the others, and may be treated a little more aggressively.</p>')
-        myWindow1.document.write('<p>papillary: A "papillary" DCIS pattern is one arranged in a "fern-like" pattern within the duct. Unlike the cribriform pattern, the papillary has no isolated "holes" of cancer cells, but they are all connected in a kind of asymmetrical or undulating pattern throughout the duct.</p>')
-        myWindow1.document.write('<p>micropapillary: Micro-papillary DCIS is now thought to be a highly malignant, dangerous presentation of DCIS, and is of the highest risk. With micropapillary DCIS the ducts are dilated and lined by a stratified population of monotonous cells. The pattern may show small finger-like protuberances with bulbous ends, which may form arches. Micropapillary DCIS is often multifocal and multicentric. When the presentation is pure, it is often considered grounds for mastectomy in hopes of avoiding invasive micropapillary carcinoma.</p>')
-
-        myWindow1.document.write('</body></html>');
+        myWindow1.document.write(css)
+        myWindow1.document.write('<html><head><title>Table</title></head><body style="margin:25px 15px;"><ul className="list-group list-group-flush">');
+        myWindow1.document.write('<li className="list-group-item">Ductal carcinoma in situ (DCIS): The presence of abnormal cells inside a milk duct in the breast. DCIS is considered the earliest form of breast cancer and is noninvasive, meaning it has not spread out of the milk duct to invade other parts of the breast. </li>')
+        myWindow1.document.write('<li className="list-group-item">solid: A “Solid” cell pattern is one in which the cancer cells have completely filled the duct.</li>')
+        myWindow1.document.write('<li className="list-group-item">apocrine: Apocrine breast cancer is a rare type of invasive ductal breast cancer. Like other types of invasive ductal cancer, apocrine breast cancer begins in the milk duct of the breast before spreading to the tissues around the duct. The cells that make up an apocrine tumor are different than those of typical ductal cancers.</li>')
+        myWindow1.document.write('<li className="list-group-item">cribriform: A “cribriform” pattern has gaps between the cancer cells within the duct, with an appearance similar to the "holes in swiss cheese" or perhaps "ripples". A cribriform pattern is consistent with a low or medium grade DCIS.</li>')
+        myWindow1.document.write('<li className="list-group-item">dcis: Normal DCIS</li>')
+        myWindow1.document.write('<li className="list-group-item">comedo: it is characterized by the presence of central necrosis, or evidence of cell death and decay. A diagnosis of this particular kind of breast cancer is somewhat fortuitous as it is confined to the breast ducts and usually does not spread beyond. However, in terms of the various kinds of DCIS, comedo carcinoma is considered to be of a higher grade and a little more aggressive than the others, and may be treated a little more aggressively.</li>')
+        myWindow1.document.write('<li className="list-group-item">papillary: A "papillary" DCIS pattern is one arranged in a "fern-like" pattern within the duct. Unlike the cribriform pattern, the papillary has no isolated "holes" of cancer cells, but they are all connected in a kind of asymmetrical or undulating pattern throughout the duct.</li>')
+        myWindow1.document.write('<li className="list-group-item">micropapillary: Micro-papillary DCIS is now thought to be a highly malignant, dangerous presentation of DCIS, and is of the highest risk. With micropapillary DCIS the ducts are dilated and lined by a stratified population of monotonous cells. The pattern may show small finger-like protuberances with bulbous ends, which may form arches. Micropapillary DCIS is often multifocal and multicentric. When the presentation is pure, it is often considered grounds for mastectomy in hopes of avoiding invasive micropapillary carcinoma.</li>')
+        myWindow1.document.write('</ul></body></html>');
         myWindow1.document.close();
     }else{
          Swal.fire("The example dataset is already open")
@@ -806,7 +847,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
         rocHTML = `<img className="fit-picture" src="static/img/shap/shap.png" alt="SHAP" style="width:300px;height:250px;">`
     }
     //Simple solution for small apps
-    let buttonHtml = generateBtnGroup(btnGroup)
+    let buttonHtml = generateBtnGroup(btnGroup,tag)
     original_text=text
     if (btnGroup != "") {
         if (text=="What is the " || text=="Could you tell me the ")
@@ -1176,17 +1217,36 @@ function getinput(input_copy){
 })
 }
 
+
 function generateBtnGroup(btn_group){
   let buttonHtml = ""
   let btn_array = Object.values(btn_group)
   // console.log( btn_array )
+
   if (btn_array.length != 0){
       document.getElementById('textInput').disabled = true;
       document.getElementById('textInput').placeholder = "You can not input now";
       buttonHtml = btn_array.map(function(btn){
-        const element = `<button type="button" class="btn btn-success">${btn}</button>`
-    return element
-  })
+        dcis_dict={"solid":"A Solid cell pattern is one in which the cancer cells have completely filled the duct.",
+             "apocrine":"Apocrine breast cancer is a rare type of invasive ductal breast cancer. Like other types of invasive ductal cancer, apocrine breast cancer begins in the milk duct of the breast before spreading to the tissues around the duct. The cells that make up an apocrine tumor are different than those of typical ductal cancers.",
+             "cribriform":' A cribriform pattern has gaps between the cancer cells within the duct, with an appearance similar to the holes in swiss cheese or perhaps ripples. A cribriform pattern is consistent with a low or medium grade DCIS.',
+             "dcis":"Normal DCIS",
+             "comedo":'it is characterized by the presence of central necrosis, or evidence of cell death and decay. A diagnosis of this particular kind of breast cancer is somewhat fortuitous as it is confined to the breast ducts and usually does not spread beyond. However, in terms of the various kinds of DCIS, comedo carcinoma is considered to be of a higher grade and a little more aggressive than the others, and may be treated a little more aggressively.',
+             "papillary":'A papillary DCIS pattern is one arranged in a fern-like pattern within the duct. Unlike the cribriform pattern, the papillary has no isolated holes of cancer cells, but they are all connected in a kind of asymmetrical or undulating pattern throughout the duct.',
+             "micropapillary":'Micro-papillary DCIS is now thought to be a highly malignant, dangerous presentation of DCIS, and is of the highest risk. With micropapillary DCIS the ducts are dilated and lined by a stratified population of monotonous cells. The pattern may show small finger-like protuberances with bulbous ends, which may form arches. Micropapillary DCIS is often multifocal and multicentric. When the presentation is pure, it is often considered grounds for mastectomy in hopes of avoiding invasive micropapillary carcinoma.',
+             "not present":"Not present"}
+        tag=Object.keys(dcis_dict)
+
+        if (tag.includes(btn)){
+        element = `<button type="button" class="btn btn-success" title="${dcis_dict[btn]}">${btn}</button>`
+        }
+        if (tag.includes(btn)==false)
+        {
+        element = `<button type="button" class="btn btn-success">${btn}</button>`
+        }
+
+        return element
+    })
     let front = '<div class="btn-group-vertical" role="group" aria-label="Basic example">'
     let end = '</div>'
     buttonHtml = front+buttonHtml.join("")+end

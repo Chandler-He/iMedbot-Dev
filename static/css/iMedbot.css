@@ -333,3 +333,6 @@ textarea {
   resize: none;
 }
 
+.list-group-item{
+margin:50px;
+}
