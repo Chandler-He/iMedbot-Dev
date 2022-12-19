@@ -186,10 +186,10 @@ with the best set of parameter values found by grid search
     print(img_src)
     plt.savefig(img_src)
     plt.clf()
-    '''
+
     while os.path.exists(img_src) is not True:
         continue
-    '''
+
     print("best val score grid: "+str(val_auc_grid))
     print("best val score manual: "+str(val_auc_manu))
     print("best mean auc: %f and best index: %s using %s" % (gs.best_score_, gs.best_index_,gs.best_params_))
