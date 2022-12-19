@@ -110,7 +110,7 @@ function uploadData(e) {
    Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 50kb-500kb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be in 20kb-1mb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -158,7 +158,7 @@ function uploadNewData(e) {
     Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 50kb-500kb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be in 20kb-1mb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -248,7 +248,8 @@ function viewDataset(dataset,name,size){
         // }
 
     //}
-    var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array.length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
+    console.log(tablehead)
+    var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array.length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the name of target class of your dataset is <b>"+tablehead[tablehead.length-1]+"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
 
   //  if (array.length < 30){
@@ -317,20 +318,29 @@ function submit() {
             //location.reload();
             console.log(typeof dataset);
             dataset=undefined;
-            console.log(dataset);
             $('#fileid').val("");
             valid_file=false;
             return
         }
-        if (size>500000){
-            alert ("The size of your dataset file is too large, please reupload a smaller one which size is less than 500kb!  ")
-            //location.reload();
+        console.log(size)
+        if (size>1024000){
+            alert ("The size of your dataset file is too large, please reupload a smaller one which size is less than 1MB!  ")
+
             delete dataset;
             dataset=undefined;
             console.log(dataset)
 
             $('#fileid').val("");
-            console.log($('#fileid'))
+            valid_file=false;
+            return
+        }
+        if (size<20480){
+            alert ("The size of your dataset file is too small, please reupload a larger one which size is greater than 20KB!  ")
+            delete dataset;
+            dataset=undefined;
+            console.log(dataset)
+
+            $('#fileid').val("");
             valid_file=false;
             return
         }
@@ -372,9 +382,9 @@ function submit() {
 
 function getParameterExam(){
         console.log("enter getpara exam")
-    document.getElementById('textInput').disabled = true;
-    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
-        const name = '15_year_smote_balancedataset - Copy.csv'
+//    document.getElementById('textInput').disabled = true;
+//    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
+        const name = 'Book1.csv'
         var learningrate = $("#parameterForm input[name=learningrate]").val()
         var decay = $("#parameterForm input[name=decay]").val()
         var batchsize= $("#parameterForm input[name=batchsize]").val()
@@ -388,18 +398,24 @@ function getParameterExam(){
             dropoutrate: dropoutrate,
             epochs: epochs
         }).done(function (data) {
+            if (data=="error"){
+                                    alert('Sorry! We have an error when training your model!')
+                                    location.reload()
+                                    }
+            auc=data["auc"]
+            img_src=data["src"]
             appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model. ", "no information", [])
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + data, "no information", [])
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + auc, "no information", [])
             wait(20000);
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[])
-            appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
-            document.getElementById('textInput').disabled = true;
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[],"",img_src)
+            appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+ //           document.getElementById('textInput').disabled = true;
             //document.getElementById('textInput').placeholder = "Enter your message..."
         })
     }
 function getParameter(){
-    document.getElementById('textInput').disabled = true;
-    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
+//    document.getElementById('textInput').disabled = true;
+//    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
     function read_parameter(callback) {
 
         var dataset = $('#fileid').prop('files')[0];
@@ -421,12 +437,18 @@ function getParameter(){
                 dropoutrate: dropoutrate,
                 epochs: epochs
             }).done(function (data) {
+                if (data=="error"){
+                                    alert('Sorry! We have an error when training your model!')
+                                    location.reload()
+                                    }
+                auc=data["auc"]
+                img_src=data["src"]
                 appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model. ", "no information", [])
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + data, "no information", [])
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC of your model is: " + auc, "no information", [])
                 wait(20000);
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[])
-                appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do predicton now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
-                document.getElementById('textInput').disabled = true;
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "The figure below is the ROC_curve resulted from validating your model.","no information",[],"",img_src)
+                appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do predicton now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+                //document.getElementById('textInput').disabled = true;
                 //document.getElementById('textInput').placeholder = "Enter your message..."
             })
         }
@@ -450,7 +472,7 @@ function showDemo() {
 
     requirements = '<h2>Instructions:</h2>'+
         '<ul className="list-group list-group-flush">'+
-        '<li className="list-group-item">1.The size of dataset file should be in 50kb-500kb;</li>'+
+        '<li className="list-group-item">1.The size of dataset file should be in 20kb-1mb;</li>'+
         '<li className="list-group-item">2.The dataset must be in .csv or .txt format;</li>'+
         '<li className="list-group-item">3.The labels of the columns must be in the first row;</li>'+
         '<li className="list-group-item">4.Can only use categorical data for now;</li>'+
@@ -519,7 +541,7 @@ function nottrainModel() {
 
     // more_que = "Do you have any other questions?"
     // appendMessage(BOT_NAME, NURSE_IMG, "left", more_que,"survey",{"I have no questions":"I have no questions","I have questions":"I have questions"})
-    document.getElementById('textInput').disabled = true;
+    //document.getElementById('textInput').disabled = true;
     console.log("end task")
     //document.getElementById('textInput').placeholder="Enter your message..."
 }
@@ -536,17 +558,17 @@ function trainModel() {
                       '   <p>   <a href="#" id="show-option" title= "Batch size is a term used in machine learning and refers to the number of training examples utilized in one iteration.">  batch_size</a>: [40]</p>\n' +
                       '   <p>   <a href="#" id="show-option" title= "An epoch is when all the training data is used at once and is defined as the total number of iterations of all the training data in one cycle for training the machine learning model. ">  epochs</a>: [85]</p>',
                   icon: 'info',
-                  showCancelButton: false,
+                  showCancelButton: true,
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
 
-                     cancelButtonText: 'Cancel',
+                     cancelButtonText: 'No, changed my mind',
                   confirmButtonText: 'Yes, Go on!',
                   reverseButtons: true
                 }).then((result) => {
                   if (result.isConfirmed) {
-                      document.getElementById('textInput').disabled = true;
-                      document.getElementById('textInput').placeholder = "Training is on!";
+                      //document.getElementById('textInput').disabled = true;
+                      //document.getElementById('textInput').placeholder = "Training is on!";
                       var dataset = $('#fileid').prop('files')[0];
                       console.log("dataset",dataset);
                       if (dataset == null){
@@ -555,12 +577,19 @@ function trainModel() {
                           else if (train_model_year == 15) {data_name='Book3.csv'};
                           console.log(data_name);
                           $.post("/Examdataset", {name: data_name}).done(function (data) {
+                                    if (data=="error"){
+                                    alert('Sorry! We have an error when training your model!')
+                                    location.reload()
+                                    }
+                                    auc=data["auc"]
+                                    img_src=data["src"]
+                                    console.log(img_src)
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, we are training your model ","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ data,"no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve.","no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ auc,"no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve.","no information",[],"",img_src)
 
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
-                                    document.getElementById('textInput').disabled = true;
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+                                    //document.getElementById('textInput').disabled = true;
                                     //document.getElementById('textInput').placeholder="Enter your message..."
                                 })
 
@@ -573,11 +602,17 @@ function trainModel() {
                             reader.onload = function() {
                                 rawLog = reader.result
                                 $.post("/dataset", { dataset: rawLog, name: name}).done(function (data) {
+                                    if (data=="error"){
+                                    alert('Sorry! We have an error when training your model!')
+                                    location.reload()
+                                    }
+                                    auc=data["auc"]
+                                    img_src=data["src"]
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Please wait, training is on ","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ data,"no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve","no information",[])
-                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
-                                    document.getElementById('textInput').disabled = true;
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "The validation AUC is: "+ auc,"no information",[])
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is the validation ROC_curve","no information",[],"",img_src)
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+                                    //document.getElementById('textInput').disabled = true;
                                     //document.getElementById('textInput').placeholder="Enter your message..."
                                 })
                             }
@@ -593,7 +628,7 @@ function trainModelWithParameterExam() {
 
     const question = "Please input the hyperparameter values you want to use for model training"
     appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Train Model with Example dataset",[])
-    document.getElementById('textInput').disabled = true;
+    //document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
 }
@@ -602,7 +637,7 @@ function trainModelWithParameter() {
 
     const question = "Please input the hyperparameter values you want to use."
     appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Parameters",[])
-    document.getElementById('textInput').disabled = true;
+    //document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
 }
@@ -610,15 +645,15 @@ function retrainModelWithParameter() {
     add_userMsg("Retrain the model")
     const question = "Please input the hyperparameter values you want to use"
     appendMessage(BOT_NAME, NURSE_IMG, "left", question,"Parameters",[])
-    document.getElementById('textInput').disabled = true;
+    //document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
 }
-function submitPatientForm(){
+function submitPatientForm(val){
     add_userMsg("Submit patient form")
-    console.log("submitPatientForm")
-    document.getElementById('textInput').disabled = true;
-    document.getElementById('textInput').placeholder = "We are evaluating your patient...";
+    console.log(val)
+    //document.getElementById('textInput').disabled = true;
+    //document.getElementById('textInput').placeholder = "We are evaluating your patient...";
     var patient_dic = []
     var patient_Form = document.getElementById("patientForm")
 
@@ -628,6 +663,8 @@ function submitPatientForm(){
 
         patient_dic.push({key:patient_Form.elements[i].id, value:patient_Form.elements[i].value})
     }
+    console.log(patient_Form)
+    console.log(patient_dic)
     if (window.dataset_name===undefined)
     {
         if (train_model_year==5){window.dataset_name="LSM-5Year-I-240.txt";}
@@ -636,18 +673,18 @@ function submitPatientForm(){
     }
 
     $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name),shap_check: JSON.stringify(shap_check)}).done(function (data) {
-        if (data=="error")
+        if (data["proba"]=="error")
         {
             alert("Sorry, there is an time-out error")
             location.reload()
         }
         else{
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of breast cancer metastasis is: " + data, "no information", [])   //This is place that you need to add a variable that contains the value of year.
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + data["proba"], "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[])}    //Be specific about the type of SHAP plot. 
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
 
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","End task":"End task","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset"})
-        document.getElementById('textInput').disabled = true;
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+        //document.getElementById('textInput').disabled = true;
         //document.getElementById('textInput').placeholder = "Enter your message..."
         }
     })
@@ -655,8 +692,7 @@ function submitPatientForm(){
 
 }
 function generatePatientForm(labelList,table_result) {
-    console.log(labelList.toString())
-    console.log(table_result)
+
      var patient_Form = document.getElementById("patientForm")
      if (patient_Form)
      {
@@ -664,19 +700,20 @@ function generatePatientForm(labelList,table_result) {
      }
 
     var labelList_withouttarget = labelList
+    console.log(labelList_withouttarget)
+    target_class=labelList_withouttarget[labelList_withouttarget.length-1]
     labelList_withouttarget.pop()
     if (labelList_withouttarget.length == 0){
         labelList_withouttarget = (labelList.toString()).split("\t")
         labelList_withouttarget.pop()
     }
-    console.log(labelList_withouttarget)
-    console.log(table_result[0])
+
     var final_result = labelList_withouttarget.map((e, i) => e + "&"+table_result[i]);
-    console.log(final_result)
+
     let patientFormHtml = ""
           if (labelList.length != 0){
-              document.getElementById('textInput').disabled = true;
-              document.getElementById('textInput').placeholder = "You can not input now";
+              //document.getElementById('textInput').disabled = true;
+              //document.getElementById('textInput').placeholder = "You can not input now";
               patientFormHtml = final_result.map(function(item){
                   const label = item.split("&")[0]
                   const option_list = item.split("&")[1].split(',')
@@ -689,7 +726,7 @@ function generatePatientForm(labelList,table_result) {
                                        <div class="col-sm-6">
                                       
                                                 <select id=${label} class="form-control" required>
-                                        <option selected value="1">0</option>
+                                        <option selected value="0">0</option>
                                         `
 
                   const option_html = option_list.slice(1).map(function(option){
@@ -700,7 +737,7 @@ function generatePatientForm(labelList,table_result) {
                   //console.log(option_html)
                   return element + option_html.join("") +`</select></div> </div>`
               })
-            let front = '<form id="patientForm" onsubmit="submitPatientForm();return false" method="post">\n'
+            let front = `<form id='patientForm' onsubmit='submitPatientForm("${target_class}");return false' method='post'>\n`
             let end =' <div class="form-check">\n' +
                 '    <input type="checkbox" class="form-check-input" id="shapCheck">\n' +
                 '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model</label>\n' +
@@ -851,7 +888,7 @@ function displayRadioValue()
 
 }
 
-function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
+function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_src="") {
     if (text == "") {
 
         return
@@ -861,11 +898,13 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     var parameterHTML = ``
     var patientHtml = ``
     var rocHTML = ``
+
     if(text.includes("ROC_curve")){
-        rocHTML = `<img className="fit-picture" src="static/img/roc/roc_curve.png" alt="ROC Curve" style="width:300px;height:250px;">`
+        console.log(img_src)
+        rocHTML = `<img className="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">`
     }
     if(text.includes("SHAP")){
-        rocHTML = `<img className="fit-picture" src="static/img/shap/shap.png" alt="SHAP" style="width:300px;height:250px;">`
+        rocHTML = `<img className="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">`
     }
     //Simple solution for small apps
     let buttonHtml = generateBtnGroup(btnGroup,tag)
@@ -1002,7 +1041,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
     }
     if (text == "Please fill the patient form below and click submit") {
         patientHtml = instruction
-        instruction = "Patient Parameters"
+        instruction = "The patient form is generated from the column name of your dataset"
     }
     if (instruction != "no information" && original_text!="What is your " && original_text!="Could you tell me your " && original_text!="What is your tumor " && original_text!="Could you tell me your tumor " )
     {
@@ -1032,7 +1071,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="") {
                 <div class="msg-info-time">${formatDate(new Date())}
                 </div>
             </div>
-        <div class="msg-text">Figure below is the validation <a href="#" id="show-option" title= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1).'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+        <div class="msg-text">Figure below is the validation <a href="#" id="show-option" title= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1). Normal AUC is between 0.5 to 1.0. The closer to 1 the AUC is, the better the model will be.'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else if(text.includes("SHAP")){
         var msgHTML =
@@ -1162,7 +1201,7 @@ function showNext(e){
                   confirmButtonText: 'Yes, Go on!'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                      appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Upload Local Dataset":"Upload Local Dataset","Run Model with Example Dataset":"Run Model with Example Dataset"})
+                      appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
                   }else {
                       console.log("hello")
                         secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
@@ -1224,7 +1263,7 @@ function showNext(e){
 
 function getinput(input_copy){
   $.get("/getInput", { msg: input_copy.toString() }).done(function (data) {
-    res = "The chance of breast cancer metastasis of "+predict_year+"-year is" +" "+data.substring(2,data.length-2)
+    res = "The chance of "+predict_year+"-year breast cancer metastasis of is" +" "+data.substring(2,data.length-2)
       appendMessage(BOT_NAME, NURSE_IMG, "left", res,"no information",[])
       appendMessage(BOT_NAME, NURSE_IMG, "left","Which task would you like to do next?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
      // appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
@@ -1232,7 +1271,7 @@ function getinput(input_copy){
 
 
     // appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you have any other questions?","no information",{"I have no questions":"I have no questions","I have questions":"I have questions"})
-    document.getElementById('textInput').disabled = true;
+   //  document.getElementById('textInput').disabled = true;
     //document.getElementById('textInput').placeholder="Enter your message..."
 
 })
@@ -1245,8 +1284,8 @@ function generateBtnGroup(btn_group){
   // console.log( btn_array )
 
   if (btn_array.length != 0){
-      document.getElementById('textInput').disabled = true;
-      document.getElementById('textInput').placeholder = "You can not input now";
+    //  document.getElementById('textInput').disabled = true;
+    //  document.getElementById('textInput').placeholder = "You can not input now";
       buttonHtml = btn_array.map(function(btn){
         dcis_dict={"solid":"A Solid cell pattern is one in which the cancer cells have completely filled the duct.",
              "apocrine":"Apocrine breast cancer is a rare type of invasive ductal breast cancer. Like other types of invasive ductal cancer, apocrine breast cancer begins in the milk duct of the breast before spreading to the tissues around the duct. The cells that make up an apocrine tumor are different than those of typical ductal cancers.",
@@ -1256,13 +1295,38 @@ function generateBtnGroup(btn_group){
              "papillary":'A papillary DCIS pattern is one arranged in a fern-like pattern within the duct. Unlike the cribriform pattern, the papillary has no isolated holes of cancer cells, but they are all connected in a kind of asymmetrical or undulating pattern throughout the duct.',
              "micropapillary":'Micro-papillary DCIS is now thought to be a highly malignant, dangerous presentation of DCIS, and is of the highest risk. With micropapillary DCIS the ducts are dilated and lined by a stratified population of monotonous cells. The pattern may show small finger-like protuberances with bulbous ends, which may form arches. Micropapillary DCIS is often multifocal and multicentric. When the presentation is pure, it is often considered grounds for mastectomy in hopes of avoiding invasive micropapillary carcinoma.',
              "not present":"Not present"}
-        tag=Object.keys(dcis_dict)
+        dcis_tag=Object.keys(dcis_dict)
+        histology2_dict={"histology2 IDC":"Invasive (infiltrating) ductal carcinoma","histology2 ILC":"Invasive lobular carcinoma","histology2 DCIS":"DCIS is also called intraductal carcinoma or stage 0 breast cancer. DCIS is a non-invasive or pre-invasive breast cancer.","histology2 NC":""}
+        histology2_tag=Object.keys(histology2_dict)
+        t_tnm_stage_dict={"t_tnm_stage 0":"no tumor was found",
+                          "t_tnm_stage 1":"1 means that the tumour is 2 centimetres (cm) across or less",
+                          "t_tnm_stage 2":"the tumour is more than 2 centimetres but no more than 5 centimetres across",
+                          "t_tnm_stage 3":"the tumour is bigger than 5 centimetres across",
+                          "t_tnm_stage 4":"tumor has spread into other places",
+                          "t_tnm_stage X":"X means that the tumour size cannot be assessed",
+                          "t_tnm_stage IS":"IS means ductal carcinoma in situ",
+                          "t_tnm_stage 1mic":""}
+        t_tnm_stage_tag=Object.keys(t_tnm_stage_dict)
+        n_tnm_stage_dict={"n_tnm_stage 0":"Either of the following: no cancer was found in the lymph nodes or only areas of cancer smaller than 0.2 mm are in the lymph nodes.",
+                          "n_tnm_stage 1":"The cancer has spread to 1 to 3 axillary lymph nodes and/or the internal mammary lymph nodes.",
+                          "n_tnm_stage 2":"The cancer has spread to 4 to 9 axillary lymph nodes.",
+                          "n_tnm_stage 3":"The cancer has spread to 10 or more axillary lymph nodes, or it has spread to the lymph nodes located under the clavicle, or collarbone.",
+                          "n_tnm_stage X":"The lymph nodes were not evaluated."}
+        n_tnm_stage_tag=Object.keys(n_tnm_stage_dict)
 
-        if (tag.includes(btn)){
+        if (dcis_tag.includes(btn)){
         element = `<button type="button" class="btn btn-success" title="${dcis_dict[btn]}">${btn}</button>`
         }
-        if (tag.includes(btn)==false)
-        {
+        else if (histology2_tag.includes(btn)){
+        element = `<button type="button" class="btn btn-success" title="${histology2_dict[btn]}">${btn}</button>`
+        }
+        else if (t_tnm_stage_tag.includes(btn)){
+        element = `<button type="button" class="btn btn-success" title="${t_tnm_stage_dict[btn]}">${btn}</button>`
+        }
+        else if (n_tnm_stage_tag.includes(btn)){
+        element = `<button type="button" class="btn btn-success" title="${n_tnm_stage_dict[btn]}">${btn}</button>`
+        }
+        else {
         element = `<button type="button" class="btn btn-success">${btn}</button>`
         }
 
@@ -1428,41 +1492,48 @@ function autocomplete(inp, arr) {
   the text field element and an array of possible autocompleted values:*/
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
+/*
   inp.addEventListener("input", function(e) {
       var a, b, i, val = this.value;
       /*close any already open lists of autocompleted values*/
+ /*
       closeAllLists();
       if (!val) { return false;}
       currentFocus = -1;
       /*create a DIV element that will contain the items (values):*/
+      /*
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
       a.setAttribute("class", "autocomplete-items");
       /*append the DIV element as a child of the autocomplete container:*/
+      /*
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
+      /*
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
+        /*
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
-          b = document.createElement("DIV");
+   //       b = document.createElement("DIV");
           /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+   //       b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+   //       b.innerHTML += arr[i].substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+   //       b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
-          b.addEventListener("click", function(e) {
+   //       b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
-              inp.value = this.getElementsByTagName("input")[0].value;
+   //           inp.value = this.getElementsByTagName("input")[0].value;
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
-              closeAllLists();
-          });
-          a.appendChild(b);
-        }
-      }
-  });
+   //           closeAllLists();
+   //       });
+   //       a.appendChild(b);
+   //     }
+   //   }
+  //});
+
   /*execute a function presses a key on the keyboard:*/
   // inp.addEventListener("keydown", function(e) {
   //     var x = document.getElementById(this.id + "autocomplete-list");

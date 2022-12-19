@@ -99,7 +99,7 @@ input_question =
     '  {"tag": "histology2",\n' +
     ' "instruction": "tumor histology subtypes.Invasive (infiltrating) ductal carcinoma (IDC). Invasive lobular carcinoma (ILC). DCIS is also called intraductal carcinoma or stage 0 breast cancer. DCIS is a non-invasive or pre-invasive breast cancer. ",\n' +
     '  "nextques": "invasive_tumor_Location",\n' +
-    '  "patterns": {"histology2 IDC":"0","histology2 ILO":"1","histology2 DCIS":"2","histology2 NC":"3"},\n' +
+    '  "patterns": {"histology2 IDC":"0","histology2 ILC":"1","histology2 DCIS":"2","histology2 NC":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 

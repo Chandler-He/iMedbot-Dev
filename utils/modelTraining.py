@@ -16,8 +16,11 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, StratifiedKFold, StratifiedShuffleSplit
 from sklearn.metrics import roc_curve, auc
 from tensorflow.keras import regularizers
+from tensorflow.keras.models import load_model
 import pandas as pandas
 import shap
+import os
+import time
 
 
 def loadandprocess(file, sep='\t', predtype=1, scaled=True):
@@ -171,12 +174,27 @@ with the best set of parameter values found by grid search
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
     plt.legend()
-    plt.savefig('static/img/roc/roc_curve.png')
+
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    img_src='static/img/roc/roc_curve'+timestr+'.png'
+    if os.path.exists(img_src):
+        os.remove(img_src)
+    if os.path.exists(img_src):
+        print("png exist")
+    else:
+        print("png does not exist")
+    print(img_src)
+    plt.savefig(img_src)
     plt.clf()
+    '''
+    while os.path.exists(img_src) is not True:
+        continue
+    '''
     print("best val score grid: "+str(val_auc_grid))
     print("best val score manual: "+str(val_auc_manu))
     print("best mean auc: %f and best index: %s using %s" % (gs.best_score_, gs.best_index_,gs.best_params_))
     print("")
+
     # shap
     # def f(X):
     #     # return best_model.predict(X).flatten()
@@ -184,5 +202,7 @@ with the best set of parameter values found by grid search
     #
     # explainer = shap.KernelExplainer(f, X_CV)
     # shap_values = explainer.shap_values(X_val[10])
-
-    return gs, val_auc_grid, val_auc_manu
+    user_model=load_model('user_training_model.h5')
+    user_model.fit(X_CV,Y_CV)
+    user_model.save('user_training_model.h5')
+    return gs, val_auc_grid, val_auc_manu,img_src

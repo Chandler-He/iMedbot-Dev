@@ -220,6 +220,7 @@ def get_user_survey():
 @application.route("/patientform", methods=['GET', 'POST'])
 def get_model_patientform():
     if request.method == "POST":
+
         try:
             dataset_name = request.form.get('dataset_name')
             shap_check = request.form.get("shap_check")
@@ -229,9 +230,9 @@ def get_model_patientform():
             print(dataset_name_str)
             filename = os.path.join("dataset/", dataset_name_str)
             predset, target, X_columns = modelTraining.loadandprocess(filename, predtype=1, scaled=False)
-            print("147", X_columns)
-            print("148", predset[0])
-            print("149", target[0])
+            print("232", X_columns)
+            print("233", predset[0])
+            print("234", target[0])
             # ['race', 'ethnicity', 'smoking', 'alcohol_useage', 'family_history', 'age_at_diagnosis', 'menopause_status',
             #  'side', 'TNEG', 'ER', 'ER_percent', 'PR', 'PR_percent',
             #  'P53', 'HER2', 't_tnm_stage', 'n_tnm_stage', 'stage', 'lymph_node_removed', 'lymph_node_positive',
@@ -247,13 +248,13 @@ def get_model_patientform():
             patient_input_list = json.loads(patient_dic)
 
             patient_input_list = patient_input_list[:-1]
-            print(patient_input_list)
+            print(250,patient_input_list)
             for item in patient_input_list:
                 category_list.append(int(item['value']))
-            print("168", np.array([category_list]))
+            print("253", np.array([category_list]))
             # [[2 0 1 1 2 1 1 0 0 1 1 1 1 1 0 1 1 2 1 1 1 1 2 1 1 0 2 3 1 1 1]]
             user_training_model = load_model('user_training_model.h5')
-
+            img_src=""
             if shap_check == "true":
                 def f(X):
                     # return best_model.predict(X).flatten()
@@ -286,14 +287,27 @@ def get_model_patientform():
                 # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
                 shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
                                                      data=np.array([category_list])[0], feature_names=X_columns))
-                plt.savefig('static/img/shap/shap.png')
-
+                timestr = time.strftime("%Y%m%d-%H%M%S")
+                img_src = 'static/img/shap/shap' + timestr + '.png'
+                if os.path.exists(img_src):
+                    os.remove(img_src)
+                if os.path.exists(img_src):
+                    print("png exist")
+                else:
+                    print("png does not exist")
+                print(img_src)
+                plt.savefig(img_src)
+                plt.clf()
             res = user_training_model.predict_proba(np.array([category_list]))
             res = str(res).replace('[', '').replace(']', '')
             print(res)
-        except:
+
+        except Exception as e:
+            print(e)
             res="error"
-    return res
+            img_src=""
+
+    return {"proba":res,"img":img_src}
 
 
 @application.route("/Examdataset", methods=['GET', 'POST'])
@@ -301,8 +315,12 @@ def get_model_Examdataset():
     if request.method == "POST":
         datasetname = request.form.get('name')
         print("data set name is ", datasetname)
-    validation_auc = train_mode(datasetname)
-    return str(validation_auc)
+    try:
+        validation_auc,img_src = train_mode(datasetname)
+        return {"auc":str(validation_auc),"src":str(img_src)}
+    except Exception as e:
+        print(e)
+        return "error"
 
 
 @application.route("/dataset", methods=['GET', 'POST'])
@@ -310,16 +328,19 @@ def get_model_dataset():
     if request.method == "POST":
         dataset = request.form.get('dataset')
         datasetname = request.form.get('name')
-    upload_path = "dataset/" + str(datasetname)
-    dataset = dataset.split('\n')
-    with open(upload_path, 'wb') as file:
-        print("hello")
-        for l in dataset:
-            file.write(l.strip().encode("utf-8"))
-            file.write('\n'.encode("utf-8"))
-    validation_auc = train_mode(datasetname)
-    return str(validation_auc)
-
+    try:
+        upload_path = "dataset/" + str(datasetname)
+        dataset = dataset.split('\n')
+        with open(upload_path, 'wb') as file:
+            print("hello")
+            for l in dataset:
+                file.write(l.strip().encode("utf-8"))
+                file.write('\n'.encode("utf-8"))
+        validation_auc,img_src = train_mode(datasetname)
+        return {"auc":str(validation_auc),"src":str(img_src)}
+    except Exception as e:
+        print(e)
+        return "error"
 
 @application.route("/parameterExam", methods=['GET', 'POST'])
 def get_model_parameter_exam():
@@ -330,9 +351,13 @@ def get_model_parameter_exam():
         epochs = request.form.get('epochs')
         decay = request.form.get('decay')
         dropoutrate = request.form.get('dropoutrate')
-
-    validation_auc = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
-    return str(validation_auc)
+    try:
+        print(340,datasetname)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
+        return {"auc":str(validation_auc),"src":str(img_src)}
+    except Exception as e:
+        print(e)
+        return "error"
 
 
 @application.route("/parameter", methods=['GET', 'POST'])
@@ -345,15 +370,19 @@ def get_model_parameter():
         decay = request.form.get('decay')
         dropoutrate = request.form.get('dropoutrate')
         dataset = request.form.get('dataset')
-    upload_path = "dataset/" + str(datasetname)
-    dataset = dataset.split('\n')
-    with open(upload_path, 'wb') as file:
-        for l in dataset:
-            file.write(l.strip().encode("utf-8"))
-            file.write('\n'.encode("utf-8"))
+    try:
+        upload_path = "dataset/" + str(datasetname)
+        dataset = dataset.split('\n')
+        with open(upload_path, 'wb') as file:
+            for l in dataset:
+                file.write(l.strip().encode("utf-8"))
+                file.write('\n'.encode("utf-8"))
 
-    validation_auc = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
-    return str(validation_auc)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
+        return {"auc":str(validation_auc),"src":str(img_src)}
+    except Exception as e:
+        print(e)
+        return "error"
 
 
 def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate):
@@ -384,8 +413,8 @@ def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dr
         'L2': [0.005],
         'ltype': [3]
     }
-    results, score_val, score_man = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
-    return score_val
+    results, score_val, score_man,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    return score_val,img_src
 
 
 def train_mode(datasetname):
@@ -417,8 +446,8 @@ def train_mode(datasetname):
         'L2': [0.005],
         'ltype': [3]
     }
-    results, score_val, score_man = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
-    return score_val
+    results, score_val, score_man,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    return score_val,img_src
 
 
 if __name__ == "__main__":
