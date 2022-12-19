@@ -320,7 +320,7 @@ def get_model_Examdataset():
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
-        return {"auc":"error","src":e}
+        return {"auc":"error","src":str(e)}
 
 
 @application.route("/dataset", methods=['GET', 'POST'])
@@ -340,7 +340,7 @@ def get_model_dataset():
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
-        return {"auc":"error","src":e}
+        return {"auc":"error","src":str(e)}
 
 @application.route("/parameterExam", methods=['GET', 'POST'])
 def get_model_parameter_exam():
@@ -357,7 +357,7 @@ def get_model_parameter_exam():
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
-        return {"auc":"error","src":e}
+        return {"auc":"error","src":str(e)}
 
 
 @application.route("/parameter", methods=['GET', 'POST'])
@@ -382,7 +382,7 @@ def get_model_parameter():
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
-        return {"auc":"error","src":e}
+        return {"auc":"error","src":str(e)}
 
 
 def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate):
