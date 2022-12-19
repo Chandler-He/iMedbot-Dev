@@ -413,7 +413,7 @@ def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dr
         'L2': [0.005],
         'ltype': [3]
     }
-    results, score_val, score_man,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
     return score_val,img_src
 
 
@@ -446,7 +446,7 @@ def train_mode(datasetname):
         'L2': [0.005],
         'ltype': [3]
     }
-    results, score_val, score_man,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
     return score_val,img_src
 
 

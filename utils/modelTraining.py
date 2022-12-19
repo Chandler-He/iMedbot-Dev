@@ -154,19 +154,19 @@ with the best set of parameter values found by grid search
     # 1: the best model from gridsearch;
     gs=g_search.fit(X=X_CV, y=Y_CV)
     # 2: the best model trained manually from best parameter from gridsearch;
-    clf_val = model_val(gs.best_params_, X_CV, Y_CV)
+    #clf_val = model_val(gs.best_params_, X_CV, Y_CV)
     # way1 results
     Y_pred1 = gs.predict_proba(X_val)[:, 1]
     # way2 results
-    Y_pred2 = clf_val.predict_proba(X_val)[:,1]
-    Y_pred1 = Y_pred1.reshape(-1)
-    Y_pred2= Y_pred2.reshape(-1)
+    #Y_pred2 = clf_val.predict_proba(X_val)[:,1]
+    #Y_pred1 = Y_pred1.reshape(-1)
+    #Y_pred2= Y_pred2.reshape(-1)
     # way1 AUC
     FP, TP, thresholds = roc_curve(Y_val.astype(float), Y_pred1.astype(float))
     val_auc_grid = auc(FP, TP)
     # way2 AUC
-    FP2, TP2, thresholds2 = roc_curve(Y_val.astype(float), Y_pred2.astype(float))
-    val_auc_manu = auc(FP2, TP2)
+    #FP2, TP2, thresholds2 = roc_curve(Y_val.astype(float), Y_pred2.astype(float))
+    #val_auc_manu = auc(FP2, TP2)
     plt.title('Validation roc Curve')
     plt.plot(FP,  TP, label = r'Mean Validation ROC (area=%0.4f)' % val_auc_grid)
     plt.plot([0, 1], ls="--")
@@ -191,7 +191,7 @@ with the best set of parameter values found by grid search
         continue
 
     print("best val score grid: "+str(val_auc_grid))
-    print("best val score manual: "+str(val_auc_manu))
+    #print("best val score manual: "+str(val_auc_manu))
     print("best mean auc: %f and best index: %s using %s" % (gs.best_score_, gs.best_index_,gs.best_params_))
     print("")
 
@@ -205,4 +205,4 @@ with the best set of parameter values found by grid search
     user_model=load_model('user_training_model.h5')
     user_model.fit(X_CV,Y_CV)
     user_model.save('user_training_model.h5')
-    return gs, val_auc_grid, val_auc_manu,img_src
+    return gs, val_auc_grid,img_src
