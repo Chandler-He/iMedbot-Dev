@@ -110,7 +110,7 @@ function uploadData(e) {
    Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 20kb-1mb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be in 20kb-500kb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -158,7 +158,7 @@ function uploadNewData(e) {
     Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 20kb-1mb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be in 20kb-500kb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -323,8 +323,8 @@ function submit() {
             return
         }
         console.log(size)
-        if (size>1024000){
-            alert ("The size of your dataset file is too large, please reupload a smaller one which size is less than 1MB!  ")
+        if (size>512000){
+            alert ("The size of your dataset file is too large, please reupload a smaller one which size is less than 500KB!  ")
 
             delete dataset;
             dataset=undefined;
@@ -398,7 +398,8 @@ function getParameterExam(){
             dropoutrate: dropoutrate,
             epochs: epochs
         }).done(function (data) {
-            if (data=="error"){
+            console.log(data)
+            if (data["auc"]=="error"){
                                     alert('Sorry! We have an error when training your model!')
                                     location.reload()
                                     }
@@ -437,7 +438,8 @@ function getParameter(){
                 dropoutrate: dropoutrate,
                 epochs: epochs
             }).done(function (data) {
-                if (data=="error"){
+                console.log(data)
+                if (data["auc"]=="error"){
                                     alert('Sorry! We have an error when training your model!')
                                     location.reload()
                                     }
@@ -472,7 +474,7 @@ function showDemo() {
 
     requirements = '<h2>Instructions:</h2>'+
         '<ul className="list-group list-group-flush">'+
-        '<li className="list-group-item">1.The size of dataset file should be in 20kb-1mb;</li>'+
+        '<li className="list-group-item">1.The size of dataset file should be in 20kb-500kb;</li>'+
         '<li className="list-group-item">2.The dataset must be in .csv or .txt format;</li>'+
         '<li className="list-group-item">3.The labels of the columns must be in the first row;</li>'+
         '<li className="list-group-item">4.Can only use categorical data for now;</li>'+
@@ -577,7 +579,8 @@ function trainModel() {
                           else if (train_model_year == 15) {data_name='Book3.csv'};
                           console.log(data_name);
                           $.post("/Examdataset", {name: data_name}).done(function (data) {
-                                    if (data=="error"){
+                                    console.log(data)
+                                    if (data["auc"]=="error"){
                                     alert('Sorry! We have an error when training your model!')
                                     location.reload()
                                     }
@@ -602,7 +605,8 @@ function trainModel() {
                             reader.onload = function() {
                                 rawLog = reader.result
                                 $.post("/dataset", { dataset: rawLog, name: name}).done(function (data) {
-                                    if (data=="error"){
+                                    console.log(data)
+                                    if (data["auc"]=="error"){
                                     alert('Sorry! We have an error when training your model!')
                                     location.reload()
                                     }
