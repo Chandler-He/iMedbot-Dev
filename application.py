@@ -23,7 +23,7 @@ from datetime import datetime
 
 application = Flask(__name__)
 application.static_folder = 'static'
-bootstrap = Bootstrap(application)
+#bootstrap = Bootstrap(application)
 class_button_json = json.loads(open('training_data/classes_button.json').read())
 list_of_classes = class_button_json['classes_button']
 
@@ -241,7 +241,7 @@ def get_model_patientform():
             strat_shuf = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=123)
             for CV_index, val_index in strat_shuf.split(predset, target):
                 X_CV, X_val = predset[CV_index], predset[val_index]
-                Y_CV, Y_val = target[CV_index], target[val_index]
+               #Y_CV, Y_val = target[CV_index], target[val_index]
 
             category_list = []
             patient_dic = request.form.get('patient_dic')
@@ -261,7 +261,6 @@ def get_model_patientform():
                     # print("++++++++++++++++++++++++")
                     result = []
                     for item in X:
-                        print("item is ",item)
                         prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
                         # print(prob)
                         # print(prob[0][0])
@@ -284,6 +283,7 @@ def get_model_patientform():
                 print("333333333333333333333333333333333333333")
                 print(shap_values)
                 print(explainer.expected_value)
+                plt.clf()
                 # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
                 shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
                                                      data=np.array([category_list])[0], feature_names=X_columns))

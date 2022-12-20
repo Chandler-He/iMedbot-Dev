@@ -239,6 +239,9 @@ function viewDataset(dataset,name,size){
     //     var tablehead = Object.keys(array[0]);
     // }else{
         var array = csvToArray(dataset, delimiter = ",")
+        if (array.length>500){
+        array=array.slice(0,499)
+        }
         var tablehead = Object.keys(array[0]);
         var targetValue = String((tablehead[tablehead.length-1]).replace(/(?:\r\n|\r|\n)/g,""))
         // if (targetValue != "distant_recurrence"){
@@ -334,6 +337,7 @@ function submit() {
             valid_file=false;
             return
         }
+        /*
         if (size<20480){
             alert ("The size of your dataset file is too small, please reupload a larger one which size is greater than 20KB!  ")
             delete dataset;
@@ -344,7 +348,7 @@ function submit() {
             valid_file=false;
             return
         }
-
+        */
 
         var reader = new FileReader();
         reader.onload = function() {
@@ -400,7 +404,7 @@ function getParameterExam(){
         }).done(function (data) {
             console.log(data)
             if (data["auc"]=="error"){
-                                    alert('Sorry! We have an error when training your model!')
+                                    alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
                                     location.reload()
                                     }
             auc=data["auc"]
@@ -417,18 +421,21 @@ function getParameterExam(){
 function getParameter(){
 //    document.getElementById('textInput').disabled = true;
 //    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
+    console.log("getParameter")
     function read_parameter(callback) {
-
+        console.log("read_parameter")
         var dataset = $('#fileid').prop('files')[0];
+        console.log(dataset)
         var name = dataset.name
         var learningrate = $("#parameterForm input[name=learningrate]").val()
         var decay = $("#parameterForm input[name=decay]").val()
         var batchsize= $("#parameterForm input[name=batchsize]").val()
         var dropoutrate = $("#parameterForm input[name=dropoutrate]").val()
         var epochs = $("#parameterForm input[name=epochs]").val()
-        var reader = new FileReader();
-        reader.onload = function() {
-            rawLog = reader.result
+        //var reader = new FileReader();
+        //reader.onload = function() {
+            //rawLog = reader.result
+            //console.log(rawLog)
             $.post("/parameter", {
                 dataset: rawLog,
                 datasetname: name,
@@ -440,7 +447,7 @@ function getParameter(){
             }).done(function (data) {
                 console.log(data)
                 if (data["auc"]=="error"){
-                                    alert('Sorry! We have an error when training your model!')
+                                    alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
                                     location.reload()
                                     }
                 auc=data["auc"]
@@ -453,8 +460,8 @@ function getParameter(){
                 //document.getElementById('textInput').disabled = true;
                 //document.getElementById('textInput').placeholder = "Enter your message..."
             })
-        }
-    reader.readAsText(dataset);
+        //}
+    //reader.readAsText(dataset);
     }
    read_parameter()
 }
@@ -581,7 +588,7 @@ function trainModel() {
                           $.post("/Examdataset", {name: data_name}).done(function (data) {
                                     console.log(data)
                                     if (data["auc"]=="error"){
-                                    alert('Sorry! We have an error when training your model!')
+                                    alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
                                     location.reload()
                                     }
                                     auc=data["auc"]
@@ -607,7 +614,7 @@ function trainModel() {
                                 $.post("/dataset", { dataset: rawLog, name: name}).done(function (data) {
                                     console.log(data)
                                     if (data["auc"]=="error"){
-                                    alert('Sorry! We have an error when training your model!')
+                                    alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
                                     location.reload()
                                     }
                                     auc=data["auc"]
@@ -968,6 +975,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
     }
 
     if (instruction == "Parameters") {
+        console.log("parameters")
         parameterHTML = '<form id="parameterForm" onsubmit="getParameter();return false" method="post">\n' +
             '  <div class="form-group row">\n' +
             '    <label for="learningrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Lrate means learning rate. The learning rate is a tuning parameter in an optimization algorithm that determines the step size at each iteration while moving toward a minimum of a loss function.">Learning Rate</a></label>\n' +
