@@ -5,7 +5,7 @@ import numpy as np
 import pandas
 
 from chatbot import chatbot
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, after_this_request
 #from flask_bootstrap import Bootstrap
 import pyttsx3 as tts
 import json
@@ -48,6 +48,7 @@ model_5 = load_model('model5.h5')
 
 @application.route("/")
 def index():
+
     return render_template("index.html")
 
 
@@ -259,58 +260,59 @@ def get_model_patientform():
             timestr = time.strftime("%Y%m%d-%H%M%S")
             img_src = 'static/img/shap/shap' + timestr + '.png'
             if shap_check == "true":
-                def long_running_task(**kwargs):
-                    img_src = kwargs.get('img_src', {})
-                    print("long_running_task ",img_src)
-                    def f(X):
-                        # return best_model.predict(X).flatten()
-                        # print("++++++++++++++++++++++++")
-                        result = []
-                        for item in X:
-                            prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
-                            # print(prob)
-                            # print(prob[0][0])
-                            result.append(prob[0][0])
-                        print(np.array(result))
-                        # the reason why we have 5 results is because we use kmeans to shrink the x_cv(background dataset) dataset to only 5 samples
-                        # [0.4565038  0.3262849  0.3953898  0.23958007 0.3785722]
+                @after_this_request
+                def plot_shap(response):
+                    @response.call_on_close
+                    def process_after_request():
+                        print("long_running_task ", img_src)
 
-                        print(type(result))
-                        return np.array(result)
+                        def f(X):
+                            # return best_model.predict(X).flatten()
+                            # print("++++++++++++++++++++++++")
+                            result = []
+                            for item in X:
+                                prob = user_training_model.predict_proba(item.reshape(1, len(predset[0])))
+                                # print(prob)
+                                # print(prob[0][0])
+                                result.append(prob[0][0])
+                            print(np.array(result))
+                            # the reason why we have 5 results is because we use kmeans to shrink the x_cv(background dataset) dataset to only 5 samples
+                            # [0.4565038  0.3262849  0.3953898  0.23958007 0.3785722]
 
-                    # shap.kmeans(data, K) to summarize the background as K samples, in our case it transfer
-                    X_train_summary = shap.kmeans(X_CV, 1)
-                    print(X_train_summary)
-                    # < shap.utils._legacy.DenseData object at 0x0000024682E412B0 >
-                    print("111111111111111111111111111111111111111")
-                    explainer = shap.KernelExplainer(f, X_train_summary)
-                    print("222222222222222222222222222222222222222")
-                    shap_values = explainer.shap_values(np.array([category_list]))
-                    print("333333333333333333333333333333333333333")
-                    print(shap_values)
-                    print(explainer.expected_value)
-                    plt.clf()
-                    # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
-                    shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
-                                                         data=np.array([category_list])[0], feature_names=X_columns))
+                            print(type(result))
+                            return np.array(result)
 
-                    if os.path.exists(img_src):
-                        os.remove(img_src)
-                    if os.path.exists(img_src):
-                        print("png exist")
-                    else:
-                        print("png does not exist")
-                    print(img_src)
-                    plt.savefig(img_src)
-                    plt.clf()
+                        # shap.kmeans(data, K) to summarize the background as K samples, in our case it transfer
+                        X_train_summary = shap.kmeans(X_CV, 1)
+                        print(X_train_summary)
+                        # < shap.utils._legacy.DenseData object at 0x0000024682E412B0 >
+                        print("111111111111111111111111111111111111111")
+                        explainer = shap.KernelExplainer(f, X_train_summary)
+                        print("222222222222222222222222222222222222222")
+                        shap_values = explainer.shap_values(np.array([category_list]))
+                        print("333333333333333333333333333333333333333")
+                        print(shap_values)
+                        print(explainer.expected_value)
+                        plt.clf()
+                        # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
+                        shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
+                                                             data=np.array([category_list])[0], feature_names=X_columns))
 
-                thread = threading.Thread(target=long_running_task, kwargs={
-                    'img_src': img_src})
-                thread.start()
+                        if os.path.exists(img_src):
+                            os.remove(img_src)
+                        if os.path.exists(img_src):
+                            print("png exist")
+                        else:
+                            print("png does not exist")
+                        print(img_src)
+                        plt.savefig(img_src)
+                        plt.clf()
+                    return response
+
 
             res = user_training_model.predict_proba(np.array([category_list]))
             res = str(res).replace('[', '').replace(']', '')
-            print(res)
+            print("res is",res)
 
         except Exception as e:
             print(e)

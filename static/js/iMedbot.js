@@ -239,7 +239,9 @@ function viewDataset(dataset,name,size){
     //     var tablehead = Object.keys(array[0]);
     // }else{
         var array = csvToArray(dataset, delimiter = ",")
+        array_length=array.length
         if (array.length>500){
+
         array=array.slice(0,499)
         }
         var tablehead = Object.keys(array[0]);
@@ -252,7 +254,7 @@ function viewDataset(dataset,name,size){
 
     //}
     console.log(tablehead)
-    var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array.length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the name of target class of your dataset is <b>"+tablehead[tablehead.length-1]+"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
+    var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array_length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the name of target class of your dataset is <b>"+tablehead[tablehead.length-1]+"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
 
   //  if (array.length < 30){
@@ -693,7 +695,7 @@ function submitPatientForm(val){
         console.log(data)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + data["proba"], "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
-        wait(150000)
+        wait(120000)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
 
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
