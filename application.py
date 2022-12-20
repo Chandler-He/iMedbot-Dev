@@ -6,7 +6,7 @@ import pandas
 
 from chatbot import chatbot
 from flask import Flask, render_template, request
-from flask_bootstrap import Bootstrap
+#from flask_bootstrap import Bootstrap
 import pyttsx3 as tts
 import json
 import datetime
