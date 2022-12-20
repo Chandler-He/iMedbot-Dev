@@ -692,6 +692,7 @@ function submitPatientForm(val){
         else{
         appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + data["proba"], "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
+        wait(150000)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
 
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
