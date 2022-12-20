@@ -690,6 +690,7 @@ function submitPatientForm(val){
             location.reload()
         }
         else{
+        console.log(data)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + data["proba"], "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
         wait(150000)
