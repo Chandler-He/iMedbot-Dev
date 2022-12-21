@@ -125,6 +125,7 @@ function uploadData(e) {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     console.log($('#fileid'))
+                    $('#fileid').val("");
                     document.getElementById('fileid').click();
                     console.log(alreaView)
                     if (alreaView == false){
