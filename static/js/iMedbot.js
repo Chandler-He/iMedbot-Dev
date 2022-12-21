@@ -194,8 +194,14 @@ function csvToArray(dataset, delimiter = ",") {
   // slice from start of text to the first \n index
   // use split to create an array from string by delimiter
     var headers = dataset.slice(0, dataset.indexOf("\n")).split("\t").join(",").split(delimiter)
+    console.log(headers)
+    if (headers.includes('0')||headers.includes('1')||headers.includes('2')||headers.includes('3')||headers.includes('4')||headers.includes('5')||headers.includes('6')||headers.includes('7')||headers.includes('8')||headers.includes('9'))
+    {
+        for (var i=0;i<headers.length;++i)
+            headers[i]="column "+i
 
-
+    }
+    console.log(headers)
   // slice from \n index + 1 to the end of the text
   // use split to create an array of each csv value row
   var rows = dataset.slice(dataset.indexOf("\n") + 1).split("\t").join(",").split("\n");
@@ -253,7 +259,6 @@ function viewDataset(dataset,name,size){
         // }
 
     //}
-    console.log(tablehead)
     var statisticalData = "Your dataset name is <b>"+ name +"</b>; number of rows of your dataset is <b>"+ array_length +"</b>; number of columns of your dataset is <b>"+ tablehead.length +"</b>; the name of target class of your dataset is <b>"+tablehead[tablehead.length-1]+"</b>; the size of your dataset file is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
     appendMessage(BOT_NAME, NURSE_IMG, "left", statisticalData,"statistical data of dataset",[])
 
@@ -285,7 +290,6 @@ function viewDataset(dataset,name,size){
     // });
     if (myWindow != null){
 
-    console.log("200",myWindow)
     myWindow.document.write(css + '<html><head><title>Table</title></head><body>');
     myWindow.document.write('<table  class="table">')
     myWindow.document.write(tableHTML)
@@ -356,7 +360,6 @@ function submit() {
         reader.onload = function() {
             rawLog = reader.result
             var array = csvToArray(rawLog, delimiter = ",")
-
             var tablehead = Object.keys(array[0]);
             if (valid_file){
             add_userMsg("View my dataset");
@@ -369,7 +372,6 @@ function submit() {
         }
 
         reader.readAsText(dataset);
-        console.log(valid_file)
 
         if (valid_file)
         add_userMsg("Upload local dataset");
@@ -407,7 +409,8 @@ function getParameterExam(){
             console.log(data)
             if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
-                                    location.reload()
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
+                                    return
                                     }
             auc=data["auc"]
             img_src=data["src"]
@@ -450,7 +453,8 @@ function getParameter(){
                 console.log(data)
                 if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
-                                    location.reload()
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
+                                    return
                                     }
                 auc=data["auc"]
                 img_src=data["src"]
@@ -547,6 +551,10 @@ function DCIS_process(){
 function nottrainModel() {
 
     add_userMsg("End task")
+    $.post("/endtask", {
+            }).done(function (data) {
+                console.log(data)
+            })
 
     appendMessage(BOT_NAME, NURSE_IMG, "left","Would you like to take a survey?","no information",{"Yes":"Yes","No":"No"})
 
@@ -591,7 +599,8 @@ function trainModel() {
                                     console.log(data)
                                     if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
-                                    location.reload()
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
+                                    return
                                     }
                                     auc=data["auc"]
                                     img_src=data["src"]
@@ -617,7 +626,8 @@ function trainModel() {
                                     console.log(data)
                                     if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
-                                    location.reload()
+                                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
+                                    return
                                     }
                                     auc=data["auc"]
                                     img_src=data["src"]
@@ -1078,6 +1088,11 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
             ${text}
         </div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div> </div>`;
     }else if(text.includes("ROC_curve")) {
+        $.post("/checkimg", {
+                img:img
+            }).done(function (data) {
+                console.log(data)
+            })
         var msgHTML =
         `<div class="msg ${side}-msg">
         <div class="msg-img" style="background-image: url(${img})"></div>
@@ -1090,6 +1105,11 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
         <div class="msg-text">Figure below is the validation <a href="#" id="show-option" title= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1). Normal AUC is between 0.5 to 1.0. The closer to 1 the AUC is, the better the model will be.'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else if(text.includes("SHAP")){
+        $.post("/checkimg", {
+                img:img
+            }).done(function (data) {
+                console.log(data)
+            })
         var msgHTML =
         `<div class="msg ${side}-msg">
         <div class="msg-img" style="background-image: url(${img})"></div>

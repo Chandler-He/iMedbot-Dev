@@ -1,4 +1,5 @@
 import os
+import shutil
 import webbrowser
 
 import numpy as np
@@ -219,6 +220,48 @@ def get_user_survey():
 
     return "success"
 
+@application.route("/checkimg", methods=['POST','GET'])
+def check_img_src():
+    if request.method == 'POST':
+
+        img_src = request.form.get('img')
+        t1=time.time()
+        while os.path.exists(img_src) is not True:
+            t2=time.time()
+            time_diff=t2-t1
+            print()
+            if time_diff>20:
+                break
+            else:
+                continue
+
+    return "success"
+
+@application.route("/endtask", methods=['POST','GET'])
+def delete_temporary_resource():
+    if request.method == 'POST':
+        folder = 'static/img/roc'
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+        folder = 'static/img/shap'
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+    return "success"
 
 @application.route("/patientform", methods=['GET', 'POST'])
 def get_model_patientform():
@@ -464,3 +507,5 @@ def train_mode(datasetname):
 
 if __name__ == "__main__":
     application.run(debug=True)
+
+

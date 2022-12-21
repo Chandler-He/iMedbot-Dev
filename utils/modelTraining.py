@@ -72,6 +72,7 @@ def loadandprocess(file, sep='\t', predtype=1, scaled=True):
     # you can just comment"predset = predset.to_numpy()" because predset = scaler.transform(predset) will return numpy object directly
     #print(predset.shape)
     # which we want to make a prediction
+
     return (predset, tarcol, column_names)
 def create_model(mstruct, idim, drate, kinit, iacti, hacti, oacti, opti, lrate, momen ,dec,ls, L1, L2,ltype):
     # create a model that KerasClassifier needs as an input for parameter build_fn
@@ -154,6 +155,12 @@ with the best set of parameter values found by grid search
     g_search= GridSearchCV(clf, param_grid=params,cv=cur_cv,refit ='AUC', scoring=scores, return_train_score =True,n_jobs= -1)
     # we have 2 ways to predict validation dataset
     # 1: the best model from gridsearch;
+    print(77777777777)
+
+    if X_CV.shape[0]>4000:
+            X_CV=X_CV[0:4000,:]
+            Y_CV=Y_CV[0:4000]
+    print(X_CV.shape, Y_CV.shape)
     gs=g_search.fit(X=X_CV, y=Y_CV)
     # 2: the best model trained manually from best parameter from gridsearch;
     clf_val = model_val(gs.best_params_, X_CV, Y_CV)
