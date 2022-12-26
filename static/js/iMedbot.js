@@ -468,6 +468,7 @@ function getParameter(){
                 console.log(data)
                 if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
+                                    $('#fileid').val("");
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
                                     return
                                     }
@@ -645,6 +646,8 @@ function trainModel() {
                                     console.log(data)
                                     if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
+                                    $('#fileid').val("");
+
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Please review the demo dataset first and upload your local dataset, only .txt and .csv format are permitted","Browse data",{"View Example Dataset":"View Example Dataset","Run Model with Example Dataset":"Run Model with Example Dataset","Upload Local Dataset":"Upload Local Dataset"})
                                     return
                                     }
@@ -707,7 +710,7 @@ function submitPatientForm(val){
     }
     console.log(patient_Form)
     console.log(patient_dic)
-    if (window.dataset_name===undefined)
+    if ($('#fileid').prop('files')[0]==null)
     {
         if (train_model_year==5){window.dataset_name="LSM-5Year-I-240.txt";}
         if (train_model_year==10){window.dataset_name="LSM-10Year-I-240.txt";}
@@ -796,7 +799,8 @@ function generatePatientForm(labelList,table_result) {
 
 function testPatient() {
     add_userMsg("Testing with new patients")
-    if (window.dataset_name===undefined)
+
+    if ($('#fileid').prop('files')[0]==null)
     {
         if (train_model_year==5){window.dataset_name="LSM-5Year-I-240.txt";}
     }
