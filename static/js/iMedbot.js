@@ -391,6 +391,7 @@ function submit() {
 
 function getParameterExam(){
         console.log("enter getpara exam")
+        add_userMsg("Get the parameter for example dataset")
 //    document.getElementById('textInput').disabled = true;
 //    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
         const name = 'Book1.csv'
@@ -399,13 +400,19 @@ function getParameterExam(){
         var batchsize= $("#parameterForm input[name=batchsize]").val()
         var dropoutrate = $("#parameterForm input[name=dropoutrate]").val()
         var epochs = $("#parameterForm input[name=epochs]").val()
+        var momentum = $("#parameterForm input[name=momentum]").val()
+        var l1 = $("#parameterForm input[name=l1]").val()
+        var l2 = $("#parameterForm input[name=l2]").val()
         $.post("/parameterExam", {
             datasetname: name,
             learningrate: learningrate,
             decay: decay,
             batchsize: batchsize,
             dropoutrate: dropoutrate,
-            epochs: epochs
+            epochs: epochs,
+            momentum:momentum,
+            l1:l1,
+            l2:l2
         }).done(function (data) {
             console.log(data)
             if (data["auc"]=="error"){
@@ -427,6 +434,7 @@ function getParameterExam(){
 function getParameter(){
 //    document.getElementById('textInput').disabled = true;
 //    document.getElementById('textInput').placeholder = "Training a model from your dataset now!";
+    add_userMsg("Get the parameter")
     console.log("getParameter")
     function read_parameter(callback) {
         console.log("read_parameter")
@@ -438,6 +446,9 @@ function getParameter(){
         var batchsize= $("#parameterForm input[name=batchsize]").val()
         var dropoutrate = $("#parameterForm input[name=dropoutrate]").val()
         var epochs = $("#parameterForm input[name=epochs]").val()
+        var momentum = $("#parameterForm input[name=momentum]").val()
+        var l1 = $("#parameterForm input[name=l1]").val()
+        var l2 = $("#parameterForm input[name=l2]").val()
         //var reader = new FileReader();
         //reader.onload = function() {
             //rawLog = reader.result
@@ -449,7 +460,10 @@ function getParameter(){
                 decay: decay,
                 batchsize: batchsize,
                 dropoutrate: dropoutrate,
-                epochs: epochs
+                epochs: epochs,
+                momentum:momentum,
+                l1:l1,
+                l2:l2
             }).done(function (data) {
                 console.log(data)
                 if (data["auc"]=="error"){
@@ -576,6 +590,10 @@ function trainModel() {
                       '   <p>   <a href="#" id="show-option" title= "Lrate means learning rate. The learning rate is a tuning parameter in an optimization algorithm that determines the step size at each iteration while moving toward a minimum of a loss function.">  lrate</a>: [0.01]</p>\n' +
                       '   <p>   <a href="#" id="show-option" title= "Decay is a regularization technique that is used in machine learning to reduce the complexity of a model and prevent overfitting.">  dec</a>: [0.0005]</p>\n' +
                       '   <p>   <a href="#" id="show-option" title= "Batch size is a term used in machine learning and refers to the number of training examples utilized in one iteration.">  batch_size</a>: [40]</p>\n' +
+
+                      '   <p>   <a href="#" id="show-option" title= "Momentum is an extension to the gradient descent optimization algorithm that allows the search to build inertia in a direction in the search space and overcome the oscillations of noisy gradients and coast across flat spots of the search space.">  momentum</a>: [0.4]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= "L1 Regularization, also called a lasso regression, adds the “absolute value of magnitude” of the coefficient as a penalty term to the loss function.">  l1</a>: [0.005]</p>\n' +
+                      '   <p>   <a href="#" id="show-option" title= " L2 Regularization, also called a ridge regression, adds the “squared magnitude” of the coefficient as the penalty term to the loss function.">  l2</a>: [0.005]</p>\n' +
                       '   <p>   <a href="#" id="show-option" title= "An epoch is when all the training data is used at once and is defined as the total number of iterations of all the training data in one cycle for training the machine learning model. ">  epochs</a>: [85]</p>',
                   icon: 'info',
                   showCancelButton: true,
@@ -1022,6 +1040,25 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
             '      <input type="number" min="0" step="0.001" class="form-control" id="dropoutrate" name="dropoutrate" placeholder=0.02 value=0.02>\n' +
             '    </div>\n' +
             '  </div>\n' +
+
+            '  <div class="form-group row">\n' +
+            '    <label for="momentum" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Momentum is an extension to the gradient descent optimization algorithm that allows the search to build inertia in a direction in the search space and overcome the oscillations of noisy gradients and coast across flat spots of the search space.">Momen</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="momentum" name="momentum" placeholder=0.02 value=0.4>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="form-group row">\n' +
+            '    <label for="l1" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "L1 Regularization, also called a lasso regression, adds the “absolute value of magnitude” of the coefficient as a penalty term to the loss function."> L1</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="l1" name="l1" placeholder=0.02 value=0.05>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="form-group row">\n' +
+            '    <label for="l2" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "L2 Regularization, also called a ridge regression, adds the “squared magnitude” of the coefficient as the penalty term to the loss function.">L2</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="l2" name="l2" placeholder=0.02 value=0.05>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
             '  <div class="form-group row">\n' +
             '  <div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button>\n' +
             '</div>\n' +
@@ -1058,6 +1095,24 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
             '    <label for="dropoutrate" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Drate is dropout rate. In dropout, we randomly shut down some fraction of a layer’s neurons at each training step by zeroing out the neuron values."> Dropout Rate</a></label>\n' +
             '    <div class="col-sm-10">\n' +
             '      <input type="number" min="0" step="0.001" class="form-control" id="dropoutrate" name="dropoutrate" placeholder=0.02 value=0.02>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="form-group row">\n' +
+            '    <label for="momentum" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "Momentum is an extension to the gradient descent optimization algorithm that allows the search to build inertia in a direction in the search space and overcome the oscillations of noisy gradients and coast across flat spots of the search space.">Momen</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="momentum" name="momentum" placeholder=0.02 value=0.4>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="form-group row">\n' +
+            '    <label for="l1" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "L1 Regularization, also called a lasso regression, adds the “absolute value of magnitude” of the coefficient as a penalty term to the loss function."> L1</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="l1" name="l1" placeholder=0.02 value=0.05>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '  <div class="form-group row">\n' +
+            '    <label for="l2" class="col-sm-2 col-form-label"><a href="#" id="show-option" title= "L2 Regularization, also called a ridge regression, adds the “squared magnitude” of the coefficient as the penalty term to the loss function.">L2</a></label>\n' +
+            '    <div class="col-sm-10">\n' +
+            '      <input type="number" min="0" step="0.01" class="form-control" id="l2" name="l2" placeholder=0.02 value=0.05>\n' +
             '    </div>\n' +
             '  </div>\n' +
             '  <div class="form-group row">\n' +

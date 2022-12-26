@@ -406,9 +406,12 @@ def get_model_parameter_exam():
         epochs = request.form.get('epochs')
         decay = request.form.get('decay')
         dropoutrate = request.form.get('dropoutrate')
+        momentum=request.form.get('momentum')
+        l1 = request.form.get('l1')
+        l2 = request.form.get('l2')
     try:
         print(340,datasetname)
-        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
@@ -425,6 +428,9 @@ def get_model_parameter():
         decay = request.form.get('decay')
         dropoutrate = request.form.get('dropoutrate')
         dataset = request.form.get('dataset')
+        momentum = request.form.get('momentum')
+        l1 = request.form.get('l1')
+        l2 = request.form.get('l2')
     try:
         upload_path = "dataset/" + str(datasetname)
         dataset = dataset.split('\n')
@@ -433,14 +439,14 @@ def get_model_parameter():
                 file.write(l.strip().encode("utf-8"))
                 file.write('\n'.encode("utf-8"))
 
-        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
         return {"auc":"error","src":str(e)}
 
 
-def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate):
+def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2):
     seed = 123
     nsplits = 5
     scores = "roc_auc"
@@ -459,13 +465,13 @@ def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dr
         'oacti': ['sigmoid'],
         'opti': ['Adagrad'],
         'lrate': [float(learningrate)],
-        'momen': [0.4],
+        'momen': [float(momentum)],
         'dec': [float(decay)],
         'ls': ['binary_crossentropy'],
         'batch_size': [int(batchsize)],
         'epochs': [int(epochs)],
-        'L1': [0.005],
-        'L2': [0.005],
+        'L1': [float(l1)],
+        'L2': [float(l2)],
         'ltype': [3]
     }
     results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
