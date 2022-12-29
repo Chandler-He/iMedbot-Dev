@@ -105,6 +105,121 @@ function gobacktoBrowse() {
     appendMessage(BOT_NAME, NURSE_IMG, "left", text,"no information",{"Predict":"Predict","Model Training":"Model Training"})
 
 }
+
+function login(){
+    Swal.fire({
+      title: 'Login Form',
+      html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+      <input type="password" id="password" class="swal2-input" placeholder="Password">`,
+      confirmButtonText: 'Log in',
+      confirmButtonColor: '#04AA6D',
+      showCloseButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const login = Swal.getPopup().querySelector('#login').value
+        const password = Swal.getPopup().querySelector('#password').value
+        if (!login || !password) {
+          Swal.showValidationMessage(`Please enter login and password`)
+        }
+        return { login: login, password: password }
+      }
+    }).then((result) => {
+
+      $.post("/login", {
+            username:result.value.login,
+            password:result.value.password
+        }).done(function (data) {
+            console.log(data)
+            if (data=="success"){
+                Swal.fire('Log in successfully'.trim()).then((result) =>{
+                    secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+                    appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+                })
+            }
+            else{
+                Swal.fire(`Please input a right username and password`.trim()).then((result)=>{
+                    login()
+                })
+            }
+        })
+    })
+
+}
+
+function checkPassword(password){
+    var lowerCaseLetters = /[a-z]/g;
+    var upperCaseLetters = /[A-Z]/g;
+    var numbers = /[0-9]/g;
+    if(!password.match(lowerCaseLetters)){
+        return 1
+    }
+    if(!password.match(upperCaseLetters)){
+        return 2
+    }
+    if(!password.match(numbers)){
+        return 3
+    }
+    if (password.length<8)
+    {
+        return 4
+    }
+}
+
+function signup(){
+Swal.fire({
+      title: 'Sign Up Form',
+      html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+      <input type="password" id="password" class="swal2-input" placeholder="Password">
+      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">`,
+      confirmButtonText: 'Sign up',
+      confirmButtonColor: '#04AA6D',
+      showCloseButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const login = Swal.getPopup().querySelector('#login').value
+        const password = Swal.getPopup().querySelector('#password').value
+        const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
+        if (!login || !password || !confirm_password) {
+          Swal.showValidationMessage(`Please enter login and password`)
+        }
+        if (password!=confirm_password){
+            Swal.showValidationMessage(`Please enter the same password`)
+        }
+        password_type=checkPassword(password)
+
+        if (password_type==1){
+            Swal.showValidationMessage(`Password must contain a lowercase letter`)
+        }
+        if (password_type==2){
+            Swal.showValidationMessage(`Password must contain an uppercase letter`)
+        }
+        if (password_type==3){
+            Swal.showValidationMessage(`Password must contain a number`)
+        }
+        if (password_type==4){
+            Swal.showValidationMessage(`Password must contain minimum 8 characters`)
+        }
+        return { login: login, password: password }
+      }
+    }).then((result) => {
+      $.post("/signup", {
+            username:result.value.login,
+            password:result.value.password
+        }).done(function (data) {
+            console.log(data)
+            if (data=="success"){
+                Swal.fire('Sign up successfully'.trim()).then((result) =>{
+                   login()
+                })
+            }
+            else{
+                Swal.fire(`Sorry, the username is already registered by others`.trim()).then((result)=>{
+                    signup()
+                })
+            }
+        })
+    })
+}
 function uploadData(e) {
    // add_userMsg("Upload Local Dataset")
    Swal.fire({
@@ -1252,6 +1367,12 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
              else if (btn_group[i].innerHTML == "Predict another patient") {
                 btn_group[i].addEventListener('click', predictanotherpatient, false)
             }
+            else if (btn_group[i].innerHTML == "Log in") {
+                btn_group[i].addEventListener('click',login, false)
+            }
+            else if (btn_group[i].innerHTML == "Sign up") {
+                btn_group[i].addEventListener('click', signup, false)
+            }
             else {
                     btn_group[i].addEventListener('click', showNext, false)
             }
@@ -1461,10 +1582,11 @@ function formatDate(date) {
 function load(){
 
     firstMsg = "Hi, welcome to iMedBot! 😄"
-    secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+    //secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
     btnGroup = []
     appendMessage(BOT_NAME, NURSE_IMG, "left", firstMsg,"no information", btnGroup);
-    appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+    appendMessage(BOT_NAME, NURSE_IMG, "left","To begin with, log in with your iMedbot account or create a new one to continue","no information", {"Log in":"Log in","Sign up":"Sign up"});
+    //appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
 }
 
 window.οnlοad =load()

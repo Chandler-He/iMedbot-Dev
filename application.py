@@ -207,6 +207,36 @@ def get_test_patient_list():
     return {"labellist": labellist, "tableresult": table_result}
 
 
+@application.route("/login", methods=['POST','GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username, password)
+        user = imedbot["user"]
+        finding_result=user.find_one({"username": username,"password":password})
+        print(finding_result)
+        if finding_result is not None:
+            return "success"
+        else:
+            return "fail"
+
+@application.route("/signup", methods=['POST','GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username, password)
+        user = imedbot["user"]
+        finding_result=user.find_one({"username": username})
+        print(finding_result)
+        if finding_result is not None:
+            return "fail"
+        else:
+            user_dict = {"username": username, "password":password}
+            user.insert_one(user_dict)
+            return "success"
+
 @application.route("/submitsurvey", methods=['POST','GET'])
 def get_user_survey():
     if request.method == 'POST':
