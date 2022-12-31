@@ -6,7 +6,7 @@ import numpy as np
 import pandas
 
 from chatbot import chatbot
-from flask import Flask, render_template, request, after_this_request
+from flask import Flask, render_template, request, after_this_request,session
 #from flask_bootstrap import Bootstrap
 import pyttsx3 as tts
 import json
@@ -21,11 +21,12 @@ import joblib
 import time
 import pymongo
 from datetime import datetime
-import threading
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 application = Flask(__name__)
 application.static_folder = 'static'
+application.secret_key = 'BAD_SECRET_KEY'
+
 #bootstrap = Bootstrap(application)
 class_button_json = json.loads(open('training_data/classes_button.json').read())
 list_of_classes = class_button_json['classes_button']
@@ -207,33 +208,47 @@ def get_test_patient_list():
     return {"labellist": labellist, "tableresult": table_result}
 
 
+@application.route("/logout", methods=['POST','GET'])
+def logout():
+    if request.method == 'POST':
+
+        print("session",session)
+        name=session["username"]
+        session["username"]=None
+        return {"status":"success","username":name}
+
+
 @application.route("/login", methods=['POST','GET'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        print(username, password)
+        print("session",session)
         user = imedbot["user"]
-        finding_result=user.find_one({"username": username,"password":password})
-        print(finding_result)
-        if finding_result is not None:
-            return "success"
-        else:
+        finding_result=user.find_one({"username": username})
+        if finding_result is None:
             return "fail"
+        if check_password_hash(finding_result["password"],password):
+            session["username"]=username
+            print(session)
+            return {"status":"success","username":username}
+        else:
+            return {"status":"fail","username":username}
 
 @application.route("/signup", methods=['POST','GET'])
 def signup():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        print(username, password)
+        hashed_password = generate_password_hash(password)
+        print(username, hashed_password)
         user = imedbot["user"]
         finding_result=user.find_one({"username": username})
         print(finding_result)
         if finding_result is not None:
             return "fail"
         else:
-            user_dict = {"username": username, "password":password}
+            user_dict = {"username": username, "password":hashed_password}
             user.insert_one(user_dict)
             return "success"
 
@@ -245,7 +260,8 @@ def get_user_survey():
         print(star, text)
         now = datetime.now()
         print("Current Time =", now)
-        survey_dict={"time":now,"star":star,"suggestion":text}
+        survey_dict={"time":now,"username":session["username"],"star":star,"suggestion":text}
+        print(survey_dict)
         survey.insert_one(survey_dict)
 
     return "success"

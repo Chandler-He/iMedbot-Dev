@@ -106,6 +106,22 @@ function gobacktoBrowse() {
 
 }
 
+function logout(){
+    Swal.fire({
+          confirmButtonText: 'Log out',
+          confirmButtonColor: 'red',
+          showCloseButton: true,
+          focusConfirm: false
+        }).then((result) => {
+
+          $.post("/logout", {
+            }).done(function (data) {
+                document.getElementsByClassName('greeting')[0].remove()
+                location.reload()
+            })
+        })
+}
+
 function login(){
     Swal.fire({
       title: 'Login Form',
@@ -130,10 +146,21 @@ function login(){
             password:result.value.password
         }).done(function (data) {
             console.log(data)
-            if (data=="success"){
+            if (data["status"]=="success"){
                 Swal.fire('Log in successfully'.trim()).then((result) =>{
+                    add_userMsg("Log in")
                     secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
                     appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+
+                    const div = document.createElement('div');
+
+                      div.className = 'greeting';
+
+                      div.innerHTML = `
+                        <h> Hi, <a href="#" onclick="logout()">${data["username"]}</a></h>
+                      `;
+
+                      document.getElementsByClassName('msger-header')[0].appendChild(div);
                 })
             }
             else{
@@ -1045,7 +1072,6 @@ function displayRadioValue()
                 text:text
             }).done(function (data) {
                console.log(data)
-               alert("done")
                location.reload()
             })
 

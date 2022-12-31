@@ -42,16 +42,21 @@ body {
 }
 
 .msger-header {
-
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+  grid-column-gap: 1px;
+  justify-items: center;
   font-size: medium;
   justify-content: space-between;
   padding: 10px;
-  text-align: center;
+  /*text-align: center;*/
   border-bottom: var(--border);
   background: #eee;
   color: #666;
 }
-
+.previous{ grid-column-start: 1;}
+.msger-header-title { grid-column-start: 3; }
+.greeting { grid-column-start: 5;}
 
 .msger-chat {
   flex: 1;
