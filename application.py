@@ -227,13 +227,13 @@ def login():
         user = imedbot["user"]
         finding_result=user.find_one({"username": username})
         if finding_result is None:
-            return "fail"
+            return {"status":"fail","username":username,"fail type":"no username"}
         if check_password_hash(finding_result["password"],password):
             session["username"]=username
             print(session)
             return {"status":"success","username":username}
         else:
-            return {"status":"fail","username":username}
+            return {"status":"fail","username":username,"fail type":"wrong password"}
 
 @application.route("/signup", methods=['POST','GET'])
 def signup():

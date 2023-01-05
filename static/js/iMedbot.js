@@ -164,9 +164,16 @@ function login(){
                 })
             }
             else{
-                Swal.fire(`Please input a right username and password`.trim()).then((result)=>{
-                    login()
-                })
+                if (data["fail type"]=="no username"){
+                    Swal.fire(`The username does not exist, please sign up first`.trim()).then((result)=>{
+                        login()
+                    })
+                }
+                if (data["fail type"]=="wrong password"){
+                    Swal.fire(`Your password does not match your usename, please input the right password`.trim()).then((result)=>{
+                        login()
+                    })
+                }
             }
         })
     })
@@ -192,12 +199,30 @@ function checkPassword(password){
     }
 }
 
+function showpassword() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+
+  var y = document.getElementById("confirmpassword");
+  if (y.type === "password") {
+    y.type = "text";
+  } else {
+    y.type = "password";
+  }
+}
+
 function signup(){
 Swal.fire({
       title: 'Sign Up Form',
       html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
       <input type="password" id="password" class="swal2-input" placeholder="Password">
-      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">`,
+      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+      <br>
+      <input type="checkbox" onclick="showpassword()">Show Password`,
       confirmButtonText: 'Sign up',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
