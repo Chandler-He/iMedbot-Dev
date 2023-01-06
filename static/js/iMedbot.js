@@ -277,7 +277,7 @@ function uploadData(e) {
    Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 20kb-500kb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be less than 500kb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -326,7 +326,7 @@ function uploadNewData(e) {
     Swal.fire({
                   title: 'Instructions for dataset',
                   html: '<ul className="list-group list-group-flush" style="text-align:justify;padding-left: 25px;">'+
-                        '<li className="list-group-item">The size of dataset file should be in 20kb-500kb;</li>'+
+                        '<li className="list-group-item">The size of dataset file should be less than 500kb;</li>'+
                         '<li className="list-group-item">The dataset must be in .csv or .txt format;</li>'+
                         '<li className="list-group-item">The labels of the columns must be in the first row;</li>'+
                         '<li className="list-group-item">Can only use categorical data for now;</li>'+
@@ -1092,11 +1092,16 @@ function displayRadioValue()
     var text=document.getElementById("usersuggestion").value;
     console.log(text);
     console.log(5-checked_star);
+    if (checked_star>0){
+    checked_star=5-checked_star;
+    }
+    alert("done")
     $.post("/submitsurvey", {
-                star:5-checked_star,
+                star:checked_star,
                 text:text
             }).done(function (data) {
                console.log(data)
+
                location.reload()
             })
 
