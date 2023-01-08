@@ -1098,7 +1098,6 @@ function displayRadioValue()
     if (checked_star>0){
     checked_star=5-checked_star;
     }
-    alert("done")
     $.post("/submitsurvey", {
                 star:checked_star,
                 text:text
