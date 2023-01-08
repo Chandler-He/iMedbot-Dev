@@ -135,7 +135,7 @@ function login(){
         const login = Swal.getPopup().querySelector('#login').value
         const password = Swal.getPopup().querySelector('#password').value
         if (!login || !password) {
-          Swal.showValidationMessage(`Please enter login and password`)
+          Swal.showValidationMessage(`Please enter username and password`)
         }
         return { login: login, password: password }
       }
