@@ -114,6 +114,7 @@ function logout(){
           focusConfirm: false
         }).then((result) => {
           if (result.isConfirmed) {
+
           $.post("/logout", {
             }).done(function (data) {
                 document.getElementsByClassName('greeting')[0].remove()
