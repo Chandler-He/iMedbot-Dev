@@ -228,6 +228,38 @@ def logout():
         return {"status":"success","username":name}
 
 
+@application.route("/resetPassword", methods=['POST','GET'])
+def resetpassword():
+    if request.method == 'POST':
+        username=request.form.get('username')
+        password = request.form.get('password')
+        verification_ques = request.form.get('verification_ques')
+        answer = request.form.get('answer')
+        user = imedbot["user"]
+        finding_result = user.find_one({"username": username,"verification question":verification_ques,"answer":answer})
+        print(finding_result)
+        if finding_result is None:
+            return {"status": "fail", "username": username, "fail type": "answer not correct"}
+        else:
+            hashed_password = generate_password_hash(password)
+            myquery = {"username": username}
+            newvalues = {"$set": {"password": hashed_password}}
+
+            user.update_one(myquery, newvalues)
+            return {"status": "success", "username": username}
+
+    if request.method == 'GET':
+        username = request.args.get('username')
+        user = imedbot["user"]
+        finding_result = user.find_one({"username": username})
+        if finding_result is None:
+            return {"status":"fail","username":username,"fail type":"no username"}
+        else:
+            if "verification question" not in finding_result.keys():
+                return {"status": "success", "username": username,"verification question":"none"}
+            else:
+                return {"status": "success", "username": username,"verification question":finding_result["verification question"]}
+
 @application.route("/login", methods=['POST','GET'])
 def login():
     if request.method == 'POST':
@@ -250,6 +282,8 @@ def signup():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        question = request.form.get('question')
+        answer = request.form.get('answer')
         hashed_password = generate_password_hash(password)
         print(username, hashed_password)
         user = imedbot["user"]
@@ -258,7 +292,7 @@ def signup():
         if finding_result is not None:
             return "fail"
         else:
-            user_dict = {"username": username, "password":hashed_password}
+            user_dict = {"username": username, "password":hashed_password,"verification question":question,"answer":answer}
             user.insert_one(user_dict)
             return "success"
 

@@ -125,11 +125,143 @@ function logout(){
         })
 }
 
+function resetPassword(){
+    Swal.fire({
+      title: 'Reset Password',
+      html: `<label>Username:</label>
+      <input type="text" id="login" class="swal2-input" placeholder="Username">`,
+      confirmButtonText: 'Next',
+      confirmButtonColor: '#04AA6D',
+      showCloseButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const login = Swal.getPopup().querySelector('#login').value
+        if (!login) {
+          Swal.showValidationMessage(`Please enter username`)
+        }
+
+        return { login: login }
+      }
+    }).then((result) => {
+        console.log(result.value.login)
+        $.get("/resetPassword", {username:result.value.login}).done(function (data) {
+
+            if (data["status"]=="fail"){
+                Swal.fire(`The username does not exist`.trim()).then((result)=>{
+                        resetPassword()
+                    })
+            }
+            if (data["status"]=="success"){
+                verification_ques=data["verification question"]
+                username=data["username"]
+                if (verification_ques=="none"){
+                    Swal.fire(`The username does not have verification question`.trim()).then((result)=>{
+                        login()
+                    })
+                }
+                else{
+                      Swal.fire({
+                      title: 'Reset Password',
+                      html: `<label>${verification_ques}</label>
+                      <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+                      <br>
+                      <div id="signup-pass">
+                      <input type="password" id="password" class="swal2-input" placeholder="New Password">
+                      </div>
+                      <div id="signup-confirm">
+                      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+                      </div>
+                      <input type="checkbox" onclick="showpassword()" >Show Password
+                      `,
+                      confirmButtonText: 'Submit',
+                      confirmButtonColor: '#04AA6D',
+                      showCloseButton: true,
+                      focusConfirm: false,
+                      didOpen:function(){
+                        const pass = document.getElementById('password');
+
+                        pass.addEventListener('focus', (event) => {
+                                var text = document.createElement('p');
+                                text.setAttribute("id", "pass-requirement");
+                                text.appendChild(document.createTextNode("Password must contain a lowercase letter\nPassword must contain an uppercase letter\nPassword must contain a number\nPassword must contain minimum 8 characters\n"));
+                                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
+                                var child = document.getElementById('signup-confirm');
+                                child.parentNode.insertBefore(text, child);
+                        }, true);
+
+                        pass.addEventListener('blur', (event) => {
+                                var text = document.getElementById('pass-requirement');
+                                text.remove();
+                        }, true);
+
+                      },
+                      preConfirm: () => {
+                            const password = Swal.getPopup().querySelector('#password').value
+                            const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
+                            const answer = Swal.getPopup().querySelector('#answer').value
+                            if ( !password || !confirm_password) {
+
+                              Swal.showValidationMessage(`Please enter password`)
+                            }
+
+                            else if (password!=confirm_password){
+                                Swal.showValidationMessage(`Please enter the same password`)
+                            }
+
+                            else if (!answer) {
+
+                              Swal.showValidationMessage(`Please input the answer`)
+                            }
+                            else{
+                            password_type=checkPassword(password)
+
+                            if (password_type==1){
+                                Swal.showValidationMessage(`Password must contain a lowercase letter`)
+                            }
+                            else if (password_type==2){
+                                Swal.showValidationMessage(`Password must contain an uppercase letter`)
+                            }
+                            else if (password_type==3){
+                                Swal.showValidationMessage(`Password must contain a number`)
+                            }
+                            else if (password_type==4){
+                                Swal.showValidationMessage(`Password must contain minimum 8 characters`)
+                            }
+                            }
+                            return { password: password,answer:answer }
+                      }
+                    }).then((result) => {
+                            $.post("/resetPassword", {username:username,verification_ques:verification_ques,password:result.value.password,answer:result.value.answer}).done(function (data) {
+                                    if (data["status"]=="fail"){
+                                        Swal.fire(`The answer does not match`.trim()).then((result)=>{
+                                                resetPassword()
+                                            })
+                                    }
+                                    if (data["status"]=="success"){
+                                        Swal.fire(`New password saved`.trim()).then((result)=>{
+                                                login()
+                                            })
+                                    }
+
+                            })
+
+
+                    })
+
+                }
+            }
+        })
+
+    })
+
+}
+
 function login(){
     Swal.fire({
       title: 'Login Form',
       html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
-      <input type="password" id="password" class="swal2-input" placeholder="Password">`,
+      <input type="password" id="password" class="swal2-input" placeholder="Password"><br>
+      <a href="#" onclick="resetPassword()">Forgot password?</a>`,
       confirmButtonText: 'Log in',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
@@ -241,8 +373,23 @@ Swal.fire({
       <div id="signup-confirm">
       <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
       </div>
+      <input type="checkbox" onclick="showpassword()" >Show Password
+      <br><br>
+      <select name="veri-ques" id="veri-ques" class=".swal2-select">
+      <option value="" disabled selected hidden>Choose a verification question:</option>
+      <option> In what city were you born?</option>
+      <option>  What is the name of your favorite pet?</option>
+      <option>  What is your mother's maiden name?</option>
+      <option>  What high school did you attend?</option>
+      <option>  What was the name of your elementary school?</option>
+      <option>  What was the make of your first car?</option>
+      <option>  What was your favorite food as a child?</option>
+      <option>  Where did you meet your spouse?</option>
+      <option>  What year was your father (or mother) born?</option>
+      </select>
+      <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
       <br>
-      <input type="checkbox" onclick="showpassword()">Show Password`,
+      `,
       confirmButtonText: 'Sign up',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
@@ -285,41 +432,54 @@ Swal.fire({
             const login = Swal.getPopup().querySelector('#login').value
             const password = Swal.getPopup().querySelector('#password').value
             const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
-            console.log(login)
-            console.log(password)
-            console.log(confirm_password)
+            const ques = Swal.getPopup().querySelector('#veri-ques').value
+            const answer = Swal.getPopup().querySelector('#answer').value
             if (!login || !password || !confirm_password) {
 
               Swal.showValidationMessage(`Please enter login and password`)
             }
-            console.log(ValidateEmail(login))
-            if (!ValidateEmail(login)){
+            else if (!ValidateEmail(login)){
                 Swal.showValidationMessage(`Please input the username with a legal e-mail address`)
             }
 
-            if (password!=confirm_password){
+            else if (password!=confirm_password){
                 Swal.showValidationMessage(`Please enter the same password`)
             }
+            else if (!ques) {
+
+              Swal.showValidationMessage(`Please select a verification question`)
+            }
+            else if (!answer) {
+
+              Swal.showValidationMessage(`Please input the answer`)
+            }
+            else{
             password_type=checkPassword(password)
 
             if (password_type==1){
                 Swal.showValidationMessage(`Password must contain a lowercase letter`)
             }
-            if (password_type==2){
+            else if (password_type==2){
                 Swal.showValidationMessage(`Password must contain an uppercase letter`)
             }
-            if (password_type==3){
+            else if (password_type==3){
                 Swal.showValidationMessage(`Password must contain a number`)
             }
-            if (password_type==4){
+            else if (password_type==4){
                 Swal.showValidationMessage(`Password must contain minimum 8 characters`)
             }
-            return { login: login, password: password }
+            }
+
+
+            return { login: login, password: password,question:ques,answer:answer }
       }
     }).then((result) => {
+        console.log(result.value)
       $.post("/signup", {
             username:result.value.login,
-            password:result.value.password
+            password:result.value.password,
+            question:result.value.question,
+            answer:result.value.answer
         }).done(function (data) {
             console.log(data)
             if (data=="success"){
