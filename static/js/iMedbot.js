@@ -218,43 +218,103 @@ function showpassword() {
   }
 }
 
+function ValidateEmail(mail)
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
+
+
+
 function signup(){
 Swal.fire({
       title: 'Sign Up Form',
-      html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+      html: `
+
+      <input type="text" id="login" class="swal2-input" placeholder="Username" title="Username should be a legal e-mail address.">
+      <div id="signup-pass">
       <input type="password" id="password" class="swal2-input" placeholder="Password">
+      </div>
+      <div id="signup-confirm">
       <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+      </div>
       <br>
       <input type="checkbox" onclick="showpassword()">Show Password`,
       confirmButtonText: 'Sign up',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
       focusConfirm: false,
-      preConfirm: () => {
-        const login = Swal.getPopup().querySelector('#login').value
-        const password = Swal.getPopup().querySelector('#password').value
-        const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
-        if (!login || !password || !confirm_password) {
-          Swal.showValidationMessage(`Please enter login and password`)
-        }
-        if (password!=confirm_password){
-            Swal.showValidationMessage(`Please enter the same password`)
-        }
-        password_type=checkPassword(password)
+      didOpen:function(){
+        const pass = document.getElementById('password');
 
-        if (password_type==1){
-            Swal.showValidationMessage(`Password must contain a lowercase letter`)
-        }
-        if (password_type==2){
-            Swal.showValidationMessage(`Password must contain an uppercase letter`)
-        }
-        if (password_type==3){
-            Swal.showValidationMessage(`Password must contain a number`)
-        }
-        if (password_type==4){
-            Swal.showValidationMessage(`Password must contain minimum 8 characters`)
-        }
-        return { login: login, password: password }
+        pass.addEventListener('focus', (event) => {
+                var text = document.createElement('p');
+                text.setAttribute("id", "pass-requirement");
+                text.appendChild(document.createTextNode("Password must contain a lowercase letter\nPassword must contain an uppercase letter\nPassword must contain a number\nPassword must contain minimum 8 characters\n"));
+                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
+                var child = document.getElementById('signup-confirm');
+                child.parentNode.insertBefore(text, child);
+        }, true);
+
+        pass.addEventListener('blur', (event) => {
+                var text = document.getElementById('pass-requirement');
+                text.remove();
+        }, true);
+
+
+        const username = document.getElementById('login');
+
+        username.addEventListener('focus', (event) => {
+                var text = document.createElement('p');
+                text.setAttribute("id", "name-requirement");
+                text.appendChild(document.createTextNode("Username should be a legal e-mail address."));
+                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
+                var child = document.getElementById('signup-pass');
+                child.parentNode.insertBefore(text, child);
+        }, true);
+
+        username.addEventListener('blur', (event) => {
+                var text = document.getElementById('name-requirement');
+                text.remove();
+        }, true);
+      },
+      preConfirm: () => {
+            const login = Swal.getPopup().querySelector('#login').value
+            const password = Swal.getPopup().querySelector('#password').value
+            const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
+            console.log(login)
+            console.log(password)
+            console.log(confirm_password)
+            if (!login || !password || !confirm_password) {
+
+              Swal.showValidationMessage(`Please enter login and password`)
+            }
+            console.log(ValidateEmail(login))
+            if (!ValidateEmail(login)){
+                Swal.showValidationMessage(`Please input the username with a legal e-mail address`)
+            }
+
+            if (password!=confirm_password){
+                Swal.showValidationMessage(`Please enter the same password`)
+            }
+            password_type=checkPassword(password)
+
+            if (password_type==1){
+                Swal.showValidationMessage(`Password must contain a lowercase letter`)
+            }
+            if (password_type==2){
+                Swal.showValidationMessage(`Password must contain an uppercase letter`)
+            }
+            if (password_type==3){
+                Swal.showValidationMessage(`Password must contain a number`)
+            }
+            if (password_type==4){
+                Swal.showValidationMessage(`Password must contain minimum 8 characters`)
+            }
+            return { login: login, password: password }
       }
     }).then((result) => {
       $.post("/signup", {
@@ -1640,11 +1700,29 @@ function formatDate(date) {
 function load(){
 
     firstMsg = "Hi, welcome to iMedBot! 😄"
-    //secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+    secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
     btnGroup = []
     appendMessage(BOT_NAME, NURSE_IMG, "left", firstMsg,"no information", btnGroup);
-    appendMessage(BOT_NAME, NURSE_IMG, "left","To begin with, log in with your iMedbot account or create a new one to continue","no information", {"Log in":"Log in","Sign up":"Sign up"});
-    //appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+
+    $.get("/getLoad", {}).done(function (data) {
+        if (data["status"]=="fail"){
+            appendMessage(BOT_NAME, NURSE_IMG, "left","To begin with, log in with your iMedbot account or create a new one to continue","no information", {"Log in":"Log in","Sign up":"Sign up"});
+
+        }
+        if (data["status"]=="success"){
+            const div = document.createElement('div');
+
+                      div.className = 'greeting';
+
+                      div.innerHTML = `
+                        <h> Hi, <a href="#" onclick="logout()">${data["username"]}</a></h>
+                      `;
+
+                      document.getElementsByClassName('msger-header')[0].appendChild(div);
+            appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+
+        }
+    })
 }
 
 window.οnlοad =load()

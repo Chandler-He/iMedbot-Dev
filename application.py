@@ -76,6 +76,16 @@ def get_bot_response():
     return result
 
 
+@application.route("/getLoad")
+def get_session_username():
+    print(session)
+    if "username" not in session.keys():
+        return {"status": "fail"}
+    if session["username"] is not None:
+        return {"status":"success","username":session["username"]}
+    else:
+        return {"status":"fail"}
+
 # def speak(response):
 #     speaker = tts.init()
 #     speaker.setProperty('rate', 150)
