@@ -34,7 +34,7 @@ list_of_classes = class_button_json['classes_button']
 '''
 connect to database
 '''
-client = pymongo.MongoClient("mongodb+srv://yangzhen:yangzhen@cluster0.wigwlyv.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://XiaJiang:12345aBc@cluster0.pm6gt6w.mongodb.net/?retryWrites=true&w=majority")
 db = client.test
 
 #name of database
@@ -320,7 +320,7 @@ def check_img_src():
             t2=time.time()
             time_diff=t2-t1
             print()
-            if time_diff>20:
+            if time_diff>45:
                 break
             else:
                 continue
