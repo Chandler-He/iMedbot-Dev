@@ -355,3 +355,13 @@ margin:50px;
   position:left;
 }
 
+.swal-title{
+text-align:left;
+}
+.swal2-input{
+text-align:left;
+}
+
+.swal2-select{
+text-align:left;
+}

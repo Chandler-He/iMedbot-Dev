@@ -1,5 +1,6 @@
 import os
 import shutil
+import string
 import webbrowser
 
 import numpy as np
@@ -21,11 +22,28 @@ import joblib
 import time
 import pymongo
 from datetime import datetime
+from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mail import Mail, Message
+import random
 
 application = Flask(__name__)
 application.static_folder = 'static'
 application.secret_key = 'BAD_SECRET_KEY'
+
+mail = Mail(application) # instantiate the mail class
+
+# configuration of mail
+application.config['MAIL_SERVER']='smtp.gmail.com'
+application.config['MAIL_PORT'] = 465
+application.config['MAIL_USERNAME'] = 'imedbot.odpac@gmail.com'
+application.config['MAIL_PASSWORD'] = 'sbavpcrkkacwvyjr'
+application.config['MAIL_USE_TLS'] = False
+application.config['TESTING'] = False
+application.config['MAIL_USE_SSL'] = True
+application.config['MAIL_SUPPRESS_SEND']=False
+application.config['MAIL_DEBUG'] = True
+mail = Mail(application)
 
 #bootstrap = Bootstrap(application)
 class_button_json = json.loads(open('training_data/classes_button.json').read())
@@ -47,6 +65,12 @@ model_15 = load_model('model15.h5')
 model_10 = load_model('model10.h5')
 model_5 = load_model('model5.h5')
 
+
+
+@application.before_request
+def make_session_permanent():
+    session.permanent=True
+    application.permanent_session_lifetime = timedelta(minutes=20)
 
 @application.route("/")
 def index():
@@ -235,18 +259,26 @@ def resetpassword():
         password = request.form.get('password')
         verification_ques = request.form.get('verification_ques')
         answer = request.form.get('answer')
+        code = request.form.get('code')
         user = imedbot["user"]
+        verification=imedbot["verification"]
         finding_result = user.find_one({"username": username,"verification question":verification_ques,"answer":answer})
         print(finding_result)
         if finding_result is None:
             return {"status": "fail", "username": username, "fail type": "answer not correct"}
         else:
-            hashed_password = generate_password_hash(password)
-            myquery = {"username": username}
-            newvalues = {"$set": {"password": hashed_password}}
+            finding_code = verification.find_one({"username": username})
+            if finding_code is None:
+                return {"status": "no user", "username": username}
+            if finding_code["code"] == code:
+                hashed_password = generate_password_hash(password)
+                myquery = {"username": username}
+                newvalues = {"$set": {"password": hashed_password}}
 
-            user.update_one(myquery, newvalues)
-            return {"status": "success", "username": username}
+                user.update_one(myquery, newvalues)
+                return {"status": "success", "username": username}
+            else:
+                return {"status": "wrong code", "username": username}
 
     if request.method == 'GET':
         username = request.args.get('username')
@@ -290,11 +322,58 @@ def signup():
         finding_result=user.find_one({"username": username})
         print(finding_result)
         if finding_result is not None:
-            return "fail"
+            return {"status":"fail","username":username}
         else:
-            user_dict = {"username": username, "password":hashed_password,"verification question":question,"answer":answer}
-            user.insert_one(user_dict)
-            return "success"
+            return {"status":"success","username":username,"password":password,"question":question,"answer":answer}
+
+@application.route("/getEmailVerification",methods=['GET'])
+def send_email():
+    receiver=request.args.get('username')
+    msg = Message('Verification code from iMedBot', sender='imedbot.odpac@gmail.com', recipients=[receiver])
+    pin=''.join(random.choice(string.digits) for x in range(6))
+    msg.body = "This is your 6-digit verification code: "+pin
+    try:
+        mail.send(msg)
+    except Exception as e:
+        return "Fail"
+    else:
+        now = datetime.now()
+        code_dict = {"time": now, "username": receiver, "code": pin}
+        verification=imedbot['verification']
+        myquery = {"username": receiver}
+        x = verification.delete_many(myquery)
+        verification.insert_one(code_dict)
+    return "Sent"
+
+@application.route("/verifyCode",methods=['POST'])
+def verify_code():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        question = request.form.get('question')
+        answer = request.form.get('answer')
+        code = request.form.get('code')
+        hashed_password = generate_password_hash(password)
+        print(username, hashed_password,question,answer,code)
+        user = imedbot["user"]
+        verification = imedbot["verification"]
+        finding_result = user.find_one({"username": username})
+        print(353,finding_result)
+        if finding_result is not None:
+            return {"status": "fail", "username": username}
+        else:
+            finding_code=verification.find_one({"username": username})
+            print(358, finding_code)
+            if finding_code is None:
+                return {"status": "no user", "username": username}
+            if finding_code["code"]==code:
+                user_dict = {"username": username, "password": hashed_password, "verification question": question,
+                             "answer": answer}
+                user.insert_one(user_dict)
+                return {"status": "success", "username": username}
+            else:
+                return {"status": "codeerror", "username": username}
+
 
 @application.route("/submitsurvey", methods=['POST','GET'])
 def get_user_survey():

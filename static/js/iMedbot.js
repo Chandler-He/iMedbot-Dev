@@ -160,99 +160,111 @@ function resetPassword(){
                     })
                 }
                 else{
-                      Swal.fire({
-                      title: 'Reset Password',
-                      html: `<label>${verification_ques}</label>
-                      <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
-                      <br>
-                      <div id="signup-pass">
-                      <input type="password" id="password" class="swal2-input" placeholder="New Password">
-                      </div>
-                      <div id="signup-confirm">
-                      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
-                      </div>
-                      <input type="checkbox" onclick="showpassword()" >Show Password
-                      `,
-                      confirmButtonText: 'Submit',
-                      confirmButtonColor: '#04AA6D',
-                      showCloseButton: true,
-                      focusConfirm: false,
-                      didOpen:function(){
-                        const pass = document.getElementById('password');
-
-                        pass.addEventListener('focus', (event) => {
-                                var text = document.createElement('p');
-                                text.setAttribute("id", "pass-requirement");
-                                text.appendChild(document.createTextNode("Password must contain a lowercase letter\nPassword must contain an uppercase letter\nPassword must contain a number\nPassword must contain minimum 8 characters\n"));
-                                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
-                                var child = document.getElementById('signup-confirm');
-                                child.parentNode.insertBefore(text, child);
-                        }, true);
-
-                        pass.addEventListener('blur', (event) => {
-                                var text = document.getElementById('pass-requirement');
-                                text.remove();
-                        }, true);
-
-                      },
-                      preConfirm: () => {
-                            const password = Swal.getPopup().querySelector('#password').value
-                            const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
-                            const answer = Swal.getPopup().querySelector('#answer').value
-                            if ( !password || !confirm_password) {
-
-                              Swal.showValidationMessage(`Please enter password`)
-                            }
-
-                            else if (password!=confirm_password){
-                                Swal.showValidationMessage(`Please enter the same password`)
-                            }
-
-                            else if (!answer) {
-
-                              Swal.showValidationMessage(`Please input the answer`)
-                            }
-                            else{
-                            password_type=checkPassword(password)
-
-                            if (password_type==1){
-                                Swal.showValidationMessage(`Password must contain a lowercase letter`)
-                            }
-                            else if (password_type==2){
-                                Swal.showValidationMessage(`Password must contain an uppercase letter`)
-                            }
-                            else if (password_type==3){
-                                Swal.showValidationMessage(`Password must contain a number`)
-                            }
-                            else if (password_type==4){
-                                Swal.showValidationMessage(`Password must contain minimum 8 characters`)
-                            }
-                            }
-                            return { password: password,answer:answer }
-                      }
-                    }).then((result) => {
-                            $.post("/resetPassword", {username:username,verification_ques:verification_ques,password:result.value.password,answer:result.value.answer}).done(function (data) {
-                                    if (data["status"]=="fail"){
-                                        Swal.fire(`The answer does not match`.trim()).then((result)=>{
-                                                resetPassword()
-                                            })
-                                    }
-                                    if (data["status"]=="success"){
-                                        Swal.fire(`New password saved`.trim()).then((result)=>{
-                                                login()
-                                            })
-                                    }
-
-                            })
-
-
-                    })
-
+                        email_verification(username)
+                        Swal.fire(`We have sent a email with 6 digit pin code to your email address. Please check your mailbox!`.trim()).then((result)=>{
+                        reset()
+                        })
                 }
             }
         })
 
     })
+
+}
+
+function reset(){
+
+                          Swal.fire({
+                          title: 'Reset Password',
+                          html: `
+                           <select name="veri-ques" id="veri-ques" class=".swal2-select">
+                          <option value="" disabled selected hidden>${verification_ques}</option>
+                          <option>${verification_ques}</option>
+                          <input type="text" id="answer" class="swal2-input" placeholder="Your answer"><i class="fas fa-info-circle" style="color:black" title="Please input the answer of your verification question"></i>
+                          <br>
+                          <input type="text" id="code" class="swal2-input" placeholder="Your 6-digit verification code in your email"><i class="fas fa-info-circle" style="color:black" title="We have sent an email with code to your address, please check it."></i>
+
+                          <div id="signup-pass">
+                          <input type="password" id="password" class="swal2-input" placeholder="New Password"><i class="fas fa-info-circle" style="color:black" title="Password must contain a lowercase letter &#013Password must contain an uppercase letter&#013Password must contain a number&#013Password must contain minimum 8 characters&#013"></i>
+                          </div>
+                          <div id="signup-confirm">
+                          <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password"><i class="fas fa-info-circle" style="color:black" title="Repeat your new password again to confirm it."></i>
+                          </div>
+                          <input type="checkbox" onclick="showpassword()" >Show Password
+                          `,
+                          confirmButtonText: 'Submit',
+                          confirmButtonColor: '#04AA6D',
+                          showCloseButton: true,
+                          focusConfirm: false,
+
+                          preConfirm: () => {
+                                const password = Swal.getPopup().querySelector('#password').value
+                                const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
+                                const answer = Swal.getPopup().querySelector('#answer').value
+                                const code = Swal.getPopup().querySelector('#code').value
+                                if ( !password || !confirm_password) {
+
+                                  Swal.showValidationMessage(`Please enter password`)
+                                }
+
+                                else if (password!=confirm_password){
+                                    Swal.showValidationMessage(`Please enter the same password`)
+                                }
+
+                                else if (!answer) {
+
+                                  Swal.showValidationMessage(`Please input the answer`)
+                                }
+                                else if (!code) {
+
+                                  Swal.showValidationMessage(`Please input the code`)
+                                }
+                                else{
+                                password_type=checkPassword(password)
+
+                                if (password_type==1){
+                                    Swal.showValidationMessage(`Password must contain a lowercase letter`)
+                                }
+                                else if (password_type==2){
+                                    Swal.showValidationMessage(`Password must contain an uppercase letter`)
+                                }
+                                else if (password_type==3){
+                                    Swal.showValidationMessage(`Password must contain a number`)
+                                }
+                                else if (password_type==4){
+                                    Swal.showValidationMessage(`Password must contain minimum 8 characters`)
+                                }
+                                }
+                                return { password: password,answer:answer,code:code }
+                          }
+                        }).then((result) => {
+                                $.post("/resetPassword", {username:username,verification_ques:verification_ques,password:result.value.password,answer:result.value.answer,code:result.value.code}).done(function (data) {
+                                        if (data["status"]=="fail"){
+                                            Swal.fire(`The answer does not match`.trim()).then((result)=>{
+                                                    reset()
+                                                })
+                                        }
+                                        if (data["status"]=="wrong code"){
+                                            Swal.fire(`The code does not match`.trim()).then((result)=>{
+                                                    reset()
+                                                })
+                                        }
+                                        if (data["status"]=="success"){
+                                            Swal.fire(`New password saved`.trim()).then((result)=>{
+                                                    login()
+                                                })
+                                        }
+                                        if (data["status"]=="no user"){
+                                            Swal.fire(`There exist mistakes and we will resend an email to you.`.trim()).then((result)=>{
+                                                    resetPassword()
+                                                })
+                                        }
+
+                                })
+
+
+                        })
+
 
 }
 
@@ -366,12 +378,12 @@ Swal.fire({
       title: 'Sign Up Form',
       html: `
 
-      <input type="text" id="login" class="swal2-input" placeholder="Username" title="Username should be a legal e-mail address.">
+      <input type="text" id="login" class="swal2-input" placeholder="Username" title="Username should be a legal e-mail address."><i class="fas fa-info-circle" style="color:black" title="Username should be a legal e-mail address."></i>
       <div id="signup-pass">
-      <input type="password" id="password" class="swal2-input" placeholder="Password">
+      <input type="password" id="password" class="swal2-input" placeholder="Password"><i class="fas fa-info-circle" style="color:black" title="Password must contain a lowercase letter &#013Password must contain an uppercase letter&#013Password must contain a number&#013Password must contain minimum 8 characters&#013"></i>
       </div>
       <div id="signup-confirm">
-      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password"><i class="fas fa-info-circle" style="color:black" title="Repeat your password to confirm it."></i>
       </div>
       <input type="checkbox" onclick="showpassword()" >Show Password
       <br><br>
@@ -387,47 +399,14 @@ Swal.fire({
       <option>  Where did you meet your spouse?</option>
       <option>  What year was your father (or mother) born?</option>
       </select>
-      <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+      <input type="text" id="answer" class="swal2-input" placeholder="Your answer"><i class="fas fa-info-circle" style="color:black" title="Keep your answer in mind for password reset."></i>
       <br>
       `,
       confirmButtonText: 'Sign up',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
       focusConfirm: false,
-      didOpen:function(){
-        const pass = document.getElementById('password');
 
-        pass.addEventListener('focus', (event) => {
-                var text = document.createElement('p');
-                text.setAttribute("id", "pass-requirement");
-                text.appendChild(document.createTextNode("Password must contain a lowercase letter\nPassword must contain an uppercase letter\nPassword must contain a number\nPassword must contain minimum 8 characters\n"));
-                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
-                var child = document.getElementById('signup-confirm');
-                child.parentNode.insertBefore(text, child);
-        }, true);
-
-        pass.addEventListener('blur', (event) => {
-                var text = document.getElementById('pass-requirement');
-                text.remove();
-        }, true);
-
-
-        const username = document.getElementById('login');
-
-        username.addEventListener('focus', (event) => {
-                var text = document.createElement('p');
-                text.setAttribute("id", "name-requirement");
-                text.appendChild(document.createTextNode("Username should be a legal e-mail address."));
-                text.style = "white-space: pre;background: #04AA6D;color: white;border-radius:10px;padding:10px 0px 10px 0px;"
-                var child = document.getElementById('signup-pass');
-                child.parentNode.insertBefore(text, child);
-        }, true);
-
-        username.addEventListener('blur', (event) => {
-                var text = document.getElementById('name-requirement');
-                text.remove();
-        }, true);
-      },
       preConfirm: () => {
             const login = Swal.getPopup().querySelector('#login').value
             const password = Swal.getPopup().querySelector('#password').value
@@ -482,11 +461,16 @@ Swal.fire({
             answer:result.value.answer
         }).done(function (data) {
             console.log(data)
-            if (data=="success"){
-                Swal.fire('Sign up successfully'.trim()).then((result) =>{
-                   login()
-                })
-            }
+            if (data["status"]=="success"){
+                email_verification(data["username"])
+                Swal.fire('We have send an verification email to your address, please check it'.trim()).then((result) =>{
+
+
+
+                       check_code(data["username"],data["password"],data["question"],data["answer"])
+                   })
+                }
+
             else{
                 Swal.fire(`Sorry, the username is already registered by others`.trim()).then((result)=>{
                     signup()
@@ -495,6 +479,65 @@ Swal.fire({
         })
     })
 }
+
+function email_verification(username){
+    console.log("email sent")
+    $.get("/getEmailVerification", { username:username }).done(function (data) {
+
+        console.log(data)
+    })
+
+
+}
+
+function check_code(username,password,question="",answer=""){
+                           Swal.fire({
+                                  title: 'Verification code',
+                                  html: `
+
+                                  <input type="text" id="code" class="swal2-input" placeholder="6-digit verification code" ><i class="fas fa-info-circle" style="color:black" title="Please check your code in your mailbox."></i>
+
+                                  `,
+                                  confirmButtonText: 'Submit',
+                                  confirmButtonColor: '#04AA6D',
+                                  showCloseButton: true,
+                                  focusConfirm: false,
+
+                                  preConfirm: () => {
+
+                                        const code = Swal.getPopup().querySelector('#code').value
+                                        if (!code) {
+
+                                          Swal.showValidationMessage(`Please enter the verification code.`)
+                                        }
+
+
+                                        return {code:code}
+                                  }
+                           }).then((result) => {
+                                                    if (question==""){
+
+                                                    }
+                                                    else{
+                                                        $.post("/verifyCode", {username:username,password:password,question:question,answer:answer ,code:result.value.code}).done(function (data) {
+                                                            console.log(data)
+                                                            if (data["status"]=="success"){
+
+                                                            Swal.fire('Sign up successfully, please log in'.trim()).then((result) =>{login()})
+                                                            }
+                                                            else if (data["status"]=="codeerror"){
+                                                            Swal.fire('The code does not match'.trim()).then((result) =>{check_code(username,password,question,answer);})
+                                                            }
+                                                            else if (data["status"]=="no user"){
+                                                            Swal.fire('Please check you privide a valid email address.'.trim()).then((result) =>{signup()})
+                                                            }
+                                                        })
+                                                    }
+
+
+                                                })
+                       }
+
 function uploadData(e) {
    // add_userMsg("Upload Local Dataset")
    Swal.fire({
@@ -1115,7 +1158,7 @@ function submitPatientForm(val){
         }
         else{
         console.log(data)
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + data["proba"], "no information", [])   //This is place that you need to add a variable that contains the value of year.
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + (Number(data["proba"])*100).toFixed(2)+"%", "no information", [])   //This is place that you need to add a variable that contains the value of year.
         if(shap_check == true){
         wait(120000)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
@@ -1758,7 +1801,8 @@ function showNext(e){
 
 function getinput(input_copy){
   $.get("/getInput", { msg: input_copy.toString() }).done(function (data) {
-    res = "The chance of "+predict_year+"-year breast cancer metastasis of is" +" "+data.substring(2,data.length-2)
+    proba=Number(data.substring(2,data.length-2))
+    res = "The chance of "+predict_year+"-year breast cancer metastasis of is" +" "+(proba*100).toFixed(2)+"%"
       appendMessage(BOT_NAME, NURSE_IMG, "left", res,"no information",[])
       appendMessage(BOT_NAME, NURSE_IMG, "left","Which task would you like to do next?","no information",{"Predict another patient":"Predict another patient","End task":"End task"})
      // appendMessage(BOT_NAME, NURSE_IMG, "left",SURVEY,"no information",[])
