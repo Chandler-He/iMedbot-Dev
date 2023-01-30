@@ -26,6 +26,9 @@ from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 import random
+from trello_wrapper import *
+
+
 
 application = Flask(__name__)
 application.static_folder = 'static'
@@ -65,8 +68,23 @@ model_15 = load_model('model15.h5')
 model_10 = load_model('model10.h5')
 model_5 = load_model('model5.h5')
 
+'''
+settings for trello board
+'''
+trello_api_key="fa4a23cc48f9f53430e93a41ef6f7e66"
+trello_token="ATTA9028986991f0dfe8bd48f894b702792fe3bf71f3af2eb0207f5685adfc88a0c1EC07FFAF"
 
+trello_board_url="https://trello.com/b/IbXFiNmr"
+trello = trello_wrapper(trello_api_key, trello_token)
+board = trello.get_board(trello_board_url)
+board_list =trello.get_single_list(board, "Reported")
+board_label = trello.get_single_board_labels(board, "")
+label_list = []
+label_list.append(board_label["id"])
 
+'''
+new_card = trello.create_card(board_list, label_list, "","test for api")
+'''
 @application.before_request
 def make_session_permanent():
     session.permanent=True
@@ -397,12 +415,22 @@ def get_user_survey():
     if request.method == 'POST':
         star = request.form.get('star')
         text = request.form.get('text')
+        error = request.form.get('error')
         print(star, text)
         now = datetime.now()
         print("Current Time =", now)
         survey_dict={"time":now,"username":session["username"],"star":star,"suggestion":text}
         print(survey_dict)
         survey.insert_one(survey_dict)
+        words=error.split()
+        print(error)
+        print(words)
+        if error!="":
+            if len(words)>=3:
+                new_card = trello.create_card(board_list, label_list,words[0]+" "+words[1]+" "+words[2], error)
+            elif len(words)>0:
+
+                new_card = trello.create_card(board_list, label_list, words[0], error)
 
     return "success"
 

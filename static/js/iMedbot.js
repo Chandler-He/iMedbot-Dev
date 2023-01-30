@@ -1390,9 +1390,11 @@ function displayRadioValue()
     if (checked_star>0){
     checked_star=5-checked_star;
     }
+    var error_report=document.getElementById("user-error-report").value;
     $.post("/submitsurvey", {
                 star:checked_star,
-                text:text
+                text:text,
+                error:error_report
             }).done(function (data) {
                console.log(data)
 
@@ -1469,6 +1471,8 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
     ' <label class="star star-1" for="star-1"></label>\n' +
     '<label for="exampleFormControlTextarea1">Please leave your suggestions for iMedBot</label>\n' +
     '<textarea class="form-control" id="usersuggestion" rows="5"></textarea>\n'+
+    '<label for="exampleFormControlTextarea1">Please summarize the error or issue you meet when using imedbot ( leave it blank if there is none).</label>\n' +
+    '<textarea class="form-control" id="user-error-report" rows="5"></textarea>\n'+
     '<input type="submit" value="Submit" class ="btn btn-success" >\n'+
     '</form>\n'+
     '</div>\n'
