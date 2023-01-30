@@ -44,6 +44,8 @@ $(document).on({
 });
 
 
+
+
 //currently we do not need this part, if in the future we need user input again, readd it
 //msgerForm.addEventListener("submit", event => {
 
@@ -128,8 +130,8 @@ function logout(){
 function resetPassword(){
     Swal.fire({
       title: 'Reset Password',
-      html: `<label>Username:</label>
-      <input type="text" id="login" class="swal2-input" placeholder="Username">`,
+      html: `<label>Email:</label>
+      <input type="text" id="login" class="swal2-input" placeholder="E-mail address">`,
       confirmButtonText: 'Next',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
@@ -180,15 +182,22 @@ function reset(){
                            <select name="veri-ques" id="veri-ques" class=".swal2-select">
                           <option value="" disabled selected hidden>${verification_ques}</option>
                           <option>${verification_ques}</option>
-                          <input type="text" id="answer" class="swal2-input" placeholder="Your answer"><i class="fas fa-info-circle" style="color:black" title="Please input the answer of your verification question"></i>
+                          <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+                          <button class="tooltip-button" data-tooltip="Please input the answer of your verification question">?</button>
                           <br>
-                          <input type="text" id="code" class="swal2-input" placeholder="Your 6-digit verification code in your email"><i class="fas fa-info-circle" style="color:black" title="We have sent an email with code to your address, please check it."></i>
+                          <input type="text" id="code" class="swal2-input" placeholder="Your 6-digit verification code in your email">
+                          <button class="tooltip-button" data-tooltip="We have sent an email with code to your address, please check it.">?</button>
+
 
                           <div id="signup-pass">
-                          <input type="password" id="password" class="swal2-input" placeholder="New Password"><i class="fas fa-info-circle" style="color:black" title="Password must contain a lowercase letter &#013Password must contain an uppercase letter&#013Password must contain a number&#013Password must contain minimum 8 characters&#013"></i>
+                          <input type="password" id="password" class="swal2-input" placeholder="New Password">
+                          <button class="tooltip-button" data-tooltip="Password must contain a lowercase letter; Password must contain an uppercase letter; Password must contain a number; Password must contain minimum 8 characters">?</button>
+
                           </div>
                           <div id="signup-confirm">
-                          <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password"><i class="fas fa-info-circle" style="color:black" title="Repeat your new password again to confirm it."></i>
+                          <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+                          <button class="tooltip-button" data-tooltip="Repeat your new password again.">?</button>
+
                           </div>
                           <input type="checkbox" onclick="showpassword()" >Show Password
                           `,
@@ -271,7 +280,7 @@ function reset(){
 function login(){
     Swal.fire({
       title: 'Login Form',
-      html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+      html: `<input type="text" id="login" class="swal2-input" placeholder="E-mail address">
       <input type="password" id="password" class="swal2-input" placeholder="Password"><br>
       <a href="#" onclick="resetPassword()">Forgot password?</a>`,
       confirmButtonText: 'Log in',
@@ -304,7 +313,7 @@ function login(){
                       div.className = 'greeting';
 
                       div.innerHTML = `
-                        <h> Hi, <a href="#" onclick="logout()">${data["username"]}</a></h>
+                        <h> Hi, ${data["name"]}.&nbsp;<a href="#" onclick="logout()">Log out</a></h>
                       `;
 
                       document.getElementsByClassName('msger-header')[0].appendChild(div);
@@ -378,12 +387,21 @@ Swal.fire({
       title: 'Sign Up Form',
       html: `
 
-      <input type="text" id="login" class="swal2-input" placeholder="Username" title="Username should be a legal e-mail address."><i class="fas fa-info-circle" style="color:black" title="Username should be a legal e-mail address."></i>
+      <input type="text" id="login" class="swal2-input" placeholder="Email address"  title="Username should be a valid e-mail address and you can use it to log in.">
+      <button class="tooltip-button" data-tooltip="Please use a valid e-mail address.">?</button>
+      <input type="text" id="first-name" class="swal2-input" placeholder="First name" title="Your first name.">
+      <button class="tooltip-button" data-tooltip="Your first name.">?</button>
+      <input type="text" id="last-name" class="swal2-input" placeholder="Last name" title="Your last name.">
+      <button class="tooltip-button" data-tooltip="Your last name.">?</button>
+
       <div id="signup-pass">
-      <input type="password" id="password" class="swal2-input" placeholder="Password"><i class="fas fa-info-circle" style="color:black" title="Password must contain a lowercase letter &#013Password must contain an uppercase letter&#013Password must contain a number&#013Password must contain minimum 8 characters&#013"></i>
+      <input type="password" id="password" class="swal2-input" placeholder="Password">
+      <button class="tooltip-button" data-tooltip="Password must contain a lowercase letter; Password must contain an uppercase letter; Password must contain at least a number; Password must contain minimum 8 characters">?</button>
       </div>
       <div id="signup-confirm">
-      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password"><i class="fas fa-info-circle" style="color:black" title="Repeat your password to confirm it."></i>
+      <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+      <button class="tooltip-button" data-tooltip="Please repeat your password.">?</button>
+
       </div>
       <input type="checkbox" onclick="showpassword()" >Show Password
       <br><br>
@@ -399,20 +417,24 @@ Swal.fire({
       <option>  Where did you meet your spouse?</option>
       <option>  What year was your father (or mother) born?</option>
       </select>
-      <input type="text" id="answer" class="swal2-input" placeholder="Your answer"><i class="fas fa-info-circle" style="color:black" title="Keep your answer in mind for password reset."></i>
+      <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+      <button class="tooltip-button" data-tooltip="The answer is used for password reset.">?</button>
+
       <br>
       `,
       confirmButtonText: 'Sign up',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
       focusConfirm: false,
-
+      heightAuto:false,
       preConfirm: () => {
             const login = Swal.getPopup().querySelector('#login').value
             const password = Swal.getPopup().querySelector('#password').value
             const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
             const ques = Swal.getPopup().querySelector('#veri-ques').value
             const answer = Swal.getPopup().querySelector('#answer').value
+            const fname = Swal.getPopup().querySelector('#first-name').value
+            const lname = Swal.getPopup().querySelector('#last-name').value
             if (!login || !password || !confirm_password) {
 
               Swal.showValidationMessage(`Please enter login and password`)
@@ -420,7 +442,12 @@ Swal.fire({
             else if (!ValidateEmail(login)){
                 Swal.showValidationMessage(`Please input the username with a legal e-mail address`)
             }
-
+            else if (!fname){
+                Swal.showValidationMessage(`Please input your first name`)
+            }
+            else if (!lname){
+                Swal.showValidationMessage(`Please input your last name`)
+            }
             else if (password!=confirm_password){
                 Swal.showValidationMessage(`Please enter the same password`)
             }
@@ -450,15 +477,17 @@ Swal.fire({
             }
 
 
-            return { login: login, password: password,question:ques,answer:answer }
+            return { login: login, password: password,question:ques,answer:answer ,fname:fname,lname:lname}
       }
     }).then((result) => {
-        console.log(result.value)
+
       $.post("/signup", {
             username:result.value.login,
             password:result.value.password,
             question:result.value.question,
-            answer:result.value.answer
+            answer:result.value.answer,
+            fname:result.value.fname,
+            lname:result.value.lname
         }).done(function (data) {
             console.log(data)
             if (data["status"]=="success"){
@@ -467,7 +496,7 @@ Swal.fire({
 
 
 
-                       check_code(data["username"],data["password"],data["question"],data["answer"])
+                       check_code(data["username"],data["password"],data["question"],data["answer"],data["fname"],data["lname"])
                    })
                 }
 
@@ -490,7 +519,7 @@ function email_verification(username){
 
 }
 
-function check_code(username,password,question="",answer=""){
+function check_code(username,password,question="",answer="",fname="",lname=""){
                            Swal.fire({
                                   title: 'Verification code',
                                   html: `
@@ -519,7 +548,7 @@ function check_code(username,password,question="",answer=""){
 
                                                     }
                                                     else{
-                                                        $.post("/verifyCode", {username:username,password:password,question:question,answer:answer ,code:result.value.code}).done(function (data) {
+                                                        $.post("/verifyCode", {username:username,password:password,question:question,answer:answer ,code:result.value.code,fname:fname,lname:lname}).done(function (data) {
                                                             console.log(data)
                                                             if (data["status"]=="success"){
 
@@ -1373,6 +1402,22 @@ function displayRadioValue()
 }
 
 function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_src="") {
+    //check session before append
+    message=document.getElementsByClassName("msg");
+    if (message.length>2){
+        $.get("/checksession", {
+
+            }).done(function (data) {
+               if (data["status"]=="fail"){
+                    Swal.fire(`The session has expired. Please log in again`.trim()).then((result)=>{
+                        location.reload();
+                    })
+
+               }
+            })
+
+    }
+
     if (text == "") {
 
         return
@@ -1397,10 +1442,10 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
         if (text=="What is the " || text=="Could you tell me the ")
         {
             if (tag=="DCIS_level"){
-            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " (Please "+"<a href='#'>click here</a>"+" for more information about the meaning of the choices)"
+            text = text +"<a href='#' id='show-option' data-tooltip1='"+instruction+"'>"+tag+"</a>"+ " (Please "+"<a href='#'>click here</a>"+" for more information about the meaning of the choices)"
             }
             else{
-            text = text +"<a href='#' id='show-option' title='"+instruction+"'>"+tag+"</a>"+ " of your patient?"
+            text = text +"<a href='#' id='show-option' data-tooltip1='"+instruction+"'>"+tag+"</a>"+ " of your patient?"
             }
         }
         else{
@@ -1598,7 +1643,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                 <div class="msg-info-time">${formatDate(new Date())}
                 </div>
             </div>
-        <div class="msg-text">Figure below is the validation <a href="#" id="show-option" title= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1). Normal AUC is between 0.5 to 1.0. The closer to 1 the AUC is, the better the model will be.'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+        <div class="msg-text">Figure below is the validation <a href="#" id="show-option" data-tooltip1= 'A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied. The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.AUC stands for "Area under the ROC Curve." That is, AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1). Normal AUC is between 0.5 to 1.0. The closer to 1 the AUC is, the better the model will be.'>ROC_curve</a>.</div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else if(text.includes("SHAP")){
         $.post("/checkimg", {
@@ -1615,7 +1660,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                 <div class="msg-info-time">${formatDate(new Date())}
                 </div>
             </div>
-        <div class="msg-text">Figure below is your <a href="#" id="show-option" title= 'SHAP dependence plots are an alternative to partial dependence plots and accumulated local effects. The y-axis indicates the variable name, in order of importance from top to bottom. The value next to them is the mean SHAP value. On the x-axis is the SHAP value. Indicates how much is the change in log-odds. From this number we can extract the probability of success. Gradient color indicates the original value for that variable. In booleans, it will take two colors, but in number it can contain the whole spectrum. Each point represents a row from the original dataset.'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+        <div class="msg-text">Figure below is your <a href="#" id="show-option" data-tooltip1= 'SHAP dependence plots are an alternative to partial dependence plots and accumulated local effects. The y-axis indicates the variable name, in order of importance from top to bottom. The value next to them is the mean SHAP value. On the x-axis is the SHAP value. Indicates how much is the change in log-odds. From this number we can extract the probability of success. Gradient color indicates the original value for that variable. In booleans, it will take two colors, but in number it can contain the whole spectrum. Each point represents a row from the original dataset.'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else
     {
@@ -1919,7 +1964,7 @@ function load(){
                       div.className = 'greeting';
 
                       div.innerHTML = `
-                        <h> Hi, <a href="#" onclick="logout()">${data["username"]}</a></h>
+                        <h> Hi, ${data["username"]}.&nbsp;<a href="#" onclick="logout()">Log out</a></h>
                       `;
 
                       document.getElementsByClassName('msger-header')[0].appendChild(div);

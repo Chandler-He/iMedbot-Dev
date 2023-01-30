@@ -106,7 +106,17 @@ def get_session_username():
     if "username" not in session.keys():
         return {"status": "fail"}
     if session["username"] is not None:
-        return {"status":"success","username":session["username"]}
+        return {"status":"success","username":session["firstname"]}
+    else:
+        return {"status":"fail"}
+
+@application.route("/checksession")
+def check_session_username():
+
+    if "username" not in session.keys():
+        return {"status": "fail"}
+    if session["username"] is not None:
+        return {"status":"success","username":session["firstname"]}
     else:
         return {"status":"fail"}
 
@@ -247,9 +257,11 @@ def logout():
     if request.method == 'POST':
 
         print("session",session)
-        name=session["username"]
+        username=session["username"]
+        name=session["firstname"]
         session["username"]=None
-        return {"status":"success","username":name}
+        session["firstname"] = None
+        return {"status":"success","username":username,"name":name}
 
 
 @application.route("/resetPassword", methods=['POST','GET'])
@@ -304,8 +316,9 @@ def login():
             return {"status":"fail","username":username,"fail type":"no username"}
         if check_password_hash(finding_result["password"],password):
             session["username"]=username
+            session["firstname"]=finding_result["first name"]
             print(session)
-            return {"status":"success","username":username}
+            return {"status":"success","username":username,"name":finding_result["first name"]}
         else:
             return {"status":"fail","username":username,"fail type":"wrong password"}
 
@@ -316,6 +329,8 @@ def signup():
         password = request.form.get('password')
         question = request.form.get('question')
         answer = request.form.get('answer')
+        first_name = request.form.get('fname')
+        last_name = request.form.get('lname')
         hashed_password = generate_password_hash(password)
         print(username, hashed_password)
         user = imedbot["user"]
@@ -324,7 +339,7 @@ def signup():
         if finding_result is not None:
             return {"status":"fail","username":username}
         else:
-            return {"status":"success","username":username,"password":password,"question":question,"answer":answer}
+            return {"status":"success","username":username,"password":password,"question":question,"answer":answer,"fname":first_name,"lname":last_name}
 
 @application.route("/getEmailVerification",methods=['GET'])
 def send_email():
@@ -353,6 +368,8 @@ def verify_code():
         question = request.form.get('question')
         answer = request.form.get('answer')
         code = request.form.get('code')
+        fname = request.form.get('fname')
+        lname = request.form.get('lname')
         hashed_password = generate_password_hash(password)
         print(username, hashed_password,question,answer,code)
         user = imedbot["user"]
@@ -368,7 +385,7 @@ def verify_code():
                 return {"status": "no user", "username": username}
             if finding_code["code"]==code:
                 user_dict = {"username": username, "password": hashed_password, "verification question": question,
-                             "answer": answer}
+                             "answer": answer,"first name":fname,"last name":lname}
                 user.insert_one(user_dict)
                 return {"status": "success", "username": username}
             else:
