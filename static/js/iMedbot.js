@@ -109,20 +109,15 @@ function gobacktoBrowse() {
 }
 
 function logout(){
-    Swal.fire({
-          confirmButtonText: 'Log out',
-          confirmButtonColor: 'red',
-          showCloseButton: true,
-          focusConfirm: false
-        }).then((result) => {
-          if (result.isConfirmed) {
+    Swal.fire(`You have successfully logged out.`.trim()).then((result) => {
+
 
           $.post("/logout", {
             }).done(function (data) {
                 document.getElementsByClassName('greeting')[0].remove()
                 location.reload()
             })
-          }
+
 
         })
 }
@@ -131,18 +126,28 @@ function resetPassword(){
     Swal.fire({
       title: 'Reset Password',
       html: `<label>Email:</label>
-      <input type="text" id="login" class="swal2-input" placeholder="E-mail address">`,
+      <input type="text" id="login" class="swal2-input" placeholder="E-mail address"><br>
+      <label>Verification method:</label>
+      <select name="verification-method" id="verification-method">
+          <option value="1">Security question verification</option>
+          <option value="2">Email pin code verification</option>
+
+      </select>`,
       confirmButtonText: 'Next',
       confirmButtonColor: '#04AA6D',
       showCloseButton: true,
       focusConfirm: false,
       preConfirm: () => {
         const login = Swal.getPopup().querySelector('#login').value
+        const method = Swal.getPopup().querySelector('#verification-method').value
+
         if (!login) {
           Swal.showValidationMessage(`Please enter username`)
         }
-
-        return { login: login }
+        else if (!method){
+          Swal.showValidationMessage(`Please select a verification method`)
+        }
+        return { login: login ,method:method}
       }
     }).then((result) => {
         console.log(result.value.login)
@@ -156,16 +161,23 @@ function resetPassword(){
             if (data["status"]=="success"){
                 verification_ques=data["verification question"]
                 username=data["username"]
+
                 if (verification_ques=="none"){
                     Swal.fire(`The username does not have verification question`.trim()).then((result)=>{
                         login()
                     })
                 }
                 else{
-                        email_verification(username)
-                        Swal.fire(`We have sent a email with 6 digit pin code to your email address. Please check your mailbox!`.trim()).then((result)=>{
-                        reset()
-                        })
+                        if (result.value.method==1){
+                            reset(result.value.method,verification_ques);
+                        }
+                        else {
+                            email_verification(username)
+                            method=result.value.method;
+                            Swal.fire(`We have sent a email with 6 digit pin code to your email address. Please check your mailbox!`.trim()).then((result)=>{
+                            reset(method,verification_ques)
+                            })
+                        }
                 }
             }
         })
@@ -174,21 +186,14 @@ function resetPassword(){
 
 }
 
-function reset(){
-
-                          Swal.fire({
-                          title: 'Reset Password',
-                          html: `
-                           <select name="veri-ques" id="veri-ques" class=".swal2-select">
+function reset(method,verification_ques=""){
+                          if (method==1){
+                            html_string=`<select name="veri-ques" id="veri-ques" class=".swal2-select">
                           <option value="" disabled selected hidden>${verification_ques}</option>
                           <option>${verification_ques}</option>
-                          <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+                          <input type="text" id="reset-answer" class="swal2-input" placeholder="Your answer">
                           <button class="tooltip-button" data-tooltip="Please input the answer of your verification question">?</button>
                           <br>
-                          <input type="text" id="code" class="swal2-input" placeholder="Your 6-digit verification code in your email">
-                          <button class="tooltip-button" data-tooltip="We have sent an email with code to your address, please check it.">?</button>
-
-
                           <div id="signup-pass">
                           <input type="password" id="password" class="swal2-input" placeholder="New Password">
                           <button class="tooltip-button" data-tooltip="Password must contain a lowercase letter; Password must contain an uppercase letter; Password must contain a number; Password must contain minimum 8 characters">?</button>
@@ -200,17 +205,45 @@ function reset(){
 
                           </div>
                           <input type="checkbox" onclick="showpassword()" >Show Password
-                          `,
+                          `
+                          }
+                          else if (method==2){
+
+                            html_string=`<br><input type="text" id="reset-code" class="swal2-input" placeholder="Your 6-digit verification code in your email">
+                            <button class="tooltip-button" data-tooltip="We have sent an email with code to your address, please check it.">?</button>
+                            <div id="signup-pass">
+                          <input type="password" id="password" class="swal2-input" placeholder="New Password">
+                          <button class="tooltip-button" data-tooltip="Password must contain a lowercase letter; Password must contain an uppercase letter; Password must contain a number; Password must contain minimum 8 characters">?</button>
+
+                          </div>
+                          <div id="signup-confirm">
+                          <input type="password" id="confirmpassword" class="swal2-input" placeholder="Confirm Password">
+                          <button class="tooltip-button" data-tooltip="Repeat your new password again.">?</button>
+
+                          </div>
+                          <input type="checkbox" onclick="showpassword()" >Show Password
+                          `
+                          }
+
+
+                          Swal.fire({
+                          title: 'Reset Password',
+                          html: html_string,
                           confirmButtonText: 'Submit',
                           confirmButtonColor: '#04AA6D',
                           showCloseButton: true,
                           focusConfirm: false,
 
                           preConfirm: () => {
+                               if (method==1){
                                 const password = Swal.getPopup().querySelector('#password').value
                                 const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
-                                const answer = Swal.getPopup().querySelector('#answer').value
-                                const code = Swal.getPopup().querySelector('#code').value
+
+
+                                const answer = Swal.getPopup().querySelector('#reset-answer').value;
+
+
+
                                 if ( !password || !confirm_password) {
 
                                   Swal.showValidationMessage(`Please enter password`)
@@ -220,11 +253,51 @@ function reset(){
                                     Swal.showValidationMessage(`Please enter the same password`)
                                 }
 
-                                else if (!answer) {
+                                else if (  !answer) {
 
                                   Swal.showValidationMessage(`Please input the answer`)
                                 }
-                                else if (!code) {
+
+                                else{
+                                password_type=checkPassword(password)
+
+                                if (password_type==1){
+                                    Swal.showValidationMessage(`Password must contain a lowercase letter`)
+                                }
+                                else if (password_type==2){
+                                    Swal.showValidationMessage(`Password must contain an uppercase letter`)
+                                }
+                                else if (password_type==3){
+                                    Swal.showValidationMessage(`Password must contain a number`)
+                                }
+                                else if (password_type==4){
+                                    Swal.showValidationMessage(`Password must contain minimum 8 characters`)
+                                }
+                                }
+
+                                return { password: password,answer:answer };
+
+
+                               }
+                               else if (method==2){
+                                const password = Swal.getPopup().querySelector('#password').value
+                                const confirm_password = Swal.getPopup().querySelector('#confirmpassword').value
+
+
+
+                                const code = Swal.getPopup().querySelector('#reset-code').value;
+
+                                if ( !password || !confirm_password) {
+
+                                  Swal.showValidationMessage(`Please enter password`)
+                                }
+
+                                else if (password!=confirm_password){
+                                    Swal.showValidationMessage(`Please enter the same password`)
+                                }
+
+
+                                else if ( !code ) {
 
                                   Swal.showValidationMessage(`Please input the code`)
                                 }
@@ -244,18 +317,23 @@ function reset(){
                                     Swal.showValidationMessage(`Password must contain minimum 8 characters`)
                                 }
                                 }
-                                return { password: password,answer:answer,code:code }
+
+                                return { password: password,code:code };
+
+                               }
                           }
                         }).then((result) => {
+                                console.log(result.value);
                                 $.post("/resetPassword", {username:username,verification_ques:verification_ques,password:result.value.password,answer:result.value.answer,code:result.value.code}).done(function (data) {
                                         if (data["status"]=="fail"){
                                             Swal.fire(`The answer does not match`.trim()).then((result)=>{
-                                                    reset()
+
+                                                    reset(method,verification_ques);
                                                 })
                                         }
                                         if (data["status"]=="wrong code"){
                                             Swal.fire(`The code does not match`.trim()).then((result)=>{
-                                                    reset()
+                                                    reset(method,verification_ques);
                                                 })
                                         }
                                         if (data["status"]=="success"){

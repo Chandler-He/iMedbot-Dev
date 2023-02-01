@@ -290,13 +290,23 @@ def resetpassword():
         verification_ques = request.form.get('verification_ques')
         answer = request.form.get('answer')
         code = request.form.get('code')
+        print(answer,code)
+
         user = imedbot["user"]
         verification=imedbot["verification"]
-        finding_result = user.find_one({"username": username,"verification question":verification_ques,"answer":answer})
-        print(finding_result)
-        if finding_result is None:
-            return {"status": "fail", "username": username, "fail type": "answer not correct"}
-        else:
+        if answer is not None:
+            finding_result = user.find_one({"username": username,"verification question":verification_ques,"answer":answer})
+
+            if finding_result is None:
+                return {"status": "fail", "username": username, "fail type": "answer not correct"}
+            else:
+                hashed_password = generate_password_hash(password)
+                myquery = {"username": username}
+                newvalues = {"$set": {"password": hashed_password}}
+
+                user.update_one(myquery, newvalues)
+                return {"status": "success", "username": username}
+        if code is not None:
             finding_code = verification.find_one({"username": username})
             if finding_code is None:
                 return {"status": "no user", "username": username}
