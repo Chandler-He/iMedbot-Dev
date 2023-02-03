@@ -88,7 +88,7 @@ new_card = trello.create_card(board_list, label_list, "","test for api")
 @application.before_request
 def make_session_permanent():
     session.permanent=True
-    application.permanent_session_lifetime = timedelta(minutes=20)
+    application.permanent_session_lifetime = timedelta(minutes=10)
 
 @application.route("/")
 def index():
@@ -124,19 +124,14 @@ def get_session_username():
     if "username" not in session.keys():
         return {"status": "fail"}
     if session["username"] is not None:
-        return {"status":"success","username":session["firstname"]}
+        if "firstname" in session:
+            return {"status":"success","username":session["firstname"]}
+        else:
+            return {"status": "success", "username": session["username"]}
     else:
         return {"status":"fail"}
 
-@application.route("/checksession")
-def check_session_username():
 
-    if "username" not in session.keys():
-        return {"status": "fail"}
-    if session["username"] is not None:
-        return {"status":"success","username":session["firstname"]}
-    else:
-        return {"status":"fail"}
 
 # def speak(response):
 #     speaker = tts.init()
@@ -276,10 +271,15 @@ def logout():
 
         print("session",session)
         username=session["username"]
-        name=session["firstname"]
+        if "firstname" in session:
+            name=session["firstname"]
         session["username"]=None
-        session["firstname"] = None
-        return {"status":"success","username":username,"name":name}
+        if "firstname" in session:
+            session["firstname"] = None
+        if "firstname" in session:
+            return {"status":"success","username":username,"name":name}
+        else:
+            return {"status": "success", "username": username}
 
 
 @application.route("/resetPassword", methods=['POST','GET'])
@@ -344,11 +344,46 @@ def login():
             return {"status":"fail","username":username,"fail type":"no username"}
         if check_password_hash(finding_result["password"],password):
             session["username"]=username
-            session["firstname"]=finding_result["first name"]
-            print(session)
-            return {"status":"success","username":username,"name":finding_result["first name"]}
+            if "first name" in finding_result.keys():
+                session["firstname"]=finding_result["first name"]
+                print(session)
+                if "verification question" in finding_result.keys():
+                    return {"status":"success","username":username,"name":finding_result["first name"],"question":finding_result["verification question"]}
+                else:
+                    return {"status":"success","username":username,"name":finding_result["first name"]}
+            else:
+                print(session)
+                if "verification question" in finding_result.keys():
+                    return {"status":"success","username":username,"question":finding_result["verification question"]}
+                else:
+                    return {"status": "success", "username": username}
         else:
             return {"status":"fail","username":username,"fail type":"wrong password"}
+
+
+@application.route("/updateinfo", methods=['POST','GET'])
+def update_information():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        question = request.form.get('question')
+        answer = request.form.get('answer')
+        first_name = request.form.get('fname')
+        last_name = request.form.get('lname')
+        original_username = request.form.get('original')
+        user = imedbot["user"]
+        finding_result = user.find_one({"username": username})
+        print(finding_result)
+        if finding_result is not None and original_username!=username:
+            return {"status": "fail", "username": username,"first name":first_name}
+
+        myquery = {"username": original_username}
+        newvalues = {"$set": {"username":username,"first name":first_name,"last name":last_name,"verification question":question,"answer":answer}}
+
+        user.update_one(myquery, newvalues)
+        return {"status":"success","username":username,"first name":first_name}
+
+
+
 
 @application.route("/signup", methods=['POST','GET'])
 def signup():

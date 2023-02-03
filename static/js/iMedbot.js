@@ -43,6 +43,55 @@ $(document).on({
      ajaxStop: function() { $body.removeClass("loading"); }
 });
 
+//javascript idle timeout
+var IdealTimeOut = 600; //10 seconds
+        var idleSecondsTimer = null;
+        var idleSecondsCounter = 0;
+        document.onclick = function () { idleSecondsCounter = 0; };
+        document.onmousemove = function () { idleSecondsCounter = 0; };
+        document.onkeypress = function () { idleSecondsCounter = 0; };
+
+        idleSecondsTimer = window.setInterval(CheckIdleTime, 1000);
+
+        function CheckIdleTime() {
+            idleSecondsCounter++;
+            if (IdealTimeOut - idleSecondsCounter==60 && document.getElementsByClassName("greeting").length!=0){
+                let timerInterval
+
+               Swal.fire({
+
+                  html:
+                    'The session will expire in <strong></strong> seconds.<br/><br/>',
+                  timer: 60000,
+                  didOpen: () => {
+                    const content = Swal.getHtmlContainer()
+                    const $ = content.querySelector.bind(content)
+
+                    timerInterval = setInterval(() => {
+                      Swal.getHtmlContainer().querySelector('strong')
+                        .textContent = (Swal.getTimerLeft() / 1000)
+                          .toFixed(0)
+                    }, 100)
+
+                  },
+                  confirmButtonText: 'Stay logged in',
+                  confirmButtonColor: '#04AA6D',
+                  willClose: () => {
+                    console.log(Swal.getTimerLeft());
+                    if (Swal.getTimerLeft()<=100){
+                        Swal.fire(`The session has expired. Please log in again`.trim()).then((result)=>{
+                        wait(500);
+                        location.reload();
+                         })
+                    }
+                    clearInterval(timerInterval)
+                  }
+                })
+
+            }
+
+        }
+
 
 
 
@@ -162,10 +211,10 @@ function resetPassword(){
                 verification_ques=data["verification question"]
                 username=data["username"]
 
-                if (verification_ques=="none"){
-                    Swal.fire(`The username does not have verification question`.trim()).then((result)=>{
-                        login()
-                    })
+                if (verification_ques=="none" && result.value.method==1 || !ValidateEmail(result.value.login)){
+
+                        updateUserInfo();
+
                 }
                 else{
                         if (result.value.method==1){
@@ -174,7 +223,7 @@ function resetPassword(){
                         else {
                             email_verification(username)
                             method=result.value.method;
-                            Swal.fire(`We have sent a email with 6 digit pin code to your email address. Please check your mailbox!`.trim()).then((result)=>{
+                            Swal.fire(`We have send an verification email to your address, please check it. ( check the junk mail or review your quarantined messages if you cannot find the verification message in your mailbox)`.trim()).then((result)=>{
                             reset(method,verification_ques)
                             })
                         }
@@ -355,6 +404,98 @@ function reset(method,verification_ques=""){
 
 }
 
+
+function updateUserInfo(data1){
+    console.log("enter update",data1)
+    Swal.fire(`Sorry due to our upgrade for the system, please update your information`.trim()).then((result)=>{
+
+            email_html=`<input type="text" id="login" class="swal2-input" placeholder="Email address"  title="Username should be a valid e-mail address and you can use it to log in.">
+                        <button class="tooltip-button" data-tooltip="Please use a valid e-mail address and use it to log in.">?</button>`
+
+
+        question_html=`<select name="veri-ques" id="veri-ques" class=".swal2-select">
+                          <option value="" disabled selected hidden>Choose a verification question:</option>
+                          <option> In what city were you born?</option>
+                          <option>  What is the name of your favorite pet?</option>
+                          <option>  What is your mother's maiden name?</option>
+                          <option>  What high school did you attend?</option>
+                          <option>  What was the name of your elementary school?</option>
+                          <option>  What was the make of your first car?</option>
+                          <option>  What was your favorite food as a child?</option>
+                          <option>  Where did you meet your spouse?</option>
+                          <option>  What year was your father (or mother) born?</option>
+                          </select>
+                          <input type="text" id="answer" class="swal2-input" placeholder="Your answer">
+                          <button class="tooltip-button" data-tooltip="The answer is used for password reset.">?</button>
+
+                          <br>`
+
+
+        name_html=` <input type="text" id="first-name" class="swal2-input" placeholder="First name" title="Your first name.">
+                  <button class="tooltip-button" data-tooltip="Your first name.">?</button>
+                  <input type="text" id="last-name" class="swal2-input" placeholder="Last name" title="Your last name.">
+                  <button class="tooltip-button" data-tooltip="Your last name.">?</button>`
+
+        Swal.fire({
+                  title: 'Update Form',
+                  html: email_html+name_html+question_html,
+                  confirmButtonText: 'Update',
+                  confirmButtonColor: '#04AA6D',
+                  showCloseButton: true,
+                  focusConfirm: false,
+                  heightAuto:false,
+                  preConfirm: () => {
+                        const login = Swal.getPopup().querySelector('#login').value
+
+                        const ques = Swal.getPopup().querySelector('#veri-ques').value
+                        const answer = Swal.getPopup().querySelector('#answer').value
+                        const fname = Swal.getPopup().querySelector('#first-name').value
+                        const lname = Swal.getPopup().querySelector('#last-name').value
+                        if (!ValidateEmail(login)){
+                            Swal.showValidationMessage(`Please input the username with a legal e-mail address`)
+                        }
+                        else if (!fname){
+                            Swal.showValidationMessage(`Please input your first name`)
+                        }
+                        else if (!lname){
+                            Swal.showValidationMessage(`Please input your last name`)
+                        }
+
+                        else if (!ques) {
+
+                          Swal.showValidationMessage(`Please select a verification question`)
+                        }
+                        else if (!answer) {
+
+                          Swal.showValidationMessage(`Please input the answer`)
+                        }
+
+
+
+
+                        return { login: login,question:ques,answer:answer ,fname:fname,lname:lname}
+                  }
+                }).then((result) => {
+                    $.post("/updateinfo", {
+                                            username:result.value.login,
+                                            question:result.value.question,
+                                            answer:result.value.answer,
+                                            fname:result.value.fname,
+                                            lname:result.value.lname,
+                                            original:data1["username"]
+                                        }).done(function (data) {
+                                                if (data["status"]=="fail"){
+                                                    Swal.fire(`Sorry the email address has been used.`.trim()).then((result)=>{updateUserInfo();})
+                                                }
+                                                if (data["status"]=="success"){
+                                                    login();
+                                                }
+                                           })
+    })
+})
+}
+
+
 function login(){
     Swal.fire({
       title: 'Login Form',
@@ -379,9 +520,17 @@ function login(){
             username:result.value.login,
             password:result.value.password
         }).done(function (data) {
-            console.log(data)
+
             if (data["status"]=="success"){
+                console.log(data);
+                if (!("question" in data)||!("name" in data) ||!(ValidateEmail(data["username"])))
+                    {
+
+                     updateUserInfo(data);
+                    }
+                else{
                 Swal.fire('Log in successfully'.trim()).then((result) =>{
+
                     add_userMsg("Log in")
                     secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
                     appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
@@ -396,6 +545,7 @@ function login(){
 
                       document.getElementsByClassName('msger-header')[0].appendChild(div);
                 })
+                }
             }
             else{
                 if (data["fail type"]=="no username"){
@@ -570,7 +720,7 @@ Swal.fire({
             console.log(data)
             if (data["status"]=="success"){
                 email_verification(data["username"])
-                Swal.fire('We have send an verification email to your address, please check it'.trim()).then((result) =>{
+                Swal.fire('We have send an verification email to your address, please check it. ( check the junk mail or review your quarantined messages if you cannot find the verification message in your mailbox)'.trim()).then((result) =>{
 
 
 
@@ -1482,21 +1632,8 @@ function displayRadioValue()
 }
 
 function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_src="") {
-    //check session before append
-    message=document.getElementsByClassName("msg");
-    if (message.length>2){
-        $.get("/checksession", {
 
-            }).done(function (data) {
-               if (data["status"]=="fail"){
-                    Swal.fire(`The session has expired. Please log in again`.trim()).then((result)=>{
-                        location.reload();
-                    })
 
-               }
-            })
-
-    }
 
     if (text == "") {
 
