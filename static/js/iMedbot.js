@@ -1392,7 +1392,7 @@ function submitPatientForm(val){
     var patient_dic = []
     var patient_Form = document.getElementById("patientForm")
 
-    var shap_check = document.getElementById("shapCheck").checked
+    //var shap_check = document.getElementById("shapCheck").checked
 
     for (var i = 0; i < patient_Form.elements.length-1; i++) {
 
@@ -1407,7 +1407,7 @@ function submitPatientForm(val){
         if (train_model_year==15){window.dataset_name="LSM-15Year-I-240.txt";}
     }
 
-    $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name),shap_check: JSON.stringify(shap_check)}).done(function (data) {
+    $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name)}).done(function (data) {
         if (data["proba"]=="error")
         {
             alert("Sorry, there is an time-out error")
@@ -1475,10 +1475,32 @@ function generatePatientForm(labelList,table_result) {
                   return element + option_html.join("") +`</select></div> </div>`
               })
             let front = `<form id='patientForm' onsubmit='submitPatientForm("${target_class}");return false' method='post'>\n`
-            let end =' <div class="form-check">\n' +
-                '    <input type="checkbox" class="form-check-input" id="shapCheck">\n' +
-                '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model</label>\n' +
-                '  </div> <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>'
+            let end = `<div class="shap-row">
+                            <div id="label" class="form-group row"><a href="#" id="show-option" title="Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model. You can also select different types of shap plot"}>
+                                       <i class="fas fa-info-circle" style="color:black"></i>
+                                    </a>
+                                       <label for="shap type" class="col-sm-5 col-form-label">shap type</label>
+                                       <div class="col-sm-6">
+
+                                                <select id="shap type" class="form-control" required>
+                                                    <option selected value="0">No shap</option>
+                                                    <option selected value="1">Waterfall plot</option>
+                                                    <option selected value="2">Text plot</option>
+                                                    <option selected value="3">Scatter plot</option>
+                                                    <option selected value="4">Heatmap plot</option>
+                                                    <option selected value="5">Dependence plot</option>
+                                                    <option selected value="6">Decision plot</option>
+                                                    <option selected value="7">Beeswarm plot</option>
+                                                    <option selected value="8">Bar plot</option>
+                                                </select>
+                                        </div>
+                            </div>
+                         </div>
+                         <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>`
+            //let end =' <div class="form-check" id="form-check">\n' +
+            //    '    <input type="checkbox" class="form-check-input" id="shapCheck" onclick="shapTypeSelect()">\n' +
+            //    '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model</label>\n' +
+            //    '  </div> <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>'
             patientFormHtml = front+patientFormHtml.join("")+end
           }else {
                 patientFormHtml=" "
@@ -1486,6 +1508,22 @@ function generatePatientForm(labelList,table_result) {
           appendMessage(BOT_NAME, NURSE_IMG, "left", "Please fill the patient form below and click submit",patientFormHtml,[])
 
     }
+
+function shapTypeSelect(){
+    check_status=document.getElementById('shapCheck');
+    console.log(check_status);
+    if (check_status.checked){
+        element=document.getElementById('form-check');
+        console.log(element.innerHTML);
+        element.innerHTML=element.innerHTML+``
+        console.log(element.innerHTML);
+    }
+    if (!check_status.checked){
+        element=document.getElementsByClassName('shap-row');
+        element.remove();
+    }
+}
+
 
 function testPatient() {
     add_userMsg("Testing with new patients")
