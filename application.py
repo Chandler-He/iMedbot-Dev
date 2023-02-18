@@ -6,7 +6,7 @@ import webbrowser
 import numpy as np
 import pandas
 
-from chatbot import chatbot
+#from chatbot import chatbot
 from flask import Flask, render_template, request, after_this_request,session
 #from flask_bootstrap import Bootstrap
 import pyttsx3 as tts
@@ -104,7 +104,7 @@ def get_bot_response():
     button_group = ""
     instruction = ""
     usertext = request.args.get('msg')
-    response = str(chatbot.get_response(usertext))
+    #response = str(chatbot.get_response(usertext))
     if "can you do" in usertext:
         response = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset, or I can train a model for you if you can provide your own dataset, so how do you want to proceed? Please enter 1 for the first choice, or 2 for the second choice"
     result["response"] = response
@@ -528,8 +528,7 @@ def get_model_patientform():
 
         try:
             dataset_name = request.form.get('dataset_name')
-            shap_check = request.form.get("shap_check")
-            print(shap_check)
+
             print("dataset_name ", dataset_name)
             dataset_name_str = json.loads(dataset_name)
             print(dataset_name_str)
@@ -544,16 +543,18 @@ def get_model_patientform():
             #  'lymph_node_status', 'Histology', 'size', 'grade', 'invasive', 'hi
             #  stology2', 'invasive_tumor_Location', 'DCIS_level', 're_excision', 'surgical_margins', 'MRIs_60_surgery']
             strat_shuf = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=123)
-            for CV_index, val_index in strat_shuf.split(predset, target):
-                X_CV, X_val = predset[CV_index], predset[val_index]
+            #for CV_index, val_index in strat_shuf.split(predset, target):
+            #    X_CV, X_val = predset[CV_index], predset[val_index]
                #Y_CV, Y_val = target[CV_index], target[val_index]
 
             category_list = []
             patient_dic = request.form.get('patient_dic')
             patient_input_list = json.loads(patient_dic)
-
+            shap_check = patient_input_list[-1]["value"]
+            print(557, shap_check)
             patient_input_list = patient_input_list[:-1]
             print(250,patient_input_list)
+
             for item in patient_input_list:
                 category_list.append(int(item['value']))
             print("253", np.array([category_list]))
@@ -561,7 +562,7 @@ def get_model_patientform():
             user_training_model = load_model('user_training_model.h5')
             timestr = time.strftime("%Y%m%d-%H%M%S")
             img_src = 'static/img/shap/shap' + timestr + '.png'
-            if shap_check == "true":
+            if shap_check != "0":
                 @after_this_request
                 def plot_shap(response):
                     @response.call_on_close
@@ -585,20 +586,48 @@ def get_model_patientform():
                             return np.array(result)
 
                         # shap.kmeans(data, K) to summarize the background as K samples, in our case it transfer
+                        for CV_index, val_index in strat_shuf.split(predset, target):
+                            X_CV, X_val = predset[CV_index], predset[val_index]
                         X_train_summary = shap.kmeans(X_CV, 1)
                         print(X_train_summary)
                         # < shap.utils._legacy.DenseData object at 0x0000024682E412B0 >
                         print("111111111111111111111111111111111111111")
-                        explainer = shap.KernelExplainer(f, X_train_summary)
+
                         print("222222222222222222222222222222222222222")
-                        shap_values = explainer.shap_values(np.array([category_list]))
+
                         print("333333333333333333333333333333333333333")
-                        print(shap_values)
-                        print(explainer.expected_value)
+
                         plt.clf()
                         # shap.waterfall_plot(shap.Explanation(values=shap_values, base_values=explainer.expected_value, data=np.array([category_list]),feature_names=X_columns))
-                        shap.waterfall_plot(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
-                                                             data=np.array([category_list])[0], feature_names=X_columns))
+                        if shap_check == "1":
+                            explainer = shap.KernelExplainer(f, X_train_summary)
+                            shap_values = explainer.shap_values(np.array([category_list]))
+                            shap.waterfall_plot(
+                                shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
+                                                 data=np.array([category_list])[0], feature_names=X_columns))
+
+                        if shap_check == "2":
+
+
+                            explainer = shap.Explainer(user_training_model, X_CV[0:100],feature_names=X_columns)
+                            shap_values = explainer(X_CV[0:100])
+                            shap.plots.beeswarm(shap_values)
+                        if shap_check == "3":
+                            explainer = shap.Explainer(user_training_model, X_CV[0:100], feature_names=X_columns)
+                            shap_values = explainer(X_CV[0:100])
+                            shap.plots.heatmap(shap_values)
+
+
+                        if shap_check == "6":
+                            explainer = shap.KernelExplainer(f, X_train_summary)
+                            shap_values = explainer.shap_values(np.array([category_list]))
+                            shap.plots.decision(shap_values=shap_values,base_value=explainer.expected_value,feature_names=X_columns)
+
+                        if shap_check == "8":
+                            explainer = shap.KernelExplainer(f, X_train_summary)
+                            shap_values = explainer.shap_values(np.array([category_list]))
+                            shap.plots.bar(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
+                                                            data=np.array([category_list])[0], feature_names=X_columns))
 
                         if os.path.exists(img_src):
                             os.remove(img_src)
@@ -621,7 +650,7 @@ def get_model_patientform():
             res="error"
             img_src=""
 
-    return {"proba":res,"img":img_src}
+    return {"proba":res,"img":img_src,"shap":shap_check}
 
 
 @application.route("/Examdataset", methods=['GET', 'POST'])

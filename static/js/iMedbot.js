@@ -117,13 +117,23 @@ var IdealTimeOut = 600; //10 seconds
 
 function GoBackToLastMsg(){
     message=document.getElementsByClassName("msg");
+    text=document.getElementsByClassName("msg-text");
     if (message.length>2){
-    message[message.length-1].remove();
+        console.log(message[message.length-1]);
+        console.log(text[text.length-1].innerHTML);
+        while (text[text.length-1].innerHTML!="I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."){
+            message[message.length-1].remove();
+
+        }
+        message[message.length-1].remove();
+        secMsg = "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+        appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg,"no information", {"Predict":"Predict","Model Training":"Model Training"});
+
     }
     else{
     location.reload();
     }
-    console.log(message[message.length-1]);
+
 }
 
 function getValue(event){
@@ -1416,8 +1426,14 @@ function submitPatientForm(val){
         else{
         console.log(data)
         appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + (Number(data["proba"])*100).toFixed(2)+"%", "no information", [])   //This is place that you need to add a variable that contains the value of year.
-        if(shap_check == true){
-        wait(120000)
+
+        if(data["shap"] != "0"){
+        if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
+            wait(150000)
+        }
+        else{
+            wait(60000)
+        }
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
 
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
@@ -1485,12 +1501,9 @@ function generatePatientForm(labelList,table_result) {
                                                 <select id="shap type" class="form-control" required>
                                                     <option selected value="0">No shap</option>
                                                     <option selected value="1">Waterfall plot</option>
-                                                    <option selected value="2">Text plot</option>
-                                                    <option selected value="3">Scatter plot</option>
-                                                    <option selected value="4">Heatmap plot</option>
-                                                    <option selected value="5">Dependence plot</option>
+                                                    <option selected value="2">Beeswarm plot</option>
+                                                    <option selected value="3">Heatmap plot</option>
                                                     <option selected value="6">Decision plot</option>
-                                                    <option selected value="7">Beeswarm plot</option>
                                                     <option selected value="8">Bar plot</option>
                                                 </select>
                                         </div>
