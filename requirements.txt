@@ -17,6 +17,6 @@ PyCryptodome==3.10.1
 matplotlib
 shap==0.40.0
 dnspython==2.2.1
-
+flask-mail
 
 
