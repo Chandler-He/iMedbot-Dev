@@ -441,3 +441,15 @@ max-height:100%;
     left: 5px!important;
   }
 
+
+.bottom {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-column-gap: 1px;
+  font-size: medium;
+  justify-content: space-between;
+  /*text-align: center;*/
+  border-bottom: var(--border);
+  background: #eee;
+  color: #666;
+}

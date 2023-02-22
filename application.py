@@ -454,28 +454,33 @@ def verify_code():
             else:
                 return {"status": "codeerror", "username": username}
 
+@application.route("/errorreport", methods=['POST','GET'])
+def get_user_error():
+    if request.method == 'POST':
+        error = request.form.get('error')
+        words = error.split()
+        print(error)
+        print(words)
+        if error != "":
+            if len(words) >= 3:
+                new_card = trello.create_card(board_list, label_list, words[0] + " " + words[1] + " " + words[2], error)
+            elif len(words) > 0:
 
+                new_card = trello.create_card(board_list, label_list, words[0], error)
+    return "success"
 @application.route("/submitsurvey", methods=['POST','GET'])
 def get_user_survey():
     if request.method == 'POST':
         star = request.form.get('star')
         text = request.form.get('text')
-        error = request.form.get('error')
+
         print(star, text)
         now = datetime.now()
         print("Current Time =", now)
         survey_dict={"time":now,"username":session["username"],"star":star,"suggestion":text}
         print(survey_dict)
         survey.insert_one(survey_dict)
-        words=error.split()
-        print(error)
-        print(words)
-        if error!="":
-            if len(words)>=3:
-                new_card = trello.create_card(board_list, label_list,words[0]+" "+words[1]+" "+words[2], error)
-            elif len(words)>0:
 
-                new_card = trello.create_card(board_list, label_list, words[0], error)
 
     return "success"
 
