@@ -641,7 +641,8 @@ def get_model_patientform():
                         else:
                             print("png does not exist")
                         print(img_src)
-                        plt.savefig(img_src)
+
+                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = 200)
                         plt.clf()
                     return response
 

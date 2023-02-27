@@ -45,7 +45,13 @@
 
   <section class="msger">
     <header class="msger-header">
-        <a href="#" class="previous" onclick="GoBackToLastMsg()">&laquo; Previous</a>
+        <div class="dropdown">
+        <a href="#" class="previous" onclick="dropdown()">&laquo; Previous</a>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="#" onclick="GoBackToLastMsg()">Go back to service choices</a>
+                <a href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
+          </div>
+        </div>
       <div class="msger-header-title">
 
         <div class="modal"></div>

@@ -115,6 +115,62 @@ var IdealTimeOut = 600; //10 seconds
  * @param {string} text the value of input
  */
 
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function dropdown() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.previous')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+function GoBackDialog(){
+
+    message=document.getElementsByClassName("msg");
+    text=document.getElementsByClassName("msg-text");
+    if (message.length>2){
+        if (text[text.length-1].innerHTML=="I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+            || text[text.length-1].innerHTML=="To begin with, log in with your iMedbot account or create a new one to continue")
+        {
+        location.reload();
+        }
+        else{
+
+            while (message[message.length-1].className=="msg left-msg"){
+                message[message.length-1].remove();
+            }
+            while (message[message.length-1].className=="msg right-msg"){
+                message[message.length-1].remove();
+            }
+            buttons=document.getElementsByClassName("btn-group-vertical");
+            buttons=buttons[buttons.length-1];
+            buttons=buttons.getElementsByClassName("btn");
+            for (var i=0;i<buttons.length;++i){
+                buttons[i].className="btn btn-success";
+            }
+
+
+        }
+    }
+    else{
+    location.reload();
+    }
+
+
+}
+
 function GoBackToLastMsg(){
     message=document.getElementsByClassName("msg");
     text=document.getElementsByClassName("msg-text");
@@ -1434,7 +1490,7 @@ function submitPatientForm(val){
         else{
             wait(60000)
         }
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"])}    //Be specific about the type of SHAP plot.
+        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])}    //Be specific about the type of SHAP plot.
 
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
         //document.getElementById('textInput').disabled = true;
@@ -1500,11 +1556,11 @@ function generatePatientForm(labelList,table_result) {
 
                                                 <select id="shap type" class="form-control" required>
                                                     <option selected value="0">No shap</option>
-                                                    <option selected value="1">Waterfall plot</option>
-                                                    <option selected value="2">Beeswarm plot</option>
-                                                    <option selected value="3">Heatmap plot</option>
-                                                    <option selected value="6">Decision plot</option>
-                                                    <option selected value="8">Bar plot</option>
+                                                    <option selected value="1" title="The waterfall plot is designed to visually display how the SHAP values (evidence) of each feature move the model output from our prior expectation under the background data distribution, to the final model prediction given the evidence of all the features.">Waterfall plot</option>
+                                                    <option selected value="2" title="The beeswarm plot is designed to display an information-dense summary of how the top features in a dataset impact the model’s output. Each instance the given explanation is represented by a single dot on each feature fow.">Beeswarm plot</option>
+                                                    <option selected value="3" title="the heatmap plot function creates a plot with the instances on the x-axis, the model inputs on the y-axis, and the SHAP values encoded on a color scale.">Heatmap plot</option>
+                                                    <option selected value="6" title="SHAP decision plots show how complex models arrive at their predictions (i.e., how models make decisions).">Decision plot</option>
+                                                    <option selected value="8" title="Passing a matrix of SHAP values to the bar plot function creates a global feature importance plot, where the global importance of each feature is taken to be the mean absolute value for that feature over all the given samples.">Bar plot</option>
                                                 </select>
                                         </div>
                             </div>
@@ -1705,10 +1761,45 @@ function error_report(){
 
 }
 
+function saveimage(){
+    console.log("save");
+    canvas=document.getElementsByName("fit-picture");
+
+
+    canvas=canvas[canvas.length-1];
+    console.log(canvas);
+    //window.open(canvas.toDataURL('image/png'));
+       // var gh = canvas.toDataURL('png');
+
+        var a  = document.createElement('a');
+        a.href = canvas.src;
+        a.download = 'image.png';
+
+        a.click();
+}
+
+function copyimage(src){
+  image=document.getElementsByName("fit-picture");
+  image=image[image.length-1];
+  const canvas = document.createElement('canvas')
+  canvas.width = image.naturalWidth
+  canvas.height = image.naturalHeight
+  const context = canvas.getContext('2d')
+  context.drawImage(image, 0, 0)
+  canvas.toBlob(blob => {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        [blob.type]: blob
+      })
+    ]).then(() => {
+      console.log('Copied')
+    })
+  })
+}
 
 
 
-function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_src="") {
+function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_src="",shap_type="") {
 
 
 
@@ -1724,10 +1815,18 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
 
     if(text.includes("ROC_curve")){
         console.log(img_src)
-        rocHTML = `<img className="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">`
+        rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">
+                    <div class="flexbuttons">
+                    <a href="#" onclick="copyimage()" class="fit-button">copy</a>
+                    <a href="#" onclick="saveimage()" class="fit-button">save</a>
+                    </div>`
     }
     if(text.includes("SHAP")){
-        rocHTML = `<img className="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">`
+        rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">
+                    <div class="flexbuttons">
+                    <a href="#" onclick="copyimage()" class="fit-button">copy</a>
+                    <a href="#" onclick="saveimage()" class="fit-button">save</a>
+                    </div>`
     }
     //Simple solution for small apps
     let buttonHtml = generateBtnGroup(btnGroup,tag)
@@ -1946,6 +2045,12 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
             }).done(function (data) {
                 console.log(data)
             })
+        shap_dict={"1":"The waterfall plot is designed to visually display how the SHAP values (evidence) of each feature move the model output from our prior expectation under the background data distribution, to the final model prediction given the evidence of all the features. Features are sorted by the magnitude of their SHAP values with the smallest magnitude features grouped together at the bottom of the plot when the number of features in the models exceeds the max_display parameter.",
+                    "2":"The SHAP beeswarm plot displays each instance as a point on a horizontal axis, and the vertical position of the point indicates the feature's importance value. The plot groups the points based on the feature value, and the color of the points indicates the feature value.",
+                    "3":"The SHAP heatmap plot displays a matrix of rectangular cells, where each cell represents the impact of two features on the prediction. The color of the cell indicates the magnitude and direction of the impact. Positive impacts are represented by warm colors (e.g., red), and negative impacts are represented by cool colors (e.g., blue). The size of the cell represents the frequency of the combination of feature values in the dataset.",
+                    "6":"The SHAP decision plot displays a bar chart with each bar representing the contribution of a feature to the predicted value. The bars are arranged in descending order of importance, and the color of the bars indicates the direction and magnitude of the impact. Positive contributions are shown in warm colors (e.g., red), while negative contributions are shown in cool colors (e.g., blue). The height of the bar represents the magnitude of the contribution. The plot also displays a vertical line representing the expected value of the model for the dataset. The sum of the contributions and the expected value corresponds to the predicted value for the instance.",
+                    "8":"The SHAP bar plot displays a horizontal bar chart with each bar representing the impact of a feature on the predicted output. The bars are arranged in descending order of importance, and the color of the bars indicates the direction and magnitude of the impact. Positive contributions are shown in warm colors (e.g., red), while negative contributions are shown in cool colors (e.g., blue). The length of the bar represents the magnitude of the contribution.The plot also displays a vertical line representing the expected value of the model for the dataset. The sum of the contributions and the expected value corresponds to the predicted output for the dataset."}
+        shap_title="SHAP (SHapley Additive exPlanations) is a framework for explaining the output of machine learning models. It is a unified approach to explain the output of any machine learning model by decomposing it into the contribution of each input feature to the output."+shap_dict[shap_type]
         var msgHTML =
         `<div class="msg ${side}-msg">
         <div class="msg-img" style="background-image: url(${img})"></div>
@@ -1955,7 +2060,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                 <div class="msg-info-time">${formatDate(new Date())}
                 </div>
             </div>
-        <div class="msg-text">Figure below is your <a href="#" id="show-option" data-tooltip1= 'SHAP dependence plots are an alternative to partial dependence plots and accumulated local effects. The y-axis indicates the variable name, in order of importance from top to bottom. The value next to them is the mean SHAP value. On the x-axis is the SHAP value. Indicates how much is the change in log-odds. From this number we can extract the probability of success. Gradient color indicates the original value for that variable. In booleans, it will take two colors, but in number it can contain the whole spectrum. Each point represents a row from the original dataset.'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+        <div class="msg-text">Figure below is your <a href="#" id="show-option" data-tooltip1= '${shap_title}'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else
     {
