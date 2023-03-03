@@ -610,6 +610,7 @@ def get_model_patientform():
                             shap.waterfall_plot(
                                 shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
                                                  data=np.array([category_list])[0], feature_names=X_columns))
+                            plt.title("Waterfall Plot", fontsize=30)
 
                         if shap_check == "2":
 
@@ -617,23 +618,26 @@ def get_model_patientform():
                             explainer = shap.Explainer(user_training_model, X_CV[0:100],feature_names=X_columns)
                             shap_values = explainer(X_CV[0:100])
                             shap.plots.beeswarm(shap_values)
+                            plt.title("Beeswarm Plot", fontsize=30)
                         if shap_check == "3":
                             explainer = shap.Explainer(user_training_model, X_CV[0:100], feature_names=X_columns)
                             shap_values = explainer(X_CV[0:100])
                             shap.plots.heatmap(shap_values)
+                            plt.title("Heatmap Plot",fontsize = 30)
 
 
                         if shap_check == "6":
                             explainer = shap.KernelExplainer(f, X_train_summary)
                             shap_values = explainer.shap_values(np.array([category_list]))
                             shap.plots.decision(shap_values=shap_values,base_value=explainer.expected_value,feature_names=X_columns)
-
+                            plt.title("Decision Plot", fontsize=30)
                         if shap_check == "8":
                             explainer = shap.KernelExplainer(f, X_train_summary)
                             shap_values = explainer.shap_values(np.array([category_list]))
                             shap.plots.bar(shap.Explanation(values=shap_values[0], base_values=explainer.expected_value,
                                                             data=np.array([category_list])[0], feature_names=X_columns))
 
+                            plt.title("Bar Plot", fontsize=30)
                         if os.path.exists(img_src):
                             os.remove(img_src)
                         if os.path.exists(img_src):
@@ -641,8 +645,7 @@ def get_model_patientform():
                         else:
                             print("png does not exist")
                         print(img_src)
-
-                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = 200)
+                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = 300)
                         plt.clf()
                     return response
 

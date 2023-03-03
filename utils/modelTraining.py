@@ -194,7 +194,7 @@ with the best set of parameter values found by grid search
     else:
         print("png does not exist")
     print(img_src)
-    plt.savefig(img_src)
+    plt.savefig(img_src,dpi=300)
     plt.clf()
 
     while os.path.exists(img_src) is not True:

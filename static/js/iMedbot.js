@@ -982,11 +982,16 @@ function csvToArray(dataset, delimiter = ",") {
 }
 
 function wait(ms){
+
+
+
    var start = new Date().getTime();
    var end = start;
    while(end < start + ms) {
+   //$body.addClass("loading");
      end = new Date().getTime();
   }
+  //$body.removeClass("loading");
 }
 function viewDataset(dataset,name,size){
     // var statisticalData = "Your dataset name is <b>"+ name +"</b> ; dataset size is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
@@ -1817,15 +1822,13 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
         console.log(img_src)
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">
                     <div class="flexbuttons">
-                    <a href="#" onclick="copyimage()" class="fit-button">copy</a>
-                    <a href="#" onclick="saveimage()" class="fit-button">save</a>
+                    <a href="#" onclick="saveimage()" class="fit-button">Save the curve</a>
                     </div>`
     }
     if(text.includes("SHAP")){
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">
                     <div class="flexbuttons">
-                    <a href="#" onclick="copyimage()" class="fit-button">copy</a>
-                    <a href="#" onclick="saveimage()" class="fit-button">save</a>
+                    <a href="#" onclick="saveimage()" class="fit-button">Save the plot</a>
                     </div>`
     }
     //Simple solution for small apps

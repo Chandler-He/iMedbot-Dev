@@ -202,17 +202,22 @@ body {
   background-color: #fcfcfe;
   /*background-image: url("");*/
 }
-.modal {
+
+.modal{
+    position: fixed;
     display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: url("http://i.stack.imgur.com/FhHRx.gif")
-                50% 50%
-                no-repeat;
+      left: 54%;
+      top: 56%;
+      z-index: 1000;
+      width: 40px;
+      height: 40px;
+      margin: -76px 0 0 -76px;
+      border: 8px solid #DCCBC9;
+      border-radius: 50%;
+      border-top: 8px solid #A52A2A;
+      border-bottom: 8px solid #A52A2A;
+      -webkit-animation: spin 1.5s linear infinite;
+      animation: spin 1.5s linear infinite;
 }
 
 @-webkit-keyframes spin {
@@ -226,14 +231,14 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-
 /* Anytime the body has the loading class, our
    modal element will be visible */
 body.loading .modal {
     display: block;
 }
-body.loading .modal {
+body.loading  {
     overflow: hidden;
+    pointer-events: none;
 }
 
 .hint-loading{
