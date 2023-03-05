@@ -2118,6 +2118,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                     "3":"The SHAP heatmap plot displays a matrix of rectangular cells, where each cell represents the impact of two features on the prediction. The color of the cell indicates the magnitude and direction of the impact. Positive impacts are represented by warm colors (e.g., red), and negative impacts are represented by cool colors (e.g., blue). The size of the cell represents the frequency of the combination of feature values in the dataset.",
                     "6":"The SHAP decision plot displays a bar chart with each bar representing the contribution of a feature to the predicted value. The bars are arranged in descending order of importance, and the color of the bars indicates the direction and magnitude of the impact. Positive contributions are shown in warm colors (e.g., red), while negative contributions are shown in cool colors (e.g., blue). The height of the bar represents the magnitude of the contribution. The plot also displays a vertical line representing the expected value of the model for the dataset. The sum of the contributions and the expected value corresponds to the predicted value for the instance.",
                     "8":"The SHAP bar plot displays a horizontal bar chart with each bar representing the impact of a feature on the predicted output. The bars are arranged in descending order of importance, and the color of the bars indicates the direction and magnitude of the impact. Positive contributions are shown in warm colors (e.g., red), while negative contributions are shown in cool colors (e.g., blue). The length of the bar represents the magnitude of the contribution.The plot also displays a vertical line representing the expected value of the model for the dataset. The sum of the contributions and the expected value corresponds to the predicted output for the dataset."}
+        shap_name={"1":"waterfall","2":"beeswarm","3":"heatmap","6":"decision","8":"bar"}
         shap_title="SHAP (SHapley Additive exPlanations) is a framework for explaining the output of machine learning models. It is a unified approach to explain the output of any machine learning model by decomposing it into the contribution of each input feature to the output."+shap_dict[shap_type]
         var msgHTML =
         `<div class="msg ${side}-msg">
@@ -2128,7 +2129,7 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                 <div class="msg-info-time">${formatDate(new Date())}
                 </div>
             </div>
-        <div class="msg-text">Figure below is your <a href="#" id="show-option" data-tooltip1= '${shap_title}'>SHAP plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
+        <div class="msg-text">Figure below is your <a href="#" id="show-option" data-tooltip1= '${shap_title}'>SHAP `+shap_name[shap_type]+` plot</a></div>` + rocHTML + buttonHtml + patientHtml + starHTML + parameterHTML + `</div></div>`;
     }
     else
     {
