@@ -1766,7 +1766,32 @@ function error_report(){
 
 }
 
-function saveimage(){
+
+
+function saveimage(type) {
+  if (type==1){
+  document.getElementById("myDropdown1").classList.toggle("show1");
+  }
+  else{
+  document.getElementById("myDropdown2").classList.toggle("show1");
+  }
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.fit-button')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content1");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show1')) {
+        openDropdown.classList.remove('show1');
+      }
+    }
+  }
+}
+
+function saveimageAsPng(){
     console.log("save");
     canvas=document.getElementsByName("fit-picture");
 
@@ -1783,6 +1808,33 @@ function saveimage(){
         a.click();
 }
 
+
+function saveimageAsPdf(type){
+    canvas=document.getElementsByName("fit-picture");
+    canvas=canvas[canvas.length-1];
+
+
+
+
+      const img = new Image();
+      img.src = canvas.src;
+      const doc = new jsPDF();
+      img.onload = () => {
+          // await for the image to be fully loaded
+          doc.addImage(img,'png', 15, 40, 180, 180);
+
+          //...
+          if (type==1){
+          doc.save('curve.pdf');
+          }
+          else{
+          doc.save('plot.pdf');
+          }
+        };
+
+}
+
+/*
 function copyimage(src){
   image=document.getElementsByName("fit-picture");
   image=image[image.length-1];
@@ -1801,6 +1853,7 @@ function copyimage(src){
     })
   })
 }
+*/
 
 
 
@@ -1822,13 +1875,25 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
         console.log(img_src)
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">
                     <div class="flexbuttons">
-                    <a href="#" onclick="saveimage()" class="fit-button">Save the curve</a>
+                    <div class="dropdown1">
+                    <a href="#" onclick="saveimage(1)" class="fit-button">Save the curve</a>
+                      <div id="myDropdown1" class="dropdown-content1">
+                            <a href="#" onclick="saveimageAsPng()">As .png</a>
+                            <a href="#" onclick="saveimageAsPdf(1)">As .pdf</a>
+                      </div>
+                    </div>
                     </div>`
     }
     if(text.includes("SHAP")){
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">
                     <div class="flexbuttons">
-                    <a href="#" onclick="saveimage()" class="fit-button">Save the plot</a>
+                    <div class="dropdown1">
+                    <a href="#" onclick="saveimage(2)" class="fit-button">Save the plot</a>
+                    <div id="myDropdown2" class="dropdown-content1">
+                            <a href="#" onclick="saveimageAsPng()">As .png</a>
+                            <a href="#" onclick="saveimageAsPdf(2)">As .pdf</a>
+                      </div>
+                    </div>
                     </div>`
     }
     //Simple solution for small apps
