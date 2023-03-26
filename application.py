@@ -458,15 +458,21 @@ def verify_code():
 def get_user_error():
     if request.method == 'POST':
         error = request.form.get('error')
-        words = error.split()
-        print(error)
-        print(words)
-        if error != "":
-            if len(words) >= 3:
-                new_card = trello.create_card(board_list, label_list, words[0] + " " + words[1] + " " + words[2], error)
-            elif len(words) > 0:
+        location = request.form.get('location')
 
-                new_card = trello.create_card(board_list, label_list, words[0], error)
+        if error != "":
+            if "firstname" in session and session["firstname"] is not None:
+                print(session["firstname"])
+                name=" reported by "+session["firstname"]
+                error = "User: " + session["firstname"] + "\n" + "Time: " + str(
+                    datetime.now()) + "\n" + "Error module: " + location + "\n" + "Error content: " + error
+            else:
+                name=""
+                error = "Time: " + str(
+                    datetime.now()) + "\n" + "Error module: " + location + "\n" + "Error content: " + error
+            print(error)
+            new_card = trello.create_card(board_list, label_list, "Error"+name+" at "+str(datetime.now()), error)
+
     return "success"
 @application.route("/submitsurvey", methods=['POST','GET'])
 def get_user_survey():
@@ -533,7 +539,7 @@ def get_model_patientform():
 
         try:
             dataset_name = request.form.get('dataset_name')
-
+            dpi = int(request.form.get('dpi'))
             print("dataset_name ", dataset_name)
             dataset_name_str = json.loads(dataset_name)
             print(dataset_name_str)
@@ -645,7 +651,7 @@ def get_model_patientform():
                         else:
                             print("png does not exist")
                         print(img_src)
-                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = 300)
+                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = dpi)
                         plt.clf()
                     return response
 
@@ -666,9 +672,10 @@ def get_model_patientform():
 def get_model_Examdataset():
     if request.method == "POST":
         datasetname = request.form.get('name')
+        dpi = request.form.get('dpi')
         print("data set name is ", datasetname)
     try:
-        validation_auc,img_src = train_mode(datasetname)
+        validation_auc,img_src = train_mode(datasetname,dpi)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
@@ -680,6 +687,7 @@ def get_model_dataset():
     if request.method == "POST":
         dataset = request.form.get('dataset')
         datasetname = request.form.get('name')
+        dpi = request.form.get('dpi')
     try:
         upload_path = "dataset/" + str(datasetname)
         dataset = dataset.split('\n')
@@ -688,7 +696,7 @@ def get_model_dataset():
             for l in dataset:
                 file.write(l.strip().encode("utf-8"))
                 file.write('\n'.encode("utf-8"))
-        validation_auc,img_src = train_mode(datasetname)
+        validation_auc,img_src = train_mode(datasetname,dpi)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
@@ -706,9 +714,10 @@ def get_model_parameter_exam():
         momentum=request.form.get('momentum')
         l1 = request.form.get('l1')
         l2 = request.form.get('l2')
+        dpi = request.form.get('dpi')
     try:
         print(340,datasetname)
-        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2,dpi)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
@@ -728,6 +737,7 @@ def get_model_parameter():
         momentum = request.form.get('momentum')
         l1 = request.form.get('l1')
         l2 = request.form.get('l2')
+        dpi = request.form.get('dpi')
     try:
         upload_path = "dataset/" + str(datasetname)
         dataset = dataset.split('\n')
@@ -736,14 +746,14 @@ def get_model_parameter():
                 file.write(l.strip().encode("utf-8"))
                 file.write('\n'.encode("utf-8"))
 
-        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2)
+        validation_auc,img_src = train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2,dpi)
         return {"auc":str(validation_auc),"src":str(img_src)}
     except Exception as e:
         print(e)
         return {"auc":"error","src":str(e)}
 
 
-def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2):
+def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2,dpi):
     seed = 123
     nsplits = 5
     scores = "roc_auc"
@@ -771,11 +781,11 @@ def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dr
         'L2': [float(l2)],
         'ltype': [3]
     }
-    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores,dpi)
     return score_val,img_src
 
 
-def train_mode(datasetname):
+def train_mode(datasetname,dpi):
     seed = 123
     nsplits = 5
     scores = "roc_auc"
@@ -804,7 +814,7 @@ def train_mode(datasetname):
         'L2': [0.005],
         'ltype': [3]
     }
-    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores)
+    results, score_val,img_src = modelTraining.model_gsearch_val(predset, target, cur_params, nsplits, seed, scores,dpi)
     return score_val,img_src
 
 

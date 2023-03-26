@@ -124,7 +124,7 @@ def model_val(params, x_cv, y_cv):
 
 
 
-def model_gsearch_val(predset, target, params, nsplits=5, seed=123, scores='roc_auc'):
+def model_gsearch_val(predset, target, params, nsplits=5, seed=123, scores='roc_auc',dpi="200"):
     split = 'SKF'
     """
 Conduct grid search with 80% of data, and then validate the best model using the 20% set aside data in two ways:1.
@@ -194,7 +194,7 @@ with the best set of parameter values found by grid search
     else:
         print("png does not exist")
     print(img_src)
-    plt.savefig(img_src,dpi=300)
+    plt.savefig(img_src,dpi=int(dpi))
     plt.clf()
 
     while os.path.exists(img_src) is not True:
