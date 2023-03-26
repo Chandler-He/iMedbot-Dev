@@ -1607,12 +1607,12 @@ function submitPatientForm(val){
 
         if(data["shap"] != "0"){
         if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
-            for (var i=0;i<15;++i)
-                wait(10000)
+            for (var i=0;i<150;++i)
+                wait(1000)
         }
         else{
-            for (var i=0;i<6;++i)
-                wait(10000)
+            for (var i=0;i<60;++i)
+                wait(1000)
         }
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])}    //Be specific about the type of SHAP plot.
 
