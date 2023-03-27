@@ -988,10 +988,8 @@ function wait(ms){
    var start = new Date().getTime();
    var end = start;
    while(end < start + ms) {
-   //$body.addClass("loading");
      end = new Date().getTime();
   }
-  //$body.removeClass("loading");
 }
 function viewDataset(dataset,name,size){
     // var statisticalData = "Your dataset name is <b>"+ name +"</b> ; dataset size is <b>"+ size/1000 +"</b> kb; dataset format is<b> "+name.slice(-3)+"</b>"
@@ -1164,6 +1162,28 @@ function getParameterExam(){
         var momentum = $("#parameterForm input[name=momentum]").val()
         var l1 = $("#parameterForm input[name=l1]").val()
         var l2 = $("#parameterForm input[name=l2]").val()
+        Swal.fire({
+              title: 'Select the resolution',
+              html: `<select name="resolution" id="resolution" class=".swal2-select">
+                      <option> 100</option>
+                      <option>  200</option>
+                      <option> 300</option>
+                      <option> 500</option>
+
+                      </select>
+                    `,
+              confirmButtonText: 'Submit',
+              allowOutsideClick:false,
+              confirmButtonColor: '#04AA6D',
+              showCloseButton: false,
+              focusConfirm: false,
+              preConfirm: () => {
+                                    const dpi=Swal.getPopup().querySelector('#resolution').value
+
+                                    return {dpi:dpi }
+                                  }
+
+            }).then((result) => {
         $.post("/parameterExam", {
             datasetname: name,
             learningrate: learningrate,
@@ -1173,7 +1193,8 @@ function getParameterExam(){
             epochs: epochs,
             momentum:momentum,
             l1:l1,
-            l2:l2
+            l2:l2,
+            dpi:result.value.dpi
         }).done(function (data) {
             console.log(data)
             if (data["auc"]=="error"){
@@ -1190,6 +1211,7 @@ function getParameterExam(){
             appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
  //           document.getElementById('textInput').disabled = true;
             //document.getElementById('textInput').placeholder = "Enter your message..."
+        })
         })
     }
 function getParameter(){
@@ -1214,6 +1236,28 @@ function getParameter(){
         //reader.onload = function() {
             //rawLog = reader.result
             //console.log(rawLog)
+            Swal.fire({
+              title: 'Select the resolution',
+              html: `<select name="resolution" id="resolution" class=".swal2-select">
+                      <option> 100</option>
+                      <option>  200</option>
+                      <option> 300</option>
+                      <option> 500</option>
+
+                      </select>
+                    `,
+              confirmButtonText: 'Submit',
+              allowOutsideClick:false,
+              confirmButtonColor: '#04AA6D',
+              showCloseButton: false,
+              focusConfirm: false,
+              preConfirm: () => {
+                                    const dpi=Swal.getPopup().querySelector('#resolution').value
+
+                                    return {dpi:dpi }
+                                  }
+
+            }).then((result) => {
             $.post("/parameter", {
                 dataset: rawLog,
                 datasetname: name,
@@ -1224,7 +1268,8 @@ function getParameter(){
                 epochs: epochs,
                 momentum:momentum,
                 l1:l1,
-                l2:l2
+                l2:l2,
+                dpi:result.value.dpi
             }).done(function (data) {
                 console.log(data)
                 if (data["auc"]=="error"){
@@ -1242,6 +1287,7 @@ function getParameter(){
                 appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do predicton now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
                 //document.getElementById('textInput').disabled = true;
                 //document.getElementById('textInput').placeholder = "Enter your message..."
+            })
             })
         //}
     //reader.readAsText(dataset);
@@ -1376,7 +1422,30 @@ function trainModel() {
                           else if (train_model_year == 10) {data_name='Book2.csv'}
                           else if (train_model_year == 15) {data_name='Book3.csv'};
                           console.log(data_name);
-                          $.post("/Examdataset", {name: data_name}).done(function (data) {
+
+                          Swal.fire({
+              title: 'Select the resolution',
+              html: `<select name="resolution" id="resolution" class=".swal2-select">
+                      <option> 100</option>
+                      <option>  200</option>
+                      <option> 300</option>
+                      <option> 500</option>
+
+                      </select>
+                    `,
+              confirmButtonText: 'Submit',
+              allowOutsideClick:false,
+              confirmButtonColor: '#04AA6D',
+              showCloseButton: false,
+              focusConfirm: false,
+              preConfirm: () => {
+                                    const dpi=Swal.getPopup().querySelector('#resolution').value
+
+                                    return {dpi:dpi }
+                                  }
+
+            }).then((result) => {
+                                   $.post("/Examdataset", {name: data_name,dpi:result.value.dpi}).done(function (data) {
                                     console.log(data)
                                     if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
@@ -1395,6 +1464,9 @@ function trainModel() {
                                     //document.getElementById('textInput').placeholder="Enter your message..."
                                 })
 
+                                })
+
+
                       }else{
                         function read(callback) {
                             var dataset = $('#fileid').prop('files')[0];
@@ -1403,7 +1475,29 @@ function trainModel() {
                             var reader = new FileReader();
                             reader.onload = function() {
                                 rawLog = reader.result
-                                $.post("/dataset", { dataset: rawLog, name: name}).done(function (data) {
+                                Swal.fire({
+              title: 'Select the resolution',
+              html: `<select name="resolution" id="resolution" class=".swal2-select">
+                      <option> 100</option>
+                      <option>  200</option>
+                      <option> 300</option>
+                      <option> 500</option>
+
+                      </select>
+                    `,
+              confirmButtonText: 'Submit',
+              allowOutsideClick:false,
+              confirmButtonColor: '#04AA6D',
+              showCloseButton: false,
+              focusConfirm: false,
+              preConfirm: () => {
+                                    const dpi=Swal.getPopup().querySelector('#resolution').value
+
+                                    return {dpi:dpi }
+                                  }
+
+            }).then((result) => {
+                                $.post("/dataset", { dataset: rawLog, name: name,dpi:result.value.dpi}).done(function (data) {
                                     console.log(data)
                                     if (data["auc"]=="error"){
                                     alert('Sorry! We have an error from the server : '+data["src"]+'. Please try a valid dataset.')
@@ -1420,6 +1514,7 @@ function trainModel() {
                                     appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction now? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
                                     //document.getElementById('textInput').disabled = true;
                                     //document.getElementById('textInput').placeholder="Enter your message..."
+                                })
                                 })
                             }
                             reader.readAsText(dataset);
@@ -1478,7 +1573,29 @@ function submitPatientForm(val){
         if (train_model_year==15){window.dataset_name="LSM-15Year-I-240.txt";}
     }
 
-    $.post("/patientform", {patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name)}).done(function (data) {
+        Swal.fire({
+              title: 'Select the resolution',
+              html: `<select name="resolution" id="resolution" class=".swal2-select">
+                      <option> 100</option>
+                      <option>  200</option>
+                      <option> 300</option>
+                      <option> 500</option>
+
+                      </select>
+                    `,
+              confirmButtonText: 'Submit',
+              allowOutsideClick:false,
+              confirmButtonColor: '#04AA6D',
+              showCloseButton: false,
+              focusConfirm: false,
+              preConfirm: () => {
+                                    const dpi=Swal.getPopup().querySelector('#resolution').value
+
+                                    return {dpi:dpi }
+                                  }
+
+            }).then((result) => {
+            $.post("/patientform", {dpi:result.value.dpi,patient_dic: JSON.stringify(patient_dic),dataset_name: JSON.stringify(window.dataset_name)}).done(function (data) {
         if (data["proba"]=="error")
         {
             alert("Sorry, there is an time-out error")
@@ -1490,10 +1607,12 @@ function submitPatientForm(val){
 
         if(data["shap"] != "0"){
         if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
-            wait(150000)
+            for (var i=0;i<150;++i)
+                wait(1000)
         }
         else{
-            wait(60000)
+            for (var i=0;i<60;++i)
+                wait(1000)
         }
         appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])}    //Be specific about the type of SHAP plot.
 
@@ -1502,6 +1621,11 @@ function submitPatientForm(val){
         //document.getElementById('textInput').placeholder = "Enter your message..."
         }
     })
+      })
+
+
+
+
 
 
 }
@@ -1571,10 +1695,7 @@ function generatePatientForm(labelList,table_result) {
                             </div>
                          </div>
                          <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>`
-            //let end =' <div class="form-check" id="form-check">\n' +
-            //    '    <input type="checkbox" class="form-check-input" id="shapCheck" onclick="shapTypeSelect()">\n' +
-            //    '    <label class="form-check-label" for="shapCheck">Do you want to plot shap anlysis graph for this patient, it will take longer time according to the size of your dataset and model</label>\n' +
-            //    '  </div> <div class="form-group row"><div class="col-sm-10"> <button type="submit" class="btn btn-primary">Submit</button></div></div></form>'
+
             patientFormHtml = front+patientFormHtml.join("")+end
           }else {
                 patientFormHtml=" "
@@ -1748,19 +1869,33 @@ function error_report(){
 
         Swal.fire({
               title: 'Error Report Form',
-              html: `<label for="exampleFormControlTextarea1">Please summarize the error or issue you meet when using imedbot ( leave it blank if there is none).</label><br><br><textarea class="form-control" id="user-error-report" rows="10" cols="50"></textarea><br>`,
+              html: `<select name="error-select" id="error-select" class=".swal2-select">
+                      <option value="" disabled selected hidden>Where does your error occurr:</option>
+                      <option> Predict</option>
+                      <option>  Model Training</option>
+                      <option> Testing New Patient</option>
+                      <option> Registration</option>
+                      <option> Other</option>
+                      </select><br><br>
+                        <label for="exampleFormControlTextarea1">Please summarize the error or issue you meet when using imedbot ( leave it blank if there is none).</label><br><br>
+                        <textarea class="form-control" id="user-error-report" rows="8" cols="50"></textarea><br>
+
+                    `,
               confirmButtonText: 'Submit',
               confirmButtonColor: '#04AA6D',
               showCloseButton: true,
               focusConfirm: false,
               preConfirm: () => {
+                                    const location=Swal.getPopup().querySelector('#error-select').value
                                     const text = Swal.getPopup().querySelector('#user-error-report').value
-
-                                    return { text:text }
+                                    if (location==""){
+                                    Swal.showValidationMessage('Please choose where does the error occur.')
+                                    }
+                                    return {location:location, text:text }
                                   }
 
             }).then((result) => {
-                                    $.post("/errorreport", {error:result.value.text})
+                                    $.post("/errorreport", {error:result.value.text,location:result.value.location})
                                 })
 
 
@@ -1873,6 +2008,9 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
 
     if(text.includes("ROC_curve")){
         console.log(img_src)
+        if (document.getElementById("myDropdown1")){
+        document.getElementById("myDropdown1").remove();
+        }
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="ROC Curve" style="width:300px;height:250px;">
                     <div class="flexbuttons">
                     <div class="dropdown1">
@@ -1885,6 +2023,9 @@ function appendMessage(name, img, side, text, instruction,btnGroup,tag="",img_sr
                     </div>`
     }
     if(text.includes("SHAP")){
+        if (document.getElementById("myDropdown2")){
+        document.getElementById("myDropdown2").remove();
+        }
         rocHTML = `<img className="fit-picture" name="fit-picture" src="${img_src}" alt="SHAP" style="width:300px;height:250px;">
                     <div class="flexbuttons">
                     <div class="dropdown1">
