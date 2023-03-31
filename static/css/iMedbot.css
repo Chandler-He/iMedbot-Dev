@@ -241,6 +241,14 @@ body.loading  {
     pointer-events: none;
 }
 
+body.shapGenerating .modal {
+    display: block;
+}
+body.shapGenerating  {
+    overflow: hidden;
+    pointer-events: none;
+}
+
 .hint-loading{
   font-size:15px;
   color: green;

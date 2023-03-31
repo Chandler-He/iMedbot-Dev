@@ -1163,7 +1163,7 @@ function getParameterExam(){
         var l1 = $("#parameterForm input[name=l1]").val()
         var l2 = $("#parameterForm input[name=l2]").val()
         Swal.fire({
-              title: 'Select the resolution',
+              title:"Select the resolution (dpi) you would desire for the figure:",
               html: `<select name="resolution" id="resolution" class=".swal2-select">
                       <option> 100</option>
                       <option>  200</option>
@@ -1237,7 +1237,7 @@ function getParameter(){
             //rawLog = reader.result
             //console.log(rawLog)
             Swal.fire({
-              title: 'Select the resolution',
+              title:"Select the resolution (dpi) you would desire for the figure:",
               html: `<select name="resolution" id="resolution" class=".swal2-select">
                       <option> 100</option>
                       <option>  200</option>
@@ -1424,7 +1424,7 @@ function trainModel() {
                           console.log(data_name);
 
                           Swal.fire({
-              title: 'Select the resolution',
+              title:"Select the resolution (dpi) you would desire for the figure:",
               html: `<select name="resolution" id="resolution" class=".swal2-select">
                       <option> 100</option>
                       <option>  200</option>
@@ -1476,7 +1476,7 @@ function trainModel() {
                             reader.onload = function() {
                                 rawLog = reader.result
                                 Swal.fire({
-              title: 'Select the resolution',
+              title:"Select the resolution (dpi) you would desire for the figure:",
               html: `<select name="resolution" id="resolution" class=".swal2-select">
                       <option> 100</option>
                       <option>  200</option>
@@ -1574,7 +1574,7 @@ function submitPatientForm(val){
     }
 
         Swal.fire({
-              title: 'Select the resolution',
+              title:"Select the resolution (dpi) you would desire for the figure:",
               html: `<select name="resolution" id="resolution" class=".swal2-select">
                       <option> 100</option>
                       <option>  200</option>
@@ -1590,7 +1590,9 @@ function submitPatientForm(val){
               focusConfirm: false,
               preConfirm: () => {
                                     const dpi=Swal.getPopup().querySelector('#resolution').value
-
+                                    if (dpi==""){
+                                        Swal.showValidationMessage('Please select the dpi of your figure.')
+                                    }
                                     return {dpi:dpi }
                                   }
 
@@ -1607,27 +1609,32 @@ function submitPatientForm(val){
 
         if(data["shap"] != "0"){
         if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
-            for (var i=0;i<150;++i)
-                wait(1000)
+            alert('The generation of shap plot might take about 150 seconds. Please wait patiently');
+           $body.addClass("shapGenerating");
+
+            setTimeout(function(){
+                    $body.removeClass("shapGenerating");
+                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])    //Be specific about the type of SHAP plot.
+                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+            },150000);
         }
         else{
-            for (var i=0;i<60;++i)
-                wait(1000)
+            alert('The generation of shap plot might take about 60 seconds. Please wait patiently');
+            $body.addClass("shapGenerating");
+            setTimeout(function(){
+                    $body.removeClass("shapGenerating");
+                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])  //Be specific about the type of SHAP plot.
+                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+            },60000);
         }
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])}    //Be specific about the type of SHAP plot.
 
-        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
         //document.getElementById('textInput').disabled = true;
         //document.getElementById('textInput').placeholder = "Enter your message..."
         }
-    })
+        }
       })
 
-
-
-
-
-
+        })
 }
 function generatePatientForm(labelList,table_result) {
 
