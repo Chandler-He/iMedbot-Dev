@@ -126,6 +126,7 @@ function dropdown() {
 window.onclick = function(event) {
   if (!event.target.matches('.previous')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
+
     var i;
     for (i = 0; i < dropdowns.length; i++) {
       var openDropdown = dropdowns[i];
@@ -134,6 +135,17 @@ window.onclick = function(event) {
       }
     }
   }
+    if (!event.target.matches('.fit-button')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content1");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show1')) {
+        openDropdown.classList.remove('show1');
+      }
+    }
+  }
+
 }
 
 function GoBackDialog(){
@@ -1608,28 +1620,33 @@ function submitPatientForm(val){
         appendMessage(BOT_NAME, NURSE_IMG, "left", "The chance of "+val+" is: " + (Number(data["proba"])*100).toFixed(2)+"%", "no information", [])   //This is place that you need to add a variable that contains the value of year.
 
         if(data["shap"] != "0"){
-        if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
-            alert('The generation of shap plot might take about 150 seconds. Please wait patiently');
-           $body.addClass("shapGenerating");
+            if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
+                alert('The generation of shap plot might take about 150 seconds. Please wait patiently');
+               $body.addClass("shapGenerating");
 
-            setTimeout(function(){
-                    $body.removeClass("shapGenerating");
-                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])    //Be specific about the type of SHAP plot.
-                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
-            },150000);
-        }
-        else{
-            alert('The generation of shap plot might take about 60 seconds. Please wait patiently');
-            $body.addClass("shapGenerating");
-            setTimeout(function(){
-                    $body.removeClass("shapGenerating");
-                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])  //Be specific about the type of SHAP plot.
-                    appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
-            },60000);
-        }
+                setTimeout(function(){
+                        $body.removeClass("shapGenerating");
+                        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])
+                        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+    //Be specific about the type of SHAP plot.
+                },150000);
+            }
+            else{
+                alert('The generation of shap plot might take about 60 seconds. Please wait patiently');
+                $body.addClass("shapGenerating");
+                setTimeout(function(){
+                        $body.removeClass("shapGenerating");
+                        appendMessage(BOT_NAME, NURSE_IMG, "left", "Figure below is your SHAP plot","no information",[],"",data["img"],data["shap"])  //Be specific about the type of SHAP plot.
+                        appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+                },60000);
+            }
 
         //document.getElementById('textInput').disabled = true;
         //document.getElementById('textInput').placeholder = "Enter your message..."
+        }
+        else{
+           appendMessage(BOT_NAME, NURSE_IMG, "left", "Do you want to use your model to do prediction? ", "Test Patient", {"Testing with new patients":"Testing with new patients","Retrain the model":"Retrain the model","Open new dataset":"Open new dataset","End task":"End task"})
+
         }
         }
       })
@@ -1919,19 +1936,7 @@ function saveimage(type) {
   }
 }
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.fit-button')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content1");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show1')) {
-        openDropdown.classList.remove('show1');
-      }
-    }
-  }
-}
+
 
 function saveimageAsPng(){
     console.log("save");

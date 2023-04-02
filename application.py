@@ -623,12 +623,14 @@ def get_model_patientform():
 
                             explainer = shap.Explainer(user_training_model, X_CV[0:100],feature_names=X_columns)
                             shap_values = explainer(X_CV[0:100])
-                            shap.plots.beeswarm(shap_values)
+                            shap.plots.beeswarm(shap_values,color_bar=False,show=False)
+                            plt.colorbar()
                             plt.title("Beeswarm Plot", fontsize=30)
                         if shap_check == "3":
                             explainer = shap.Explainer(user_training_model, X_CV[0:100], feature_names=X_columns)
                             shap_values = explainer(X_CV[0:100])
-                            shap.plots.heatmap(shap_values)
+                            shap.plots.heatmap(shap_values,show=False)
+
                             plt.title("Heatmap Plot",fontsize = 30)
 
 
@@ -651,7 +653,18 @@ def get_model_patientform():
                         else:
                             print("png does not exist")
                         print(img_src)
-                        plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0, dpi = dpi)
+                        if shap_check != "3":
+                            plt.savefig(img_src ,bbox_inches='tight',pad_inches = 0.5, dpi = dpi)
+                        else:
+                            print("44444444444444444444444444444")
+                            plt.gcf().axes[-1].set_aspect('auto')
+                            '''
+                            plt.tight_layout()
+                            '''
+                            plt.gcf().axes[-1].set_box_aspect(70)
+                            plt.savefig(img_src,bbox_inches='tight',pad_inches = 0.5, dpi = dpi)
+
+
                         plt.clf()
                     return response
 

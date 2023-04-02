@@ -1,7 +1,7 @@
 import sys
 
 from sklearn.preprocessing import MinMaxScaler
-
+from sklearn.preprocessing import LabelEncoder
 sys.path.append('../../')
 from tensorflow import keras, metrics
 import matplotlib.pyplot as plt
@@ -45,6 +45,13 @@ def loadandprocess(file, sep='\t', predtype=1, scaled=True):
         df = pandas.read_csv(file, sep, lineterminator='\n')
     elif file[-3:] == "csv":
         df = pandas.read_csv(file)
+
+    df = df.fillna(df.mean())
+    le = LabelEncoder()
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            df[col] = le.fit_transform(df[col])
+
     column_names = list(df.columns)[0:-1]
     #print(column_names)
     # cols=[0,532]
