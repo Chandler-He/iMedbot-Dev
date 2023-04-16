@@ -1621,7 +1621,10 @@ function submitPatientForm(val){
 
         if(data["shap"] != "0"){
             if (data["shap"]=="1" || data["shap"]=="8" || data["shap"]=="6"){
-                alert('The generation of shap plot might take about 150 seconds. Please wait patiently');
+               setTimeout(function(){
+                            alert('The generation of shap plot might take about 150 seconds. Please wait patiently! (Click OK to close the popup)');
+                            }
+                          ,0);
                $body.addClass("shapGenerating");
 
                 setTimeout(function(){
@@ -1632,7 +1635,9 @@ function submitPatientForm(val){
                 },150000);
             }
             else{
-                alert('The generation of shap plot might take about 60 seconds. Please wait patiently');
+                setTimeout(function(){
+                alert('The generation of shap plot might take about 60 seconds. Please wait patiently! (Click OK to close the popup)');
+                },0);
                 $body.addClass("shapGenerating");
                 setTimeout(function(){
                         $body.removeClass("shapGenerating");
