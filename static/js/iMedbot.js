@@ -1961,30 +1961,40 @@ function saveimageAsPng(){
 }
 
 
-function saveimageAsPdf(type){
-    canvas=document.getElementsByName("fit-picture");
-    canvas=canvas[canvas.length-1];
+function saveImageAsPdf(type) {
+  canvas = document.getElementsByName("fit-picture");
+  canvas = canvas[canvas.length - 1];
 
+  const img = new Image();
+  img.src = canvas.src;
+  const doc = new jsPDF();
+  img.onload = () => {
+    // Calculate the new image dimensions while preserving the aspect ratio
+    const imgAspectRatio = img.width / img.height;
+    const maxWidth = 180;
+    const maxHeight = 180;
+    let newWidth, newHeight;
 
+    if (imgAspectRatio > 1) {
+      newWidth = maxWidth;
+      newHeight = maxWidth / imgAspectRatio;
+    } else {
+      newHeight = maxHeight;
+      newWidth = maxHeight * imgAspectRatio;
+    }
 
+    // Add the image to the PDF with the new dimensions
+    doc.addImage(img, "png", 15, 40, newWidth, newHeight);
 
-      const img = new Image();
-      img.src = canvas.src;
-      const doc = new jsPDF();
-      img.onload = () => {
-          // await for the image to be fully loaded
-          doc.addImage(img,'png', 15, 40, 180, 180);
-
-          //...
-          if (type==1){
-          doc.save('curve.pdf');
-          }
-          else{
-          doc.save('plot.pdf');
-          }
-        };
-
+    // Save the PDF
+    if (type == 1) {
+      doc.save("curve.pdf");
+    } else {
+      doc.save("plot.pdf");
+    }
+  };
 }
+
 
 /*
 function copyimage(src){
