@@ -1961,7 +1961,7 @@ function saveimageAsPng(){
 }
 
 
-function saveImageAsPdf(type) {
+function saveimageAsPdf(type) {
   canvas = document.getElementsByName("fit-picture");
   canvas = canvas[canvas.length - 1];
 
