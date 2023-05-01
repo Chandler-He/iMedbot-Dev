@@ -71,10 +71,10 @@ model_5 = load_model('model5.h5')
 '''
 settings for trello board
 '''
-trello_api_key="fa4a23cc48f9f53430e93a41ef6f7e66"
-trello_token="ATTA9028986991f0dfe8bd48f894b702792fe3bf71f3af2eb0207f5685adfc88a0c1EC07FFAF"
+trello_api_key="47bb67d57304bdc2c972fcf200e528b1"
+trello_token="ATTA6452d8f257184fffa983050afc9d0369598929be7d9edcf66e1eab10783ea519133BBD92"
 
-trello_board_url="https://trello.com/b/IbXFiNmr"
+trello_board_url="https://trello.com/b/8Rr6Br2i/imedbot"
 trello = trello_wrapper(trello_api_key, trello_token)
 board = trello.get_board(trello_board_url)
 board_list =trello.get_single_list(board, "Reported")
