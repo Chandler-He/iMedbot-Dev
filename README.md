@@ -17,7 +17,7 @@ pip install numpy=1.19.5 (exact version)
 pip install tensorflow=2.5.0 (exact version)
 # Note that tensorflow 2.5.0 is not compatible with python 3.9.5, so please use python 3.8.10 instead, then, tensorflow 2.5.0 will not be supported since september 2021, there is no release package currently, you need to copy the source code from github and install it manually, or copy the site-packages from previews programmer's computer.
 
-# Waring: install tensorflow v2.5.0 is super tricky, you have to try many way 
+# Waring: Installing tensorflow v2.5.0 is super tricky, you have to try many ways 
 
 
 # Inorder to run the backend, I highly recommend that use anaconda to create a virtual environment, then install all the dependencies in the virtual environment, then run the backend in the virtual environment.
