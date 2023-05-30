@@ -1,13 +1,13 @@
-# ProjectW81XWH1900495-iMedbot, for developers only!!!
+# ProjectW81XWH1900495-iMedbot!!!
+## Installation Notes
+Frontend: JS, HTML, CSS
 
-# Note that this project is not compatible with Apple M1 chip, please use Intel chip or windows pc instead, otherwise, you can do nothing with this project.
+###Backend: 
+Python, Flask
+Machine Learning: Python, Tensorflow, Keras, NLTK, Scikit-learn
+atabase: MongoDB
 
-# Frontend: JS, HTML, CSS
-# Backend: Python, Flask
-# Machine Learning: Python, Tensorflow, Keras, NLTK, Scikit-learn
-# Database: MongoDB
-
-# Dependencies:
+###Dependencies:
 python.exe -m pip install --upgrade pip
 pip install flask
 pip install flask_cors
@@ -48,3 +48,6 @@ conda deactivate
 2. https://github.com/tensorflow/tensorflow/tree/r2.5
 3. https://www.tensorflow.org/install/pip#macos
 4. https://github.com/tensorflow/tensorflow/issues/25597
+## About IMedbot
+## Structures (including components) of the program
+## Functions and examplese
