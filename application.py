@@ -7,7 +7,7 @@ import numpy as np
 import pandas
 
 #from chatbot import chatbot
-from flask import Flask, render_template, request, after_this_request,session
+from flask import Flask, render_template, request, after_this_request,session, send_file
 #from flask_bootstrap import Bootstrap
 import pyttsx3 as tts
 import json
@@ -768,6 +768,10 @@ def get_model_parameter():
         print(e)
         return {"auc":"error","src":str(e)}
 
+@application.route('/staticpdf')
+def show_static_pdf():
+    with open('./static/pdf/file.pdf', 'rb') as static_file:
+        return send_file(static_file, attachment_filename='file.pdf')
 
 def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2,dpi):
     seed = 123
