@@ -37,16 +37,16 @@ application.secret_key = 'BAD_SECRET_KEY'
 mail = Mail(application) # instantiate the mail class
 
 # configuration of mail
-application.config['MAIL_SERVER']='smtp.gmail.com'
+application.config['MAIL_SERVER'] = 'smtp.gmail.com'
 application.config['MAIL_PORT'] = 465
 # application.config['MAIL_USERNAME'] = 'imedbot.odpac@gmail.com'
-#application.config['MAIL_PASSWORD'] = 'sbavpcrkkacwvyjr'
+# application.config['MAIL_PASSWORD'] = 'sbavpcrkkacwvyjr'
 application.config['MAIL_USERNAME'] = 'xiajiangw81x@gmail.com'
 application.config['MAIL_PASSWORD'] = 'iervpcfsqhydzhnk'
 application.config['MAIL_USE_TLS'] = False
 application.config['TESTING'] = False
 application.config['MAIL_USE_SSL'] = True
-application.config['MAIL_SUPPRESS_SEND']=False
+application.config['MAIL_SUPPRESS_SEND'] = False
 application.config['MAIL_DEBUG'] = True
 mail = Mail(application)
 
