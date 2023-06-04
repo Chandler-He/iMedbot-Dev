@@ -770,8 +770,7 @@ def get_model_parameter():
 
 @application.route('/staticpdf')
 def show_static_pdf():
-    with open('./static/pdf/file.pdf', 'rb') as static_file:
-        return send_file(static_file, attachment_filename='file.pdf')
+    return redirect("./static/pdf/file.pdf")
 
 def train_mode_parameter(datasetname, learningrate, batchsize, epochs, decay, dropoutrate,momentum,l1,l2,dpi):
     seed = 123

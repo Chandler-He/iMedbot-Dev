@@ -1,90 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-{#{% extends "base.html" %}#}
-{% block content %}
-<head>
-{#<!-- Google tag (gtag.js) -->#}
-{#<script async src="https://www.googletagmanager.com/gtag/js?id=G-MFT6CBN1WE"></script>#}
-{#<script>#}
-{#  window.dataLayer = window.dataLayer || [];#}
-{#  function gtag(){dataLayer.push(arguments);}#}
-{#  gtag('js', new Date());#}
-{##}
-{#  gtag('config', 'G-MFT6CBN1WE');#}
-{#</script>#}
+  {#{% extends "base.html" %}#} {% block content %}
+  <head>
+    {#
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1QRS8FCQKN"></script>
+    #} {#
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-MFT6CBN1WE"
+    ></script>
+    #} {#
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-1QRS8FCQKN');
+      #}
+      {#  window.dataLayer = window.dataLayer || [];#}
+      {#  function gtag(){dataLayer.push(arguments);}#}
+      {#  gtag('js', new Date());#}
+      {##}
+      {#  gtag('config', 'G-MFT6CBN1WE');#}
+      {#
     </script>
-    <meta charset="UTF-8">
-    <title>Breast Cancer iMedBot</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!--    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<!--    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
-<!--    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    #}
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-1QRS8FCQKN"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/iMedbot.css') }}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      gtag("config", "G-1QRS8FCQKN");
+    </script>
+    <meta charset="UTF-8" />
+    <title>Breast Cancer iMedBot</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">-->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <!--    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
+    <!--    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/iMedbot.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+  </head>
 
+  <body>
+    <!--<div class="center">-->
 
-</head>
+    <!-- partial:index.partial.html -->
 
-<body>
-<!--<div class="center">-->
-
-
-  <!-- partial:index.partial.html -->
-
-
-  <section class="msger">
-    <header class="msger-header">
+    <section class="msger">
+      <header class="msger-header">
         <div class="dropdown">
-        <a href="#" class="previous" onclick="dropdown()">&laquo; Previous</a>
-            <div id="myDropdown" class="dropdown-content">
-                <a href="#" onclick="GoBackToLastMsg()">Go back to service choices</a>
-                <a href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
+          <a href="#" class="previous" onclick="dropdown()">&laquo; Previous</a>
+          <div id="myDropdown" class="dropdown-content">
+            <a href="#" onclick="GoBackToLastMsg()"
+              >Go back to service choices</a
+            >
+            <a href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
           </div>
         </div>
-      <div class="msger-header-title">
+        <div>
+          <button class="my-button" onclick="openLink()">User Manual</button>
+        </div>
+        <script>
+          // 点击事件处理程序
+          function openLink() {
+            window.open('http://localhost:5000/static/pdf/file.pdf', '_blank');
+          }
+        </script>
+        <div class="msger-header-title">
+          <div class="modal"></div>
 
-        <div class="modal"></div>
-
-          <i class="fas fa-bug"></i> Breast Cancer iMedbot  <i class="fas fa-bug"></i>
+          <i class="fas fa-bug"></i> Breast Cancer iMedbot
+          <i class="fas fa-bug"></i>
+        </div>
+      </header>
+      <main class="msger-chat"></main>
+      <div id="hidden_div" style="display: none">
+        <table id="hidden_table" class="table table-striped"></table>
+      </div>
+      <div class="hint-loading" id="hint">
+        <button
+          id="showdataset"
+          type="button"
+          class="btn btn-info"
+          style="display: none"
+        >
+          Show Dataset!
+        </button>
+        <!--          <button id = "changedataset" type="button" class="btn btn- " style="display:none">Change Dataset!</button>-->
+        {# &nbsp&nbsp Please don't say too much, I am still learning now!#}
       </div>
 
-    </header>
-    <main class="msger-chat"></main>
-    <div id="hidden_div" style="display:none">
-        <table id="hidden_table" class="table table-striped" >
-
-        </table>
-    </div>
-      <div class="hint-loading" id = "hint">
-          <button id = "showdataset" type="button" class="btn btn-info " style="display:none">Show Dataset!</button>
-<!--          <button id = "changedataset" type="button" class="btn btn- " style="display:none">Change Dataset!</button>-->
-{#          &nbsp&nbsp Please don't say too much, I am still learning now!#}
-
-      </div>
-
-
-    <!-- currently we do not need this part, if in the future we need user input again, re-add it
+      <!-- currently we do not need this part, if in the future we need user input again, re-add it
 
     <form class="msger-inputarea" autocomplete="off" >
 
@@ -98,42 +150,62 @@
     </form>
     -->
 
-      <form id="form1" action="/dataset" method="POST" enctype="multipart/form-data">
-          <input id='fileid' type='file' name="dataset" accept=".csv,.txt" style="display:none"/>
-           <input id='submitDataset' type=submit value=Upload style="display:none">
-
+      <form
+        id="form1"
+        action="/dataset"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <input
+          id="fileid"
+          type="file"
+          name="dataset"
+          accept=".csv,.txt"
+          style="display: none"
+        />
+        <input
+          id="submitDataset"
+          type="submit"
+          value="Upload"
+          style="display: none"
+        />
       </form>
-            <!--        <button  title = "start recording when you click" type = "button" class="record-send-btn" id = "start_button" >-->
-            <!--            <img id="start_img" src="static/img/mic.gif" alt="Start">-->
+      <!--        <button  title = "start recording when you click" type = "button" class="record-send-btn" id = "start_button" >-->
+      <!--            <img id="start_img" src="static/img/mic.gif" alt="Start">-->
 
-            <!--        </button>-->
-         <div class="bottom">
-            <a class="copyright text-dark" href="https://google.com/" style="text-align:left;">Copyright © 2021 Xia Jiang, University of Pittsburgh. All rights reserved.</a>
-             <a class="copyright text-dark" href="#" onclick="error_report()" >error report</a>
+      <!--        </button>-->
+      <div class="bottom">
+        <a
+          class="copyright text-dark"
+          href="https://google.com/"
+          style="text-align: left"
+          >Copyright © 2021 Xia Jiang, University of Pittsburgh. All rights
+          reserved.</a
+        >
+        <a class="copyright text-dark" href="#" onclick="error_report()"
+          >error report</a
+        >
+      </div>
+    </section>
 
-        </div>
+    <!--</div>-->
 
-  </section>
+    <!-- partial -->
+    <script src="https://use.fontawesome.com/releases/v5.0.13/js/all.js"></script>
+    <script
+      type="text/javascript"
+      src="static/assets/input_question.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="static/assets/input_question10.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="static/assets/input_question5.js"
+    ></script>
 
-
-
-<!--</div>-->
-
-
-
-  <!-- partial -->
-  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
-  <script type="text/javascript" src="static/assets/input_question.js"></script>
-  <script type="text/javascript" src="static/assets/input_question10.js"></script>
-  <script type="text/javascript" src="static/assets/input_question5.js"></script>
-
-  <script type="text/javascript" src="static/js/iMedbot.js"></script>
-
-
-
-
-
-</body>
-{% endblock %}
-
+    <script type="text/javascript" src="static/js/iMedbot.js"></script>
+  </body>
+  {% endblock %}
 </html>
