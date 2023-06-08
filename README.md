@@ -1,5 +1,5 @@
 # iMedBot System Development
-
+Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights reserved.
 ## 1. About iMedBot:
 iMedBot is a web application that we  developed  using the python Flask web framework and deployed on Amazon Web Services. It contains a frontend and a backend. The backend is supported by a python program we developed using the python Keras and scikit-learn packages, which can be used to learn deep feedforward neural network (DFNN) models
 
@@ -18,14 +18,10 @@ Clone the project
 ~~~bash
 git clone https://github.com/ProjectW81XWH1910495/iMedbot-Dev.git
 ~~~
-Install Dependencies
+Install Dependencies, please be sure you have python v3.8.*
 ~~~bash
 python.exe -m pip install --upgrade pip  
-pip install flask  
-pip install pymongo  
-pip install -r .\requirements.txt  
-pip install numpy=1.19.5 (exact version)  
-pip install tensorflow=2.5.0 (exact version)  
+pip install -r .\requirements.txt   
 ~~~
 Run project:
 ~~~bash
@@ -79,6 +75,36 @@ If you did all the steps above, you still cannot run the project however, please
 ~~~bash
 application.py; audio.py; chatbot.py; tryModel.py; trello_wrapper.py; js; training datasets; model5.h5; model10.h5, model15.h5
 ~~~
+### 6.1.1 application.py
+application.py is a web application file that contains functions and endpoints for a variety of tasks such as login authentication, creating users, training models, and sending emails. It uses the Flask framework to create routes, request and response cycles, and decorators to handle requests and interact with databases and file systems.
+### 6.1.2 audio.py
+The audio.py file enables speech recognition and text-to-speech capabilities by using the speech recognition and text-to-speech libraries to capture audio and convert it into text. It then utilizes conditionals and functions to detect speech patterns and print the text.
+### 6.1.3 chatbot.py
+chatbot.py is a file that sets up and trains a chatbot by importing libraries and dependencies, creating a ChatBot instance with custom settings, connecting it to a SQL database, setting the input type, output type, and two logical adapters to provide responses.
+### 6.1.4 static/assets/input_model.js
+The file static/assets/input_model.js creates a model to ask a series of questions to a user and receive responses, using an array of objects that defines the data structure and determines the questions asked.
+### 6.1.5 static/assets/input_question.js
+This file static/assets/input_question.js contains JavaScript code snippets that define objects with questions, instructions, patterns, and responses related to conversation bots, cancer staging, breast cancer diagnosis, and model training. The code is used to create a structure for a program to ask questions and interpret user responses, with each question having a set of possible responses associated with different outcomes.
+### 6.1.6 static/assets/input_question10.js
+This code file contains a snippet of Javascript code that provides instructions and questions related to predicting the probability of breast cancer recurrence. It contains tags with instructions, questions, and patterns and responses associated with the questions, which are used to calculate the probability of recurrence. The code works by prompting the user for answers to the questions and then using the answers to calculate the probability.
+### 6.1.7 static/assets/input_question5.js
+The code file static/assets/input_question5.js contains JavaScript objects that represent a conversation bot designed to ask questions related to breast cancer diagnosis. The code includes tags, instructions, next questions, patterns, and responses to interpret the user's input and provide the correct response. The code works by providing a set of questions to the user and then allowing them to answer with the corresponding values.
+### 6.1.8 static/assets/predict.js
+The predict.js file is a JavaScript file used to predict the recurrence probability of breast cancer. It contains a series of objects with the "tag", "instruction", "nextques", "patterns" and "responses" properties which map user responses to the patterns and determine the next question to ask. It works by asking the questions defined by the objects, then scanning for the pattern that matches the user's answer.
+### 6.1.9 static/js/iMedbot.js
+The static/js/iMedbot.js file contains code that sets up a session timeout warning, validates user input when resetting a password, checks for valid data when creating an account, and updates a user's information. Additionally, it enables the user to adjust parameters when training models, and to view ROC, SHAP, and patient explanation plots. It works by comparing user inputs to predetermined criteria and displaying a validation message if an input does not match, as well as by generating HTML buttons based on a provided list of strings and creating an HTML element with the corresponding item value from the array.
+### 6.1.10 testSHAP.py
+The file testSHAP.py imports necessary Python libraries and dependencies to perform a SHAP (SHapley Additive exPlanations) analysis, which is then used to train an SVM model and generate a heatmap of the SHAP values. This code forms part of a pipeline to visualize the outputs of machine learning models.
+### 6.1.11 trello_wrapper.py
+The file trello_wrapper.py contains a class which wraps around the Trello API to handle authentication and make API calls, and imports the Requests library to interact with the API. It has methods to get boards, lists, labels, and create cards.
+### 6.1.12 tryModel.py
+tryModel.py is a file that handles model training and validation, importing necessary libraries, classes, and functions from the sklearn library. It also performs input/output operations, reads and processes datasets, and runs predictions, all within the context of a machine learning workflow.
+### 6.1.13 trySpeak.py
+The file trySpeak.py is a standalone Python script that contains application code for a text-to-speech program. It uses the pyttsx3 library to instantiate a text-to-speech engine instance, which is then used to convert text to audio. The script also sets up a text-to-speech engine, passes in a command for it to read, and waits for a response.
+### 6.1.14 utils/generateTableHtml.js
+The file utils/generateTableHtml.js generates a table HTML from a dataset in the form of a CSV string by slicing the string into headers and rows, mapping the rows into objects with properties derived from the headers, and looping through the array of objects to generate the HTML.
+### 6.1.15 utils/modelTraining.py
+utils/modelTraining.py is a code file which provides functions for loading and processing data, creating a model, validating a model, and conducting grid search with cross validation for model parameters. The file imports libraries and modules for preprocessing, model training, and model evaluation, and sets up the environment for training a model in the application.
 ### 6.2 
 6.2.1  
 Get model example:
