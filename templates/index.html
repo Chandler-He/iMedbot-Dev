@@ -34,7 +34,6 @@
 
       gtag("config", "G-1QRS8FCQKN");
     </script>
-    <meta charset="UTF-8" />
     <title>Breast Cancer iMedBot</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -46,8 +45,8 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <!--    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
-    <!--    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
+    <!--    <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
+    <!--    <script src="https://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -85,6 +84,18 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+    <style>
+      .light-theme {
+        background-color: white;
+        color: black;
+      }
+      .dark-theme {
+        background-color: black;
+        color: white;
+      }
+    </style>
+    
   </head>
 
   <body>
@@ -94,7 +105,8 @@
 
     <section class="msger">
       <header class="msger-header">
-        <div class="dropdown">
+        
+        <!--<div class="dropdown">
           <a href="#" class="previous" onclick="dropdown()">&laquo; Previous</a>
           <div id="myDropdown" class="dropdown-content">
             <a href="#" onclick="GoBackToLastMsg()"
@@ -102,22 +114,54 @@
             >
             <a href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
           </div>
+        </div>-->
+
+        <div class="dropdownlist">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            &laquo; Previous
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" onclick="GoBackToLastMsg()">Go back to service choices</a>
+            <a class="dropdown-item" href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
+          </div>
         </div>
+        
+
         <div>
           <button class="my-button" onclick="openLink()">User Manual</button>
         </div>
         <script>
-          // 点击事件处理程序
+          // on click procedures
           function openLink() {
             window.open('http://localhost:5000/static/pdf/file.pdf', '_blank');
           }
         </script>
+
         <div class="msger-header-title">
           <div class="modal"></div>
-
           <i class="fas fa-bug"></i> Breast Cancer iMedbot
           <i class="fas fa-bug"></i>
         </div>
+        <!--change theme function-->
+        <div>
+          <button id="themeButton" onclick="changeTheme()">Change Theme</button>
+          <script>
+            function changeTheme() {
+              var body = document.body;
+              var themeButton = document.getElementById("themeButton");
+              if (body.className === "light-theme") {
+                body.className = "dark-theme";
+                themeButton.innerHTML = "Change to Light Theme";
+              } else {
+                body.className = "light-theme";
+                themeButton.innerHTML = "Change to Dark Theme";
+              }
+            }
+          </script>          
+          <body class="light-theme">
+
+        </div>
+
       </header>
       <main class="msger-chat"></main>
       <div id="hidden_div" style="display: none">
@@ -132,24 +176,7 @@
         >
           Show Dataset!
         </button>
-        <!--          <button id = "changedataset" type="button" class="btn btn- " style="display:none">Change Dataset!</button>-->
-        {# &nbsp&nbsp Please don't say too much, I am still learning now!#}
       </div>
-
-      <!-- currently we do not need this part, if in the future we need user input again, re-add it
-
-    <form class="msger-inputarea" autocomplete="off" >
-
-        <div class="autocomplete" style="width:650px;">
-            <input type="text" class="msger-input" id="textInput" placeholder="Enter your message..." />
-        </div>
-
-        <input id="submit" type="submit" class="msger-send-btn" value="Send" />
-
-
-    </form>
-    -->
-
       <form
         id="form1"
         action="/dataset"
@@ -170,21 +197,20 @@
           style="display: none"
         />
       </form>
-      <!--        <button  title = "start recording when you click" type = "button" class="record-send-btn" id = "start_button" >-->
-      <!--            <img id="start_img" src="static/img/mic.gif" alt="Start">-->
 
-      <!--        </button>-->
       <div class="bottom">
-        <a
+        <!--<a
           class="copyright text-dark"
           href="https://scholar.google.com/citations?hl=en&user=6Yid6tMAAAAJ, target="_blank"
-          style="text-align: left"
-          >Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights
-          reserved.</a
-        >
-        <a class="copyright text-dark" href="#" onclick="error_report()"
-          >Error Report</a
-        >
+          style="text-align: left">Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights reserved.</a
+        >-->
+        <a class="btn btn-info text-light copyright" href="https://scholar.google.com/citations?hl=en&user=6Yid6tMAAAAJ" target="_blank">
+          Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights reserved.
+        </a>
+    
+        <!--<a class="copyright text-dark" href="#" onclick="error_report()">Error Report</a>-->
+        <a class="btn btn-danger text-light" href="#" onclick="error_report()">Error Report</a>
+
       </div>
     </section>
 

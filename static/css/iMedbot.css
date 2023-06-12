@@ -1,5 +1,6 @@
+/* root css styles */
 :root {
-  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --body-bg: linear-gradient(135deg, #1553ae 0%, #2a9e57 100%);
   --msger-bg: #fff;
   --border: 2px solid #ddd;
   --left-msg-bg: #ececec;
@@ -157,7 +158,6 @@ body {
   font-size: 1em;
 }
 
-
 .msger-input {
   flex: 1;
   background: #ddd;
@@ -183,38 +183,7 @@ body {
 .msger-send-btn:hover {
   background: rgb(0, 180, 50);
   /*box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);*/
-
 }
-
-/*.normal-btn {*/
-/*  !*padding: 4px 60px;*!*/
-/*  width: 100px;*/
-/*  height: 50px;*/
-/*  margin-left: 20px;*/
-/*  margin-right: 20px;*/
-/*  margin-top: 10px;*/
-/*  margin-bottom: 10px;*/
-/*  background: rgb(0, 196, 65);*/
-/*  border-radius: 12px;*/
-/*  font-size: 20px;*/
-/*  color: #fff;*/
-/*  font-weight: bold;*/
-/*  cursor: pointer;*/
-/*  transition: background 0.23s;*/
-/*}*/
-
-/*.record-send-btn {*/
-/*  margin-left: 10px;*/
-/*  margin-right: 10px;*/
-/*  !*height: 40px;*!*/
-/*  background: dodgerblue;*/
-/*  color: #fff;*/
-/*  font-weight: bold;*/
-/*  cursor: pointer;*/
-/*  transition: background 0.23s;*/
-/*  !*background-image:url(../img/microphone.svg);*!*/
-/*  !*background-repeat:no-repeat;*!*/
-/*}*/
 
 .record-send-btn:hover {
   background: blue;
@@ -234,10 +203,10 @@ body {
   width: 40px;
   height: 40px;
   margin: -76px 0 0 -76px;
-  border: 8px solid #DCCBC9;
+  border: 8px solid #dccbc9;
   border-radius: 50%;
-  border-top: 8px solid #A52A2A;
-  border-bottom: 8px solid #A52A2A;
+  border-top: 8px solid #a52a2a;
+  border-bottom: 8px solid #a52a2a;
   -webkit-animation: spin 1.5s linear infinite;
   animation: spin 1.5s linear infinite;
 }
@@ -251,7 +220,6 @@ body {
     -webkit-transform: rotate(360deg);
   }
 }
-
 
 @keyframes spin {
   0% {
@@ -286,7 +254,6 @@ body.shapGenerating {
 .hint-loading {
   font-size: 15px;
   color: green;
-
 }
 
 .hint-loading:after {
@@ -316,7 +283,6 @@ body.shapGenerating {
   display: flex;
   padding: 10px;
   position: relative;
-
 }
 
 .autocomplete-items {
@@ -363,22 +329,22 @@ label.star {
   padding: 10px;
   font-size: 36px;
   color: #444;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
 input.star:checked~label.star:before {
-  content: '\f005';
-  color: #FD4;
-  transition: all .25s;
+  content: "\f005";
+  color: #fd4;
+  transition: all 0.25s;
 }
 
 input.star-5:checked~label.star:before {
-  color: #FE7;
+  color: #fe7;
   text-shadow: 0 0 20px #952;
 }
 
 input.star-1:checked~label.star:before {
-  color: #F62;
+  color: #f62;
 }
 
 label.star:hover {
@@ -386,7 +352,7 @@ label.star:hover {
 }
 
 label.star:before {
-  content: '\f006';
+  content: "\f006";
   font-family: FontAwesome;
 }
 
@@ -413,9 +379,7 @@ textarea {
   margin: 50px;
 }
 
-
 .previous {
-
   background: #28a745;
   text-decoration: none;
   display: inline-block;
@@ -446,7 +410,6 @@ textarea {
 }
 
 [data-tooltip]:after {
-
   content: attr(data-tooltip);
   position: absolute;
   right: 50%;
@@ -483,13 +446,11 @@ div[data-tooltip]:after {
   border-width: 1.5px;
 }
 
-
 [data-tooltip1] {
   position: relative;
 }
 
 [data-tooltip1]:after {
-
   content: attr(data-tooltip1);
   position: absolute;
   left: 50%;
@@ -514,7 +475,6 @@ div[data-tooltip1]:after {
   left: 5px !important;
 }
 
-
 .bottom {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -530,8 +490,6 @@ div[data-tooltip1]:after {
 .flexbuttons {
   display: block;
   justify-content: start;
-
-
 }
 
 .fit-button {
@@ -545,7 +503,6 @@ div[data-tooltip1]:after {
 
 .fit-button:focus {
   background: #5cb85c;
-
 }
 
 .dropdown-content {
@@ -574,11 +531,9 @@ div[data-tooltip1]:after {
   background-color: #ddd;
 }
 
-
 .show {
   display: block;
 }
-
 
 .dropdown-content1 {
   display: none;
@@ -610,6 +565,28 @@ div[data-tooltip1]:after {
   display: block;
 }
 
+/* previous dropdown button */
+.dropdown-toggle {
+  color: white;
+  background-color: rgba(7, 133, 49, 0.897);
+  border: none;
+  padding: 5px 10px;
+  transition-duration: 0.4s;
+}
+
+.dropdown-toggle:hover {
+  background-color: #5a6268;
+}
+
+.dropdown-item {
+  color: #6c757d;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* user manual */
 .my-button {
   display: inline-block;
   padding: 5px 10px;
@@ -617,11 +594,15 @@ div[data-tooltip1]:after {
   font-weight: bold;
   text-decoration: none;
   color: #ffffff;
-  background-color: grey;
+  background-color: rgba(7, 133, 49, 0.897);
   border-radius: 5px;
   border: none;
   cursor: pointer;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.my-button:hover {
+  background-color: #000000;
 }
 
 .footer {
@@ -637,4 +618,48 @@ div[data-tooltip1]:after {
 
 .footer a:hover {
   text-decoration: underline;
+}
+
+/* error report */
+.btn-danger {
+  border: none;
+  color: white;
+  padding: 4px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px 5px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: white;
+  color: black;
+}
+
+/* copyright */
+.btn-info {
+  border: none;
+  background-color: rgba(7, 133, 49, 0.897);
+  padding: 4px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px 5px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.btn-info:hover {
+  background-color: white;
+  color: black;
+}
+
+.copyright {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
