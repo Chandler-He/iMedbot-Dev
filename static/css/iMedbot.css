@@ -62,7 +62,35 @@ body {
 
 .msger-header-title {
   grid-column-start: 3;
+
+  font-family: "Arial", sans-serif;
+  font-size: 20px;
+  color: #1553ae;
+  display: flex;
+  align-items: center;
 }
+
+/* bug symble */
+.bug {
+  font-size: 16px;
+  color: #f00;
+  animation: spin 2s linear infinite;
+  margin-right: 2px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+
+
+
 
 .greeting {
   grid-column-start: 5;
