@@ -18,13 +18,13 @@ input_question10 =
     '  {"tag": "ethnicity",\n' +
     ' "instruction": "ethnicity of patient",\n' +
     '  "nextques": "smoking",\n' +
-    '  "patterns": {"not hispanic":"0","hispanic":"1"},\n' +
+    '  "patterns": {"not Hispanic":"0","Hispanic":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "smoking",\n' +
     '  "instruction": "smoking history of patient",\n' +
     '  "nextques": "alcohol_useage",\n' +
-    '  "patterns": {"ex smoker":"0", "non smoker":"1","cigarettes":"2" , "cigar":"3"},\n' +
+    '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "alcohol_useage",\n' +
@@ -54,31 +54,31 @@ input_question10 =
     '  {"tag": "ER",\n' +
     ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-low-positive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
-    '  "patterns": {"ER positive":"0","ER negative":"1","ER lowpositive":"2"},\n' +
+    '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-low-positive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "ER_percent",\n' +
     ' "instruction": "ER Percent means percent of cell stain positive for ER receptors",\n' +
     '  "nextques": "PR",\n' +
-    '  "patterns": {"ER_percent:0-20":"1","ER_percent:20-90":"2","ER_percent:90-100":"0"},\n' +
+    '  "patterns": {"ER_percent: 0-20":"1","ER_percent: 20-90":"2","ER_percent: 90-100":"0"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "PR",\n' +
    ' "instruction": "PR-positive: Breast cancers with progesterone receptors are called PR-positive (or PR+) cancers.",\n' +
     '  "nextques": "PR_percent",\n' +
-    '  "patterns": {"PR low-positive":"0","PR positive":"1","PR negative":"2"},\n' +
+    '  "patterns": {"PR-low-positive":"0","PR-positive":"1","PR-negative":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n'+
      '  {"tag": "PR_percent",\n' +
     '  "instruction": "Receptors are proteins that attach to certain substances. Progesterone receptor (PR) tests look for receptors that attach to the hormones estrogen and progesterone in a sample of breast cancer tissue. PR Percent means percent of cell stain positive for PR receptors",\n' +
     '  "nextques": "HER2",\n' +
-    '  "patterns": {"PR_percent:0-20":"2", "PR_percent:20-90":"0","PR_percent:90-100":"1"},\n' +
+    '  "patterns": {"PR_percent: 0-20":"2", "PR_percent: 20-90":"0","PR_percent: 90-100":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
         '  {"tag": "HER2",\n' +
     ' "instruction": "composite of size and number of positive nodes",\n' +
     '  "nextques": "n_tnm_stage",\n' +
-    '  "patterns": {"HER2 negative":"0","HER2 positive":"1"},\n' +
+    '  "patterns": {"HER2-negative":"0","HER2-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "n_tnm_stage",\n' +

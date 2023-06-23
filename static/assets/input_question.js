@@ -44,7 +44,7 @@ input_question =
     '  {"tag": "ER",\n' +
     ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-low-positive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
-    '  "patterns": {"ER positive":"0","ER negative":"1","ER lowpositive":"2"},\n' +
+    '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-lowpositive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "ER_percent",\n' +
@@ -74,7 +74,7 @@ input_question =
     '  {"tag": "lymph_node_status",\n' +
     ' "instruction": "Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-negative means none of the axillary lymph nodes contain cancer. Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
     '  "nextques": "Histology",\n' +
-    '  "patterns": {"lymph_node negative":"0","lymph_node positive":"1"},\n' +
+    '  "patterns": {"lymph_node-negative":"0","lymph_node-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "Histology",\n' +

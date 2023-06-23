@@ -25,7 +25,7 @@ input_question5 =
     '  {"tag": "smoking",\n' +
     '  "instruction": "smoking history of patient",\n' +
     '  "nextques": "family_history",\n' +
-    '  "patterns": {"ex smoker":"0", "non smoker":"1","cigarettes":"2" , "cigar":"4","chewing tobacco":"3"},\n' +
+    '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
@@ -53,7 +53,7 @@ input_question5 =
     '  {"tag": "ER",\n' +
     ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-low-positive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
-    '  "patterns": {"ER positive":"0","ER negative":"1","ER lowpositive":"2"},\n' +
+    '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-low-positive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
 
     '  },\n' +
@@ -61,14 +61,14 @@ input_question5 =
     '  {"tag": "ER_percent",\n' +
     ' "instruction": "ER Percent means percent of cell stain positive for ER receptors",\n' +
     '  "nextques": "PR",\n' +
-    '  "patterns": {"ER_percent:0-20":"1","ER_percent:20-90":"2","ER_percent:90-100":"0"},\n' +
+    '  "patterns": {"ER_percent: 0-20":"1","ER_percent: 20-90":"2","ER_percent: 90-100":"0"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
      '  {"tag": "PR",\n' +
    ' "instruction": "PR-positive: Breast cancers with progesterone receptors are called PR-positive (or PR+) cancers.",\n' +
     '  "nextques": "PR_percent",\n' +
-    '  "patterns": {"PR low-positive":"1","PR positive":"0","PR negative":"2"},\n' +
+    '  "patterns": {"PR-low-positive":"1","PR-positive":"0","PR-negative":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
@@ -80,7 +80,7 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "P53",\n' +
-    '  "instruction": "whether P53 is mutated.  p53 positivity was defined as a single malignant breast epithelial cell with positive nuclear staining for p53.",\n' +
+    '  "instruction": "whether P53 is mutated.  P53 positivity was defined as a single malignant breast epithelial cell with positive nuclear staining for P53.",\n' +
     '  "nextques": "HER2",\n' +
     '  "patterns": {"P53 negative":"0", "P53 positive":"1","P53 low-positive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -89,7 +89,7 @@ input_question5 =
     '  {"tag": "HER2",\n' +
     ' "instruction": "composite of size and number of positive nodes",\n' +
     '  "nextques": "t_tnm_stage",\n' +
-    '  "patterns": {"HER2 negative":"0","HER2 positive":"1"},\n' +
+    '  "patterns": {"HER2-negative":"0","HER2-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 

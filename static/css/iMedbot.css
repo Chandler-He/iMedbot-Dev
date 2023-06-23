@@ -3,8 +3,8 @@
   --body-bg: linear-gradient(135deg, #1553ae 0%, #2a9e57 100%);
   --msger-bg: #fff;
   --border: 2px solid #ddd;
-  --left-msg-bg: #ececec;
-  --right-msg-bg: #579ffb;
+  --left-msg-bg: #1e0707;
+  --right-msg-bg: #0f2c52;
 }
 
 html {
@@ -88,10 +88,6 @@ body {
   }
 }
 
-
-
-
-
 .greeting {
   grid-column-start: 5;
 }
@@ -156,6 +152,7 @@ body {
 
 .left-msg .msg-bubble {
   border-bottom-left-radius: 0;
+  color: #fff;
 }
 
 .right-msg {
@@ -217,47 +214,12 @@ body {
   background: blue;
 }
 
+/* whole backgroud color */
 .msger-chat {
-  background-color: #fcfcfe;
+  background-color: #333;
   /*background-image: url("");*/
 }
 
-.modal {
-  position: fixed;
-  display: none;
-  left: 54%;
-  top: 56%;
-  z-index: 1000;
-  width: 40px;
-  height: 40px;
-  margin: -76px 0 0 -76px;
-  border: 8px solid #dccbc9;
-  border-radius: 50%;
-  border-top: 8px solid #a52a2a;
-  border-bottom: 8px solid #a52a2a;
-  -webkit-animation: spin 1.5s linear infinite;
-  animation: spin 1.5s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 /* Anytime the body has the loading class, our
    modal element will be visible */

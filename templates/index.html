@@ -84,7 +84,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-
+    <!--theme change-->
     <style>
       .light-theme {
         background-color: white;
@@ -105,24 +105,13 @@
 
     <section class="msger">
       <header class="msger-header">
-        
-        <!--<div class="dropdown">
-          <a href="#" class="previous" onclick="dropdown()">&laquo; Previous</a>
-          <div id="myDropdown" class="dropdown-content">
-            <a href="#" onclick="GoBackToLastMsg()"
-              >Go back to service choices</a
-            >
-            <a href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
-          </div>
-        </div>-->
-
         <div class="dropdownlist">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             &laquo; Previous
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#" onclick="GoBackToLastMsg()">Go back to service choices</a>
-            <a class="dropdown-item" href="#" onclick="GoBackDialog()">Go back to previous dialog</a>
+            <a class="dropdown-item" href="#" onclick="GoBackToLastMsg()">Back to Service Choices</a>
+            <a class="dropdown-item" href="#" onclick="GoBackDialog()">Back to Previous Dialogs</a>
           </div>
         </div>
         
@@ -200,18 +189,10 @@
       </form>
 
       <div class="bottom">
-        <!--<a
-          class="copyright text-dark"
-          href="https://scholar.google.com/citations?hl=en&user=6Yid6tMAAAAJ, target="_blank"
-          style="text-align: left">Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights reserved.</a
-        >-->
         <a class="btn btn-info text-light copyright" href="https://scholar.google.com/citations?hl=en&user=6Yid6tMAAAAJ" target="_blank">
           Copyright © 2023 Xia Jiang, University of Pittsburgh. All rights reserved.
         </a>
-    
-        <!--<a class="copyright text-dark" href="#" onclick="error_report()">Error Report</a>-->
         <a class="btn btn-danger text-light" href="#" onclick="error_report()">Error Report</a>
-
       </div>
     </section>
 
