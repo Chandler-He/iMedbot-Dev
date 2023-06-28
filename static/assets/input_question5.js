@@ -51,9 +51,9 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "ER",\n' +
-    ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-low-positive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
+    ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
-    '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-low-positive":"2"},\n' +
+    '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-lowpositive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
 
     '  },\n' +
