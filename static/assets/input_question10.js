@@ -28,9 +28,9 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "alcohol_useage",\n' +
-    ' "instruction": "Choose the frequency of alcohol useage",\n' +
+    ' "instruction": "These are the indicators of alcohol usage. nos: Not Specified; Abstainer:  Someone who does not consume alcohol at all.; Moderate drinker: Someone who consumes alcohol in moderation, typically defined as up to one drink per day for women and up to two drinks per day for men.; Former alcohol use: they had a previous history of drinking alcohol, but they have chosen to abstain or have successfully quit drinking.; Alcohol dependent/alcoholic: Someone who has developed a physical or psychological dependence on alcohol and may experience withdrawal symptoms or have difficulty controlling their alcohol consumption. ",\n' +
     '  "nextques": "family_history",\n' +
-    '  "patterns": {"alcohol use, nos":"2","no alcohol use":"1","moderate alcohol use":"0","former alcohol use":"3","heavy alcohol use":"4"},\n' +
+    '  "patterns": {"Alcohol use: nos":"2","Abstainer":"1","Moderate drinker":"0","Former alcohol use":"3","Alcohol dependent/alcoholic":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "family_history",\n' +
