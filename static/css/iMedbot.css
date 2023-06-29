@@ -1,14 +1,24 @@
 /* root css styles */
 :root {
-  --body-bg: linear-gradient(135deg, #1553ae 0%, #2a9e57 100%);
+  --body-bg: linear-gradient(135deg, #256de0 0%, #ded3a8 100%);
   --msger-bg: #fff;
   --border: 2px solid #ddd;
-  --left-msg-bg: #1e0707;
+  --left-msg-bg: #0f2c52;
   --right-msg-bg: #0f2c52;
 }
 
+/*tml page rendering*/
 html {
   box-sizing: border-box;
+
+}
+
+html.dark-mode {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.dark-mode img {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 *,
@@ -26,7 +36,39 @@ body {
   height: 100vh;
   background-image: var(--body-bg);
   font-family: Helvetica, sans-serif;
+  transition: all 300ms;
+
 }
+
+/* theme button css */
+.themeButton {
+  padding: 2px 5px;
+  font-size: 20px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: var(--text-color);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px var(--secondary-color);
+  transition: all 0.2s ease;
+}
+
+.themeButton:hover {
+  background-color: var(--secondary-color);
+  box-shadow: 0 5px var(--primary-color);
+  transform: translateY(4px);
+}
+
+
+
+/* whole backgroud color */
+.msger-chat {
+  background-color: #fcfbfb;
+  /*background-image: url("");*/
+}
+
 
 .msger {
   display: flex;
@@ -214,11 +256,6 @@ body {
   background: blue;
 }
 
-/* whole backgroud color */
-.msger-chat {
-  background-color: #333;
-  /*background-image: url("");*/
-}
 
 
 /* Anytime the body has the loading class, our

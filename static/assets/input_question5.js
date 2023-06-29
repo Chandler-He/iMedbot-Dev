@@ -23,7 +23,7 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "smoking",\n' +
-    '  "instruction": "smoking history of patient",\n' +
+    '  "instruction": "smoking history of the patient",\n' +
     '  "nextques": "family_history",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +

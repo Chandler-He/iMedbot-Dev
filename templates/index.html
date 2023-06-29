@@ -2,6 +2,9 @@
 <html lang="en">
   {#{% extends "base.html" %}#} {% block content %}
   <head>
+    
+      
+      
     {#
     <!-- Google tag (gtag.js) -->
     #} {#
@@ -84,17 +87,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-    <!--theme change-->
-    <style>
-      .light-theme {
-        background-color: white;
-        color: black;
-      }
-      .dark-theme {
-        background-color: black;
-        color: white;
-      }
-    </style>
+    
     
   </head>
 
@@ -135,28 +128,19 @@
 
         <!--change theme function-->
         <div>
-          <button id="themeButton" onclick="changeTheme()">Change Theme</button>
-          <script>
-            function changeTheme() {
-              var body = document.body;
-              var themeButton = document.getElementById("themeButton");
-              if (body.className === "light-theme") {
-                body.className = "dark-theme";
-                themeButton.innerHTML = "Change to Light Theme";
-              } else {
-                body.className = "light-theme";
-                themeButton.innerHTML = "Change to Dark Theme";
-              }
-            }
-          </script>          
-          <body class="light-theme">
+          <button class="themeButton"> &#127763 </button>
         </div>
+        
+        
+
+        
+
 
       </header>
       <main class="msger-chat"></main>
-      <div id="hidden_div" style="display: none">
+      <!--<div id="hidden_div" style="display: none">
         <table id="hidden_table" class="table table-striped"></table>
-      </div>
+      </div>-->
       <div class="hint-loading" id="hint">
         <button
           id="showdataset"

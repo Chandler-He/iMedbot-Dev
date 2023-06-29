@@ -23,7 +23,7 @@ input_question =
     '  },\n' +
 
      '  {"tag": "alcohol_useage",\n' +
-    ' "instruction": "These are the indicators of alcohol usage. nos: Not Specified; Abstainer:  Someone who does not consume alcohol at all.; Moderate drinker: Someone who consumes alcohol in moderation, typically defined as up to one drink per day for women and up to two drinks per day for men.; Former alcohol use: they had a previous history of drinking alcohol, but they have chosen to abstain or have successfully quit drinking.;",\n' +
+    ' "instruction": "These are the indicators of alcohol usage. nos: Not other specified; Abstainer:  Someone who does not consume alcohol at all.; Moderate drinker: Someone who consumes alcohol in moderation, typically defined as up to one drink per day for women and up to two drinks per day for men.; Former alcohol use: they had a previous history of drinking alcohol, but they have chosen to abstain or have successfully quit drinking.;",\n' +
     '  "nextques": "age_at_diagnosis",\n' +
     '  "patterns": {"Alcohol use: nos":"0","Abstainer":"1","Moderate drinker":"2","Former alcohol use":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +

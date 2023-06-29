@@ -155,6 +155,14 @@ window.onclick = function (event) {
   }
 };
 
+// change theme js function
+document.querySelector('.themeButton').addEventListener('click', function() {
+  document.documentElement.classList.toggle('dark-mode');
+});
+
+
+
+
 function GoBackDialog() {
   message = document.getElementsByClassName("msg");
   text = document.getElementsByClassName("msg-text");
@@ -1137,6 +1145,7 @@ function viewDataset(dataset, name, size) {
   };
   showTable.addEventListener("click", openWindow.bind(event, tableHTML), false);
 }
+
 function submit() {
   //showdataset.style = "display:inline"
   console.log("enter submit");
@@ -2187,7 +2196,7 @@ function predictanotherpatient() {
       BOT_NAME,
       NURSE_IMG,
       "left",
-      "For now, I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me which year you want to go by?",
+      "For now, I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me your choice?",
       "treatment_year instruction",
       { "5 year": "5 year", "10 year": "10 year", "15 year": "15 year" }
     );
@@ -2516,6 +2525,7 @@ function appendMessage(
                     </div>
                     </div>`;
   }
+  
   //Simple solution for small apps
   let buttonHtml = generateBtnGroup(btnGroup, tag);
   original_text = text;
@@ -2914,7 +2924,7 @@ function showNext(e) {
       BOT_NAME,
       NURSE_IMG,
       "left",
-      "I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me which year you want to go by?",
+      "I can predict 5-year, 10-year, or 15-year breast cancer metastasis for your patient, please tell me your choice?",
       "treatment_year instruction",
       { "5 year": "5 year", "10 year": "10 year", "15 year": "15 year" }
     );
@@ -3039,6 +3049,7 @@ function getinput(input_copy) {
   });
 }
 
+// popup html function
 function generateBtnGroup(btn_group) {
   let buttonHtml = "";
   let btn_array = Object.values(btn_group);
