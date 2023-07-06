@@ -17,12 +17,12 @@ input_question5 =
 
     '  {"tag": "race",\n' +
     ' "instruction": "choose the race of the patient",\n' +
-    '  "nextques": "smoking",\n' +
+    '  "nextques": "smoking_history",\n' +
     '  "patterns": {"White":"0","Black":"1","American Indian or Alaskan Native":"3","Asian":"2","Native Hawaiian or Other Pacific Islander":"4","Hispanic":"5"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "smoking",\n' +
+    '  {"tag": "smoking_history",\n' +
     '  "instruction": "smoking history of the patient",\n' +
     '  "nextques": "family_history",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +

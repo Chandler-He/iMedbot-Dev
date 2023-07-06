@@ -85,12 +85,12 @@ input_question =
     '  },\n' +
     '  {"tag": "tumor_size",\n' +
    ' "instruction": "Size of tumor is measured in mm.",\n' +
-    '  "nextques": "grade",\n' +
+    '  "nextques": "disease_grade",\n' +
     '  "patterns": {"0-32":"0","32-70":"1","greater than 70":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "grade",\n' +
+    '  {"tag": "disease_grade",\n' +
     '  "instruction": "Grade of disease: grade 1 – looks most like normal breast cells and is usually slow-growing; grade 2 – looks less like normal cells and is growing faster; grade 3 – looks different to normal breast cells and is usually fast-growing",\n' +
     '  "nextques": "histology2",\n' +
     '  "patterns": {"grade1":"0","grade2":"1","grade3":"2"},\n' +

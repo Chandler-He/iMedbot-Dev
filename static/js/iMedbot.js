@@ -2541,7 +2541,7 @@ function appendMessage(
           "</a>" +
           " (Please " +
           "<a href='#'>click here</a>" +
-          " for more information about the meaning of the choices)";
+          " for more information about the meaning of the choices)?";
       } else {
         text =
           text +

@@ -17,11 +17,11 @@ input_question10 =
 
     '  {"tag": "ethnicity",\n' +
     ' "instruction": "ethnicity of patient",\n' +
-    '  "nextques": "smoking",\n' +
+    '  "nextques": "smoking_history",\n' +
     '  "patterns": {"not Hispanic":"0","Hispanic":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
-    '  {"tag": "smoking",\n' +
+    '  {"tag": "smoking_history",\n' +
     '  "instruction": "smoking history of the patient",\n' +
     '  "nextques": "alcohol_useage",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"3"},\n' +
@@ -82,22 +82,22 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "n_tnm_stage",\n' +
-    ' "instruction": "X: The lymph nodes were not evaluated. 0: Either of the following: no cancer was found in the lymph nodes or only areas of cancer smaller than 0.2 mm are in the lymph nodes. 1: The cancer has spread to 1 to 3 axillary lymph nodes and/or the internal mammary lymph nodes. 2: The cancer has spread to 4 to 9 axillary lymph nodes. 3: The cancer has spread to 10 or more axillary lymph nodes, or it has spread to the lymph nodes located under the clavicle, or collarbone. ",\n' +
+    ' "instruction": "0: Either of the following: no cancer was found in the lymph nodes or only areas of cancer smaller than 0.2 mm are in the lymph nodes. 1: The cancer has spread to 1 to 3 axillary lymph nodes and/or the internal mammary lymph nodes. 2: The cancer has spread to 4 to 9 axillary lymph nodes. 3: The cancer has spread to 10 or more axillary lymph nodes, or it has spread to the lymph nodes located under the clavicle, or collarbone. X means: The lymph nodes were not evaluated.",\n' +
     '  "nextques": "stage",\n' +
     '  "patterns": {"n_tnm_stage 0":"1","n_tnm_stage 1":"0","n_tnm_stage 2":"2","n_tnm_stage 3":"4","n_tnm_stage X":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "stage",\n' +
     ' "instruction": "composite of size and number of positive nodes",\n' +
-    '  "nextques": "lymph_node_positive",\n' +
+    '  "nextques": "#_of_positive_lymph_nodes",\n' +
     '  "patterns": {"stage 0":"3","stage 1":"0","stage 2":"2","stage 3":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
 
 
-    '  {"tag": "lymph_node_positive",\n' +
-    ' "instruction": "number of positive lymph nodes. Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
+    '  {"tag": "#_of_positive_lymph_nodes",\n' +
+    ' "instruction": "Number of positive lymph nodes. Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
     '  "nextques": "Histology",\n' +
     '  "patterns": {"0 positive lymph node":"1","1-8 positive lymph nodes":"2","greater than 8 positive lymph nodes":"0"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -106,12 +106,12 @@ input_question10 =
 
     '  {"tag": "Histology",\n' +
     ' "instruction": " A description of a tumor based on how abnormal the cancer cells and tissue look under a microscope and how quickly the cancer cells are likely to grow and spread. Ductal means an overgrowth of the cells that line the small tubes (ducts) inside the breast, while lobular is an overgrowth of cell lining the milk glands (lobules).",\n' +
-    '  "nextques": "grade",\n' +
+    '  "nextques": "disease_grade",\n' +
     '  "patterns": {"Histology: duct":"1","Histology: mixed duct and lobular":"0","Histology: lobular":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "grade",\n' +
+    '  {"tag": "disease_grade",\n' +
     '  "instruction": "Grade of disease: grade 1 – looks most like normal breast cells and is usually slow-growing; grade 2 – looks less like normal cells and is growing faster; grade 3 – looks different to normal breast cells and is usually fast-growing",\n' +
     '  "nextques": "DCIS_level",\n' +
     '  "patterns": {"grade1":"0","grade2":"1","grade3":"2"},\n' +
@@ -130,7 +130,7 @@ input_question10 =
 
 
     '  {"tag": "surgical_margins",\n' +
-    ' "instruction": "whether there is a residual tumor",\n' +
+    ' "instruction": "Surgical Margins: A surgical margin refers to the area of tissue surrounding a surgically removed tumor or lesion. It represents the outer edge or border of the excised tissue specimen. The purpose of evaluating the surgical margin is to determine whether the entire tumor has been successfully removed or if there are any cancer cells remaining at the edges of the excised tissue. Residual tumor: it refers to a portion of tumor tissue that remains in the body after an attempted surgical removal or other forms of treatment. It indicates that not all of the tumor cells were successfully eliminated during the intervention. The presence of a residual tumor suggests that there is still a potential risk of disease progression or recurrence.",\n' +
     '  "nextques": "none",\n' +
     '  "patterns": {"no residual tumor":"0","microscopic residual tumor":"3","residual tumor,nos":"1","no primary site surgery":"2","margins not evaluable":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
