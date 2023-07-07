@@ -1,10 +1,10 @@
 input_question5 =
     '  {' +
     '"START":[{"tag": "Instruction",\n' +
-    ' "instruction": "We can either predict the probability of recurrence or help you train a model online.",\n' +
+    ' "instruction": "We can either predict the probability of 5-year breast cancer metastasis or help you train a model online.",\n' +
     '  "nextques": "Predict or Train a Model",\n' +
     '   "patterns": {"Predict":"1","Train a Model":"2"},\n' +
-    '   "responses": ["I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"]\n'+
+    '   "responses": ["I can either predict breast cancer metastasis for your patient based on our deep learning models trained using a existing dataset,or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please enter 1 for the first choice, or 2 for the second choice"]\n'+
     '  }],\n' +
 
     '"Predict": [' +
@@ -16,14 +16,14 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "race",\n' +
-    ' "instruction": "choose the race of the patient",\n' +
+    ' "instruction": "Choose the race of the patient from the following list",\n' +
     '  "nextques": "smoking_history",\n' +
     '  "patterns": {"White":"0","Black":"1","American Indian or Alaskan Native":"3","Asian":"2","Native Hawaiian or Other Pacific Islander":"4","Hispanic":"5"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "smoking_history",\n' +
-    '  "instruction": "This defines the smoking status of the patient, you can infer from the options that we provided.",\n' +
+    '  "instruction": "Please choose the smoking history of the patient from the list below.",\n' +
     '  "nextques": "family_history",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
