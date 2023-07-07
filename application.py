@@ -1018,6 +1018,7 @@ def get_model_parameter():
         return {"auc": "error", "src": str(e)}
 
 
+# user manual open pdf function
 @application.route("/staticpdf")
 def show_static_pdf():
     return redirect("./static/pdf/file.pdf")

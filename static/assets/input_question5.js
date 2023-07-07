@@ -23,35 +23,35 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "smoking_history",\n' +
-    '  "instruction": "smoking history of the patient",\n' +
+    '  "instruction": "This defines the smoking status of the patient, you can infer from the options that we provided.",\n' +
     '  "nextques": "family_history",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "family_history",\n' +
-    ' "instruction": "family history of cancer",\n' +
+    ' "instruction": "family history of cancer, nos: means not other specified.",\n' +
     '  "nextques": "age_at_diagnosis",\n' +
     '  "patterns": {"no family history of cancer":"1","family history of other cancer":"2","family history of this cancer":"3","family history of this and other cancer":"0","family history of cancer, nos":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "age_at_diagnosis",\n' +
-    ' "instruction": "choose the age at the diagnosis",\n' +
+    ' "instruction": "choose the age of your patient belongs to which year range.",\n' +
     '  "nextques": "TNEG",\n' +
-    '  "patterns": {"0-49":"2","50-69":"1","greater than 69":"0"},\n' +
+    '  "patterns": {"0-49":"2","50-69":"1"," > 69":"0"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "TNEG",\n' +
-    ' "instruction": "triple negative status in terms of patient being ER, PR and HER2 negative",\n' +
+    ' "instruction": "TENG: *t*riple *neg*ative status in terms of patient being ER, PR and HER2 negative",\n' +
     '  "nextques": "ER",\n' +
     '  "patterns": {"no triple negative status":"0","triple negative status":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "ER",\n' +
-    ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
+    ' "instruction": "ER: Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
     '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-lowpositive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -66,7 +66,7 @@ input_question5 =
     '  },\n' +
 
      '  {"tag": "PR",\n' +
-   ' "instruction": "PR-positive: Breast cancers with progesterone receptors are called PR-positive (or PR+) cancers.",\n' +
+   ' "instruction": "PR_positive: It might refer to a metric used in public relations to measure the level of positive sentiment or perception surrounding a particular brand, company, or individual. This metric could be based on factors such as media coverage, social media mentions, customer feedback, or surveys that assess public opinion. PR_lowpositive: This term could suggest a lower level of positive sentiment compared to PR_positive. It may indicate a moderate or mild positive perception, or it could be used to differentiate between various levels of positivity when measuring public opinion or sentiment. PR_negative: Similarly, this term might refer to a metric used in public relations to measure the level of negative sentiment or perception surrounding a brand, company, or individual. It could encompass factors such as negative media coverage, social media mentions with unfavorable sentiment, customer complaints, or surveys indicating negative public opinion.",\n' +
     '  "nextques": "PR_percent",\n' +
     '  "patterns": {"PR-low-positive":"1","PR-positive":"0","PR-negative":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -80,14 +80,14 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "P53",\n' +
-    '  "instruction": "whether P53 is mutated.  P53 positivity was defined as a single malignant breast epithelial cell with positive nuclear staining for P53.",\n' +
+    '  "instruction": "P53: whether P53 is mutated.  P53 positivity was defined as a single malignant breast epithelial cell with positive nuclear staining for P53.",\n' +
     '  "nextques": "HER2",\n' +
     '  "patterns": {"P53 negative":"0", "P53 positive":"1","P53 low-positive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
     '  {"tag": "HER2",\n' +
-    ' "instruction": "composite of size and number of positive nodes",\n' +
+    ' "instruction": "HER2 expression refers to the level of human epidermal growth factor receptor 2 (HER2) protein found on the surface of certain cells, particularly cancer cells. HER2 is a type of protein known as a receptor tyrosine kinase, which plays a role in cell growth and division. In normal cells, HER2 helps regulate these processes, but in some cases, HER2 can become overexpressed or amplified, leading to uncontrolled cell growth and division.",\n' +
     '  "nextques": "t_tnm_stage",\n' +
     '  "patterns": {"HER2-negative":"0","HER2-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -151,7 +151,7 @@ input_question5 =
     '  },\n' +
 
     '  {"tag": "surgical_margins",\n' +
-    ' "instruction": "whether there is a residual tumor",\n' +
+    ' "instruction": "Surgical Margins: A surgical margin refers to the area of tissue surrounding a surgically removed tumor or lesion. It represents the outer edge or border of the excised tissue specimen. The purpose of evaluating the surgical margin is to determine whether the entire tumor has been successfully removed or if there are any cancer cells remaining at the edges of the excised tissue. Residual tumor: it refers to a portion of tumor tissue that remains in the body after an attempted surgical removal or other forms of treatment. It indicates that not all of the tumor cells were successfully eliminated during the intervention. The presence of a residual tumor suggests that there is still a potential risk of disease progression or recurrence.",\n' +
     '  "nextques": "none",\n' +
     '  "patterns": {"no residual tumor":"0","microscopic residual tumor":"3","residual tumor,nos":"1","no primary site surgery":"2","margins not evaluable":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +

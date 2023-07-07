@@ -22,7 +22,7 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "smoking_history",\n' +
-    '  "instruction": "smoking history of the patient",\n' +
+    '  "instruction": "This defines the smoking status of the patient, you can infer from the options that we provided.",\n' +
     '  "nextques": "alcohol_useage",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -34,25 +34,25 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "family_history",\n' +
-    ' "instruction": "family history of cancer",\n' +
+    ' "instruction": "family history of cancer, nos: means not other specified",\n' +
     '  "nextques": "age_at_diagnosis",\n' +
     '  "patterns": {"no family history of cancer":"0","family history of other cancer":"1","family history of this cancer":"2","family history of this and other cancer":"3","family history of cancer, nos":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "age_at_diagnosis",\n' +
-    ' "instruction": "choose the age at the diagnosis",\n' +
+    ' "instruction": "choose the age of your patient belongs to which year range",\n' +
     '  "nextques": "TNEG",\n' +
-    '  "patterns": {"0-49":"1","50-69":"0","greater than 69":"2"},\n' +
+    '  "patterns": {"0-49":"1","50-69":"0"," > 69":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "TNEG",\n' +
-    ' "instruction": "triple negative status in terms of patient being ER, PR and HER2 negative",\n' +
+    ' "instruction": "TENG: *t*riple *neg*ative status in terms of patient being ER, PR and HER2 negative",\n' +
     '  "nextques": "ER",\n' +
     '  "patterns": {"no triple negative status":"0","triple negative status":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "ER",\n' +
-    ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
+    ' "instruction": "ER: Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
     '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-lowpositive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -64,7 +64,7 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "PR",\n' +
-   ' "instruction": "PR-positive: Breast cancers with progesterone receptors are called PR-positive (or PR+) cancers.",\n' +
+   ' "instruction": "PR_positive: It might refer to a metric used in public relations to measure the level of positive sentiment or perception surrounding a particular brand, company, or individual. This metric could be based on factors such as media coverage, social media mentions, customer feedback, or surveys that assess public opinion. PR_lowpositive: This term could suggest a lower level of positive sentiment compared to PR_positive. It may indicate a moderate or mild positive perception, or it could be used to differentiate between various levels of positivity when measuring public opinion or sentiment. PR_negative: Similarly, this term might refer to a metric used in public relations to measure the level of negative sentiment or perception surrounding a brand, company, or individual. It could encompass factors such as negative media coverage, social media mentions with unfavorable sentiment, customer complaints, or surveys indicating negative public opinion.",\n' +
     '  "nextques": "PR_percent",\n' +
     '  "patterns": {"PR-low-positive":"0","PR-positive":"1","PR-negative":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -76,7 +76,7 @@ input_question10 =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
         '  {"tag": "HER2",\n' +
-    ' "instruction": "composite of size and number of positive nodes",\n' +
+    ' "instruction": "HER2 expression refers to the level of human epidermal growth factor receptor 2 (HER2) protein found on the surface of certain cells, particularly cancer cells. HER2 is a type of protein known as a receptor tyrosine kinase, which plays a role in cell growth and division. In normal cells, HER2 helps regulate these processes, but in some cases, HER2 can become overexpressed or amplified, leading to uncontrolled cell growth and division.",\n' +
     '  "nextques": "n_tnm_stage",\n' +
     '  "patterns": {"HER2-negative":"0","HER2-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +

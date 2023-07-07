@@ -29,6 +29,66 @@ html.dark-mode img {
   box-sizing: inherit;
 }
 
+/* slide show css */
+.slideshow-container {
+  height: 93%;
+  width: 20%;
+  /* 轮播图容器的高度宽度 */
+  overflow: hidden;
+  /* 隐藏超出容器范围的内容 */
+  border: 5px solid white;
+  /* 相框边框样式 */
+  margin: 0;
+  /* 去除默认的外边距 */
+  padding: 0;
+  /* 去除默认的内边距 */
+  position: relative;
+  right: 3%;
+}
+
+.slideshow-container ul {
+  list-style: none;
+  /* 去除列表项的默认样式 */
+  margin: 0;
+  /* 去除默认的外边距 */
+  padding: 0;
+  /* 去除默认的内边距 */
+  animation: slideshow 180s linear infinite;
+  /* 设置轮播动画 */
+}
+
+.slideshow-container li {
+  display: block;
+  /* 设置列表项为块级元素 */
+  height: 100%;
+  /* 让每个列表项填满容器高度 */
+}
+
+.slideshow-container img {
+  display: block;
+  /* 设置图片为块级元素 */
+  width: 100%;
+  /* 图片宽度填满容器 */
+  height: 100%;
+  /* 图片高度填满容器 */
+  object-fit: cover;
+  /* 等比例缩放图片，填满容器 */
+}
+
+@keyframes slideshow {
+  0% {
+    transform: translateY(0);
+    /* 图片初始位置 */
+  }
+
+  100% {
+    transform: translateY(-100%);
+    /* 图片最终位置 */
+  }
+}
+
+/* slide show css end */
+
 body {
   display: flex;
   justify-content: center;

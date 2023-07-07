@@ -30,9 +30,9 @@ input_question =
     '  },\n' +
 
     '  {"tag": "age_at_diagnosis",\n' +
-    ' "instruction": "choose the age at the diagnosis",\n' +
+    ' "instruction": "choose the age of your patient belongs to which year range",\n' +
     '  "nextques": "menopause_status",\n' +
-    '  "patterns": {"0-49":"0","50-69":"1","greater than 69":"2"},\n' +
+    '  "patterns": {"0-49":"0","50-69":"1"," > 69":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "menopause_status",\n' +
@@ -42,7 +42,7 @@ input_question =
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
     '  {"tag": "ER",\n' +
-    ' "instruction": "Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
+    ' "instruction": "ER: Receptors are proteins that attach to certain substances. Breast cancers that have estrogen receptors are called ER-positive. ER-lowpositive status means low percentage  of tumour cells positively stained for ER by immunohistochemistry, while patients with tumours categorised as ER-negative had fewer percentage of ER.",\n' +
     '  "nextques": "ER_percent",\n' +
     '  "patterns": {"ER-positive":"0","ER-negative":"1","ER-lowpositive":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -73,11 +73,11 @@ input_question =
     '  },\n' +
     '  {"tag": "lymph_node_status",\n' +
     ' "instruction": "Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-negative means none of the axillary lymph nodes contain cancer. Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
-    '  "nextques": "Histology",\n' +
+    '  "nextques": "Histology_status",\n' +
     '  "patterns": {"lymph_node-negative":"0","lymph_node-positive":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
-    '  {"tag": "Histology",\n' +
+    '  {"tag": "Histology_status",\n' +
     ' "instruction": " A description of a tumor based on how abnormal the cancer cells and tissue look under a microscope and how quickly the cancer cells are likely to grow and spread. Ductal means an overgrowth of the cells that line the small tubes (ducts) inside the breast, while lobular is an overgrowth of cell lining the milk glands (lobules).",\n' +
     '  "nextques": "tumor_size",\n' +
     '  "patterns": {"Histology: duct":"0","Histology: mixed duct and lobular":"1","Histology: lobular":"2"},\n' +
@@ -92,11 +92,11 @@ input_question =
 
     '  {"tag": "disease_grade",\n' +
     '  "instruction": "Grade of disease: grade 1 – looks most like normal breast cells and is usually slow-growing; grade 2 – looks less like normal cells and is growing faster; grade 3 – looks different to normal breast cells and is usually fast-growing",\n' +
-    '  "nextques": "histology2",\n' +
+    '  "nextques": "histology2_status",\n' +
     '  "patterns": {"grade1":"0","grade2":"1","grade3":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
-    '  {"tag": "histology2",\n' +
+    '  {"tag": "histology2_status",\n' +
     ' "instruction": "tumor histology subtypes.Invasive (infiltrating) ductal carcinoma (IDC). Invasive lobular carcinoma (ILC). DCIS is also called intraductal carcinoma or stage 0 breast cancer. DCIS is a non-invasive or pre-invasive breast cancer. ",\n' +
     '  "nextques": "invasive_tumor_Location",\n' +
     '  "patterns": {"histology2 IDC":"0","histology2 ILC":"1","histology2 DCIS":"2","histology2 NC":"3"},\n' +
@@ -118,7 +118,7 @@ input_question =
     '  },\n'+
 
     '  {"tag": "surgical_margins",\n' +
-    ' "instruction": "whether there is a residual tumor",\n' +
+    ' "instruction": "Surgical Margins: A surgical margin refers to the area of tissue surrounding a surgically removed tumor or lesion. It represents the outer edge or border of the excised tissue specimen. The purpose of evaluating the surgical margin is to determine whether the entire tumor has been successfully removed or if there are any cancer cells remaining at the edges of the excised tissue. Residual tumor: it refers to a portion of tumor tissue that remains in the body after an attempted surgical removal or other forms of treatment. It indicates that not all of the tumor cells were successfully eliminated during the intervention. The presence of a residual tumor suggests that there is still a potential risk of disease progression or recurrence.",\n' +
     '  "nextques": "none",\n' +
     '  "patterns": {"no residual tumor":"0","microscopic residual tumor":"1","residual tumor,nos":"2","no primary site surgery":"3","margins not evaluable":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +

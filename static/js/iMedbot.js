@@ -159,8 +159,7 @@ window.onclick = function (event) {
 document.querySelector('.themeButton').addEventListener('click', function() {
   document.documentElement.classList.toggle('dark-mode');
 });
-
-
+//end
 
 
 function GoBackDialog() {
