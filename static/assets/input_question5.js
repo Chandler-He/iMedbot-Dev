@@ -10,33 +10,33 @@ input_question5 =
     '"Predict": [' +
     '{"tag": "treatment_year",\n' +
     ' "instruction": "Please choose the treatment year",\n' +
-    '  "nextques": "race",\n' +
+    '  "nextques": "Race",\n' +
     '   "patterns": {"5 year":"5","10 year":"10","15 year":"15"},\n' +
     '   "responses": ["I can predict the recurrence probability of breast cancer, please tell me which year you want to predict?","I would love to help you, Can you tell me your treatment time?" ]\n' +
     '  },\n' +
 
-    '  {"tag": "race",\n' +
+    '  {"tag": "Race",\n' +
     ' "instruction": "Choose the race of the patient from the following list",\n' +
-    '  "nextques": "smoking_history",\n' +
+    '  "nextques": "Smoking History",\n' +
     '  "patterns": {"White":"0","Black":"1","American Indian or Alaskan Native":"3","Asian":"2","Native Hawaiian or Other Pacific Islander":"4","Hispanic":"5"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "smoking_history",\n' +
+    '  {"tag": "Smoking History",\n' +
     '  "instruction": "Please choose the smoking history of the patient from the list below.",\n' +
-    '  "nextques": "family_history",\n' +
+    '  "nextques": "Family History",\n' +
     '  "patterns": {"ex Smoker":"0", "non-Smoker":"1","Cigarettes":"2" , "Cigar":"4","Chewing Tobacco":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "family_history",\n' +
-    ' "instruction": "family history of cancer, nos: means not other specified.",\n' +
-    '  "nextques": "age_at_diagnosis",\n' +
+    '  {"tag": "Family History",\n' +
+    ' "instruction": "Family history of cancer, nos: means not other specified.",\n' +
+    '  "nextques": "Age_at_Diagnosis",\n' +
     '  "patterns": {"no family history of cancer":"1","family history of other cancer":"2","family history of this cancer":"3","family history of this and other cancer":"0","family history of cancer, nos":"4"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "age_at_diagnosis",\n' +
+    '  {"tag": "Age_at_Diagnosis",\n' +
     ' "instruction": "choose the age of your patient belongs to which year range.",\n' +
     '  "nextques": "TNEG",\n' +
     '  "patterns": {"0-49":"2","50-69":"1"," > 69":"0"},\n' +
@@ -102,20 +102,20 @@ input_question5 =
 
     '  {"tag": "n_tnm_stage",\n' +
     ' "instruction": "X: The lymph nodes were not evaluated. 0: Either of the following: no cancer was found in the lymph nodes or only areas of cancer smaller than 0.2 mm are in the lymph nodes. 1: The cancer has spread to 1 to 3 axillary lymph nodes and/or the internal mammary lymph nodes. 2: The cancer has spread to 4 to 9 axillary lymph nodes. 3: The cancer has spread to 10 or more axillary lymph nodes, or it has spread to the lymph nodes located under the clavicle, or collarbone. ",\n' +
-    '  "nextques": "stage",\n' +
+    '  "nextques": "Stage",\n' +
     '  "patterns": {"n_tnm_stage 0":"0","n_tnm_stage 1":"2","n_tnm_stage 2":"1","n_tnm_stage 3":"4","n_tnm_stage X":"3"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "stage",\n' +
+    '  {"tag": "Stage",\n' +
     ' "instruction": "composite of size and number of positive nodes",\n' +
-    '  "nextques": "lymph_node_positive",\n' +
+    '  "nextques": "Number of Positive Lymph Node",\n' +
     '  "patterns": {"stage 0":"3","stage 1":"0","stage 2":"2","stage 3":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-     '  {"tag": "lymph_node_positive",\n' +
-    ' "instruction": "number of positive lymph nodes. Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
+     '  {"tag": "Number of Positive Lymph Node",\n' +
+    ' "instruction": "Lymph node status shows whether or not the lymph nodes in the underarm area (axillary lymph nodes) contain cancer: Lymph node-positive means at least one axillary lymph node contains cancer.",\n' +
     '  "nextques": "Histology",\n' +
     '  "patterns": {"0 positive lymph node":"0","1-8 positive lymph nodes":"2","greater than 8 positive lymph nodes":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
@@ -123,19 +123,19 @@ input_question5 =
 
     '  {"tag": "Histology",\n' +
     ' "instruction": " A description of a tumor based on how abnormal the cancer cells and tissue look under a microscope and how quickly the cancer cells are likely to grow and spread. Ductal means an overgrowth of the cells that line the small tubes (ducts) inside the breast, while lobular is an overgrowth of cell lining the milk glands (lobules).",\n' +
-    '  "nextques": "tumor_size",\n' +
+    '  "nextques": "Tumor Size",\n' +
     '  "patterns": {"Histology: duct":"1","Histology: mixed duct and lobular":"0","Histology: lobular":"2"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-      '  {"tag": "tumor_size",\n' +
+      '  {"tag": "Tumor Size",\n' +
    ' "instruction": "Size of tumor is measured in mm.",\n' +
-    '  "nextques": "invasive_tumor_Location",\n' +
+    '  "nextques": "Invasive Tumor Location",\n' +
     '  "patterns": {"0-32":"0","32-70":"2","greater than 70":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "invasive_tumor_Location",\n' +
+    '  {"tag": "Invasive Tumor Location",\n' +
     '  "instruction": "Where invasive tumor is located. Ductal means an overgrowth of the cells that line the small tubes (ducts) inside the breast, while lobular is an overgrowth of cell lining the milk glands (lobules).",\n' +
     '  "nextques": "DCIS_level",\n' +
     '  "patterns": {"mixed duct and lobular":"0", "duct":"2","lobular":"3","none":"1"},\n' +
@@ -145,12 +145,12 @@ input_question5 =
 
     '  {"tag": "DCIS_level",\n' +
     ' "instruction": "Choose the type of ductal carcinoma in situ. Ductal carcinoma in situ (DCIS) is the presence of abnormal cells inside a milk duct in the breast. DCIS is considered the earliest form of breast cancer. DCIS is noninvasive, meaning it has not spread out of the milk duct to invade other parts of the breast. ",\n' +
-    '  "nextques": "surgical_margins",\n' +
+    '  "nextques": "Surgical Margins",\n' +
     '  "patterns": {"solid":"0","apocrine":"2","cribriform":"3","dcis":"4", "comedo":"5","papillary":"6","micropapillary":"8","not present":"1"},\n' +
     '  "responses": ["What is the ","Could you tell me the "]\n' +
     '  },\n' +
 
-    '  {"tag": "surgical_margins",\n' +
+    '  {"tag": "Surgical Margins",\n' +
     ' "instruction": "Surgical Margins: A surgical margin refers to the area of tissue surrounding a surgically removed tumor or lesion. It represents the outer edge or border of the excised tissue specimen. The purpose of evaluating the surgical margin is to determine whether the entire tumor has been successfully removed or if there are any cancer cells remaining at the edges of the excised tissue. Residual tumor: it refers to a portion of tumor tissue that remains in the body after an attempted surgical removal or other forms of treatment. It indicates that not all of the tumor cells were successfully eliminated during the intervention. The presence of a residual tumor suggests that there is still a potential risk of disease progression or recurrence.",\n' +
     '  "nextques": "none",\n' +
     '  "patterns": {"no residual tumor":"0","microscopic residual tumor":"3","residual tumor,nos":"1","no primary site surgery":"2","margins not evaluable":"4"},\n' +

@@ -168,7 +168,7 @@ function GoBackDialog() {
   if (message.length > 2) {
     if (
       text[text.length - 1].innerHTML ==
-        "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below." ||
+        "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below." ||
       text[text.length - 1].innerHTML ==
         "To begin with, log in with your iMedbot account or create a new one to continue"
     ) {
@@ -200,13 +200,13 @@ function GoBackToLastMsg() {
     console.log(text[text.length - 1].innerHTML);
     while (
       text[text.length - 1].innerHTML !=
-      "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below."
+      "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below."
     ) {
       message[message.length - 1].remove();
     }
     message[message.length - 1].remove();
     secMsg =
-      "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below.";
+      "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below.";
     appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg, "no information", {
       Predict: "Predict",
       "Model Training": "Model Training",
@@ -241,7 +241,7 @@ var alreaView = false;
 function gobacktoBrowse() {
   location.reload();
   text =
-    "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset, or I can train a model for you if you can provide your own dataset, so how do you want to proceed?Please make your choice by click one of the buttons below.";
+    "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below.";
   appendMessage(BOT_NAME, NURSE_IMG, "left", text, "no information", {
     Predict: "Predict",
     "Model Training": "Model Training",
@@ -311,7 +311,7 @@ function resetPassword() {
             email_verification(username);
             method = result.value.method;
             Swal.fire(
-              `We have send an verification email to your address, please check it. ( check the junk mail or review your quarantined messages if you cannot find the verification message in your mailbox)`.trim()
+              `We have send an verification email to your address, please check it out. ( check the junk mail or review your quarantined messages if you cannot find the verification message in your mailbox)`.trim()
             ).then((result) => {
               reset(method, verification_ques);
             });
@@ -601,9 +601,9 @@ function login() {
           updateUserInfo(data);
         } else {
           Swal.fire("Log in Successfully".trim()).then((result) => {
-            add_userMsg("Loged in!");
+            add_userMsg("Logged in!");
             secMsg =
-              "You have two available options: Either we can utilize our sophisticated deep learning models, trained on an existing dataset, to predict potential breast cancer metastasis for your patient, or we can tailor a model to suit your needs, should you have your own dataset available. Please make your selection by clicking on the appropriate button below.";
+              "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below.";
             appendMessage(
               BOT_NAME,
               NURSE_IMG,
@@ -1369,10 +1369,10 @@ function getParameter() {
     Swal.fire({
       title: "Select the resolution (dpi) you would desire for the figure:",
       html: `<select name="resolution" id="resolution" class=".swal2-select">
-                      <option> 100</option>
-                      <option>  200</option>
-                      <option> 300</option>
-                      <option> 500</option>
+                      <option> 100 </option>
+                      <option> 200 </option>
+                      <option> 300 </option>
+                      <option> 500 </option>
 
                       </select>
                     `,
@@ -2955,7 +2955,7 @@ function showNext(e) {
       } else {
         console.log("hello");
         secMsg =
-          "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below.";
+          "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below.";
         appendMessage(BOT_NAME, NURSE_IMG, "left", secMsg, "no information", {
           Predict: "Predict",
           "Model Training": "Model Training",
@@ -3154,10 +3154,11 @@ function formatDate(date) {
   const m = "0" + date.getMinutes();
   return `${h.slice(-2)}:${m.slice(-2)}`;
 }
+
 function load() {
   firstMsg = "Hi, welcome to iMedBot! 😄";
   secMsg =
-    "I can either predict breast cancer metastasis for your patient based on our deep learning models trained using one existing dataset,or I can train a model for you if you can provide your own dataset. Please make your choice by clicking a button below.";
+    "You have two options: you can either conduct prediction of 5-year, 10-year, or 15-year breast cancer metastasis for your patience using our pretrained models, or conduct model training using your own dataset. Please select one of the options below.";
   btnGroup = [];
   appendMessage(
     BOT_NAME,
@@ -3380,6 +3381,8 @@ function autocomplete(inp, arr) {
   //       }
   //     }
   // });
+
+  
   function addActive(x) {
     /*a function to classify an item as "active":*/
     if (!x) return false;
